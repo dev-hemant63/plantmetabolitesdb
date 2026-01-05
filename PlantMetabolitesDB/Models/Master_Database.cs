@@ -12,7 +12,7 @@ namespace PlantMetabolitesDB.Models
     public class Master_Database
     {
         [Key]
-        public int DatabaseKey { get; set; }
+        public Int16 DatabaseKey { get; set; }
         public string DatabaseName { get; set; }
         public bool IsActive { get; set; }
         public Int16? CreatedBy { get; set; }

@@ -22,7 +22,7 @@ namespace PlantMetabolitesDB.Repository
             var lstEntity = (from dt in _context.Master_Databases
                              select new DatabaseViewModel
                              {
-                                 DatabaseKey = (Int16)dt.DatabaseKey,
+                                 DatabaseKey = dt.DatabaseKey,
                                  DatabaseName = dt.DatabaseName,
                                  CreatedBy = dt.CreatedBy,
                                  CreatedOn = dt.CreatedOn,

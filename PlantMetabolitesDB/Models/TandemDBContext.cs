@@ -42,6 +42,7 @@ namespace PlantMetabolitesDB.Models
         public DbSet<M05_EthnobotanicalInfo> M05_EthnobotanicalInfo { get; set; }
         public DbSet<M06_CompuondClass> M06_CompuondClass { get; set; }
         public DbSet<M07_Constituents> M07_Constituents { get; set; }
+        public DbSet<MasterMS1MassSpectra> MasterMS1MassSpectra { get; set; }
 
 
 

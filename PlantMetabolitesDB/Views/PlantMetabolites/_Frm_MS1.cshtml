@@ -1,0 +1,250 @@
+﻿@using TandemDB.ViewModel
+@model Frm_MS_VM
+
+
+<div class="text-center mb-4">
+    <h3>MS1</h3>
+</div>
+<div class="row">
+    <input type="hidden" value="@Model.plantMetabolitesKey" id="plantMetabolitesKey"/>
+    <div class="col-md-6">
+        <label class="form-label" for="PlantFamilyKey">Name of plant species <span class="text-danger">*</span></label>
+        <label class="form-control">@Model.PlantMetabolitesDetails.PlantSpeciesName</label>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label" for="InstrumentKey">Name of plant species <span class="text-danger">*</span></label>
+        @Html.DropDownListFor(m => m.MasterMS1MassSpectra.InstrumentKey,
+                            new SelectList(Model.InstrumentList, "InstrumentKey", "InstrumentName", Model.MasterMS1MassSpectra.InstrumentKey),
+                            "Select",
+                            new { @class = "form-select", id = "InstrumentKey" })
+        @Html.ValidationMessageFor(m => m.MasterMS1MassSpectra.InstrumentKey, "", new { @class = "text-danger" })
+    </div>
+    <div class="col-md-6">
+        <label class="form-label" for="Polarity">Polarity</label>
+
+        @Html.DropDownListFor(
+                                                                                                                                        m => m.MasterMS1MassSpectra.Polarity,
+                                                                                                                                        new List<SelectListItem>
+                                                                                                                                        {
+            new SelectListItem { Text = "Positive", Value = "1" },
+            new SelectListItem { Text = "Negative", Value = "2" }
+                                                                                                                                                                                                                                            },
+                                                                                                                                        "Select",
+                                                                                                                                        new { @class = "form-select", id = "Polarity" }
+                                                                                                                                    )
+
+        @Html.ValidationMessageFor(
+                                                                                                                                        m => m.MasterMS1MassSpectra.Polarity,
+                                                                                                                                        "",
+                                                                                                                                        new { @class = "text-danger" }
+                                                                                                                                    )
+    </div>
+    <div class="col-md-6">
+        <label class="form-label" for="Datatype">Data type</label>
+        <select class="form-control" name="Datatype" id="Datatype">
+            <option value="">Select</option>
+        </select>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label" for="PartsOfPlant">Parts of plant</label>
+        @Html.TextBoxFor(m => m.MasterMS1MassSpectra.PartsOfPlant, new { @class = "form-control", placeholder = "Parts Of Plant" })
+        @Html.ValidationMessageFor(m => m.MasterMS1MassSpectra.PartsOfPlant, "", new { @class = "text-danger", id = "PartsOfPlant" })
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label" for="SampleType">Sample type</label>
+        @Html.TextBoxFor(m => m.MasterMS1MassSpectra.SampleType, new { @class = "form-control", placeholder = "Sample Type" })
+        @Html.ValidationMessageFor(m => m.MasterMS1MassSpectra.SampleType, "", new { @class = "text-danger", id = "SampleType" })
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label" for="TaxonomistName">Taxonomist name</label>
+        @Html.TextBoxFor(m => m.MasterMS1MassSpectra.TaxonomistName, new { @class = "form-control", placeholder = "Taxonomist Name" })
+        @Html.ValidationMessageFor(m => m.MasterMS1MassSpectra.TaxonomistName, "", new { @class = "text-danger", id = "TaxonomistName" })
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label" for="VoucherNo">Spectrum averaging</label>
+        @Html.TextBoxFor(m => m.MasterMS1MassSpectra.VoucherNo, new { @class = "form-control", placeholder = "VoucherNo" })
+        @Html.ValidationMessageFor(m => m.MasterMS1MassSpectra.VoucherNo, "", new { @class = "text-danger", id = "VoucherNo" })
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label" for="HerbariumDepositedAt">Herbarium deposited at</label>
+        @Html.TextBoxFor(m => m.MasterMS1MassSpectra.HerbariumDepositedAt, new { @class = "form-control", placeholder = "Herbarium Deposited At" })
+        @Html.ValidationMessageFor(m => m.MasterMS1MassSpectra.HerbariumDepositedAt, "", new { @class = "text-danger", id = "HerbariumDepositedAt" })
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label" for="DateOfCollection">Date of collection</label>
+        @Html.TextBoxFor(m => m.MasterMS1MassSpectra.DateOfCollection, new { @class = "form-control", placeholder = "Date Of Collection" })
+        @Html.ValidationMessageFor(m => m.MasterMS1MassSpectra.DateOfCollection, "", new { @class = "text-danger", id = "DateOfCollection" })
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label" for="GeoLocation">Geo location</label>
+        @Html.TextBoxFor(m => m.MasterMS1MassSpectra.GeoLocation, new { @class = "form-control", placeholder = "Geo Location" })
+        @Html.ValidationMessageFor(m => m.MasterMS1MassSpectra.GeoLocation, "", new { @class = "text-danger", id = "GeoLocation" })
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label" for="SpectrumAveraging">Spectrum averaging</label>
+        @Html.TextBoxFor(m => m.MasterMS1MassSpectra.SpectrumAveraging, new { @class = "form-control", placeholder = "Spectrum Averaging" })
+        @Html.ValidationMessageFor(m => m.MasterMS1MassSpectra.SpectrumAveraging, "", new { @class = "text-danger", id = "SpectrumAveraging" })
+    </div>
+
+    <div class="col-md-12">
+        <label class="form-label" for="FingerprintFile">Mass spectrum fingerprint</label>
+
+        @Html.TextBoxFor(
+                                                                  m => m.MasterMS1MassSpectra.FingerprintFile,
+                                                                  new { @class = "form-control", type = "file", id = "FingerprintFile" }
+                                                              )
+
+        @Html.ValidationMessageFor(
+                                                                  m => m.MasterMS1MassSpectra.FingerprintFile,
+                                                                  "",
+                                                                  new { @class = "text-danger" }
+                                                              )
+    </div>
+
+    <div class="col-md-12">
+        <label class="form-label" for="HPLCProfile">HPLC Profile</label>
+        <select class="form-control" name="HPLCProfile" id="HPLCProfile" onchange="handleMultiFiles(this,'HPLCProfiles')">
+            <option value="0">Select</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+    </div>
+    <div class="col-sm-12 mt-2">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>File</th>
+                        <th>Remark</th>
+                    </tr>
+                </thead>
+                <tbody id="HPLCProfiles">
+                    <tr>
+                        <td colspan="10">no data available</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <label class="form-label" for="LCMSProfile">LCMS Profile</label>
+        <select class="form-control" name="LCMSProfile" id="LCMSProfile" onchange="handleMultiFiles(this,'LCMSProfiles')">
+            <option value="0">Select</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+    </div>
+    <div class="col-sm-12 mt-2">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>File</th>
+                        <th>Remark</th>
+                    </tr>
+                </thead>
+                <tbody id="LCMSProfiles">
+                    <tr>
+                        <td colspan="10">no data available</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label" for="ExtractionMethodeFile">Extraction method file</label>
+
+        @Html.TextBoxFor(
+                                                                 m => m.MasterMS1MassSpectra.ExtractionMethodeFile,
+                                                                 new { @class = "form-control", type = "file", id = "ExtractionMethodeFile" }
+                                                             )
+
+        @Html.ValidationMessageFor(
+                                                                 m => m.MasterMS1MassSpectra.ExtractionMethodeFile,
+                                                                 "",
+                                                                 new { @class = "text-danger" }
+                                                             )
+    </div>
+    <div class="col-md-6">
+        <label class="form-label" for="HPLCUPLCMethodeFile">HPLC/UPLC Method</label>
+
+        @Html.TextBoxFor(
+                                                                m => m.MasterMS1MassSpectra.HPLCUPLCMethodeFile,
+                                                                new { @class = "form-control", type = "file", id = "HPLCUPLCMethodeFile" }
+                                                            )
+
+        @Html.ValidationMessageFor(
+                                                                m => m.MasterMS1MassSpectra.ExtractionMethodeFile,
+                                                                "",
+                                                                new { @class = "text-danger" }
+                                                            )
+    </div>
+    <div class="col-md-12">
+        <label class="form-label" for="MS1RefFile">Refrence File</label>
+
+        @Html.TextBoxFor(
+                                                               m => m.MasterMS1MassSpectra.MS1RefFile,
+                                                               new { @class = "form-control", type = "file", id = "MS1RefFile" }
+                                                           )
+
+        @Html.ValidationMessageFor(
+                                                               m => m.MasterMS1MassSpectra.MS1RefFile,
+                                                               "",
+                                                               new { @class = "text-danger" }
+                                                           )
+    </div>
+    <div class="col-md-12">
+        <label class="form-label" for="RawFile">Raw File</label>
+        <select class="form-control" name="RawFile" id="RawFile" onchange="handleMultiFiles(this,'RawFiles')">
+            <option value="0">Select</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </select>
+    </div>
+    <div class="col-sm-12 mt-2">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>File</th>
+                        <th>Remark</th>
+                    </tr>
+                </thead>
+                <tbody id="RawFiles">
+                    <tr>
+                        <td colspan="10">no data available</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <button type="submit" onclick="saveMS1Form()" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-secondary m-lg-2" onclick="$('#ms-form-modal').modal('hide');">Close</button>
+    </div>
+</div>

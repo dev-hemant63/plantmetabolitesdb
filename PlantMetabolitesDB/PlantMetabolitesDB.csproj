@@ -203,6 +203,7 @@
     <Compile Include="Models\M05_EthnobotanicalInfo.cs" />
     <Compile Include="Models\M06_CompuondClass.cs" />
     <Compile Include="Models\M07_Constituents.cs" />
+    <Compile Include="Models\MasterMS1MassSpectra.cs" />
     <Compile Include="Models\PlantMetabolites.cs" />
     <Compile Include="Models\SearchDBLayer.cs" />
     <Compile Include="Models\SqlHelper.cs" />
@@ -264,12 +265,14 @@
     <Compile Include="ViewModel\DataFileFormatViewModel.cs" />
     <Compile Include="ViewModel\DownloadViewModel.cs" />
     <Compile Include="ViewModel\FAQViewModel.cs" />
+    <Compile Include="ViewModel\Frm_MS_VM.cs" />
     <Compile Include="ViewModel\GeneralSearchViewModel.cs" />
     <Compile Include="ViewModel\InstrumentViewModel.cs" />
     <Compile Include="ViewModel\LatestUpdatesViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MassSpectraDataValuesViewModel.cs" />
     <Compile Include="ViewModel\MassSpectra_MSAdv_Search.cs" />
+    <Compile Include="ViewModel\MasterMS1MassSpectraVM.cs" />
     <Compile Include="ViewModel\MS2MassSpectraViewModel.cs" />
     <Compile Include="ViewModel\MS3MassSpectraViewModel.cs" />
     <Compile Include="ViewModel\MSIonSearchViewModel.cs" />
@@ -2448,6 +2451,7 @@
     <Content Include="Views\AvailableDatabase\Index.cshtml" />
     <Content Include="Views\PlantMetabolites\Index.cshtml" />
     <Content Include="Views\PlantMetabolites\AddEditPlantMetabolites.cshtml" />
+    <Content Include="Views\PlantMetabolites\_Frm_MS1.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

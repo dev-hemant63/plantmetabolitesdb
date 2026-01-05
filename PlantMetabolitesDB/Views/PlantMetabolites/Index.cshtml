@@ -26,6 +26,17 @@
     </div>
 </div>
 
+<div class="modal fade" id="ms-form-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content p-3 p-md-5">
+            <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-body" id="ms-form-modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts
 {
     <script>
@@ -39,15 +50,20 @@
 
                 let _html = res.data.map((v, i) => {
                     return `<tr>
-                            <td>${i + 1}</td>
-                            <td>${v.PlantSpeciesName}</td>
-                            <td></td>
-                            <td>${v.TaxonomistName}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>`;
+                                <td>${i + 1}</td>
+                                <td>${v.PlantSpeciesName}</td>
+                                <td>${v.PlantFamilyName}</td>
+                                <td>${v.TaxonomistName}</td>
+                                <td><button class="btn btn-sm" onclick="openMsFormModal('${v.PlantMetabolitesKey}','MS1')"><i class="bx bxs-folder-plus me-0 me-lg-2"></i></button></td>
+                                <td><button class="btn btn-sm" onclick="openMsFormModal('${v.PlantMetabolitesKey}','MS2')"><i class="bx bxs-folder-plus me-0 me-lg-2"></i></button></td>
+                                <td><button class="btn btn-sm" onclick="openMsFormModal('${v.PlantMetabolitesKey}','MS3')"><i class="bx bxs-folder-plus me-0 me-lg-2"></i></button></td>
+                                <td>
+                                  <span class="text-nowrap">
+                                    <a class="edit-record btn btn-sm btn-icon me-2" data-id="${v.PlantMetabolitesKey}" href="/PlantMetabolites/AddEditPlantMetabolites?plantMetabolitesKey=${v.PlantMetabolitesKey}" title="Edit"> <i class="bx bx-edit"></i></a>
+                                    <button class="delete-record btn btn-sm btn-icon me-2" onclick="deleteRecord('${v.PlantMetabolitesKey}')" data-id="${v.PlantMetabolitesKey}" title="Delete"><i class="bx bx-trash"></i></button>
+                                  </span>
+                                </td>
+                            </tr>`;
                 });
 
                 $('.datatables-plant-metabolites tbody').html(_html);
@@ -108,5 +124,167 @@
                 console.log(xhr);
             });
         };
+
+        function deleteRecord(id) {
+            $.post('/PlantMetabolites/Delete', { plantMetabolitesKey: id }).done(function (res) {
+                if (res > 0) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Success",
+                        text: "Record deleted successfully!"
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                }
+                else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Failed",
+                        text: "Sorry,Something went wrong try after some time!",
+                    });
+                }
+            }).fail(function (xhr) {
+                console.log(xhr);
+            });
+        };
+        function openMsFormModal(id,type) {
+            $.post('/PlantMetabolites/Frm_' + type, { plantMetabolitesKey: id }).done(function (_html) {
+                $('#ms-form-modal-body').html(_html);
+                $('#ms-form-modal').modal('show');
+            }).fail(function (xhr) {
+                console.log(xhr);
+                alert("Something went wrong!");
+            });
+        };
+
+        function handleMultiFiles(_this, selector) {
+            let counts = $(_this).val();
+
+            let rows = '';
+
+            for (var i = 1; i <= counts; i++) {
+                rows += `
+                    <tr class="record">
+                        <td>${i}</td>
+                        <td><input type="file" class="form-control form-control-sm" /></td>
+                        <td><input type="text" class="form-control form-control-sm" /></td>
+                    </tr>
+                `;
+            }
+
+            $('#' + selector).html(rows);
+        }
+
+        function saveMS1Form() {
+            let InstrumentKey = $('#InstrumentKey').val();
+            let Polarity = $('#Polarity').val();
+            let Datatype = $('#Datatype').val();
+            let PartsOfPlant = $('#MasterMS1MassSpectra_PartsOfPlant').val();
+            let SampleType = $('#MasterMS1MassSpectra_SampleType').val();
+            let TaxonomistName = $('#MasterMS1MassSpectra_TaxonomistName').val();
+            let VoucherNo = $('#MasterMS1MassSpectra_VoucherNo').val();
+            let HerbariumDepositedAt = $('#MasterMS1MassSpectra_HerbariumDepositedAt').val();
+            let DateOfCollection = $('#MasterMS1MassSpectra_DateOfCollection').val();
+            let GeoLocation = $('#MasterMS1MassSpectra_GeoLocation').val();
+            let SpectrumAveraging = $('#MasterMS1MassSpectra_SpectrumAveraging').val();
+            let FingerprintFile = $('#FingerprintFile').prop('files')[0];
+            let HPLCProfile = $('#HPLCProfile').val();
+            let HPLCProfilesArr = [];
+
+            $('#HPLCProfiles tr.record').each(function () {
+                const fileInput = $(this).find('input[type="file"]')[0];
+                const remark = $(this).find('input[type="text"], textarea').val();
+                if (fileInput && fileInput.files.length > 0) {
+                    HPLCProfilesArr.push({
+                        file: fileInput.files[0],
+                        remark: remark || ''
+                    });
+                }
+            });
+
+            let LCMSProfile = $('#LCMSProfile').val();
+            let LCMSProfilesArr = [];
+
+            $('#LCMSProfiles tr.record').each(function () {
+                const fileInput = $(this).find('input[type="file"]')[0];
+                const remark = $(this).find('input[type="text"], textarea').val();
+                if (fileInput && fileInput.files.length > 0) {
+                    LCMSProfilesArr.push({
+                        file: fileInput.files[0],
+                        remark: remark || ''
+                    });
+                }
+            });
+
+            let ExtractionMethodeFile = $('#ExtractionMethodeFile').prop('files')[0];
+            let HPLCUPLCMethodeFile = $('#HPLCUPLCMethodeFile').prop('files')[0];
+            let MS1RefFile = $('#MS1RefFile').prop('files')[0];
+
+            let RawFile = $('#RawFile').val();
+            let RawFilesArr = [];
+
+            $('#LCMSProfiles tr.record').each(function () {
+                const fileInput = $(this).find('input[type="file"]')[0];
+                const remark = $(this).find('input[type="text"], textarea').val();
+                if (fileInput && fileInput.files.length > 0) {
+                    RawFilesArr.push({
+                        file: fileInput.files[0],
+                        remark: remark || ''
+                    });
+                }
+            });
+
+            let formData = new FormData();
+            formData.append('InstrumentKey', InstrumentKey);
+            formData.append('Polarity', Polarity);
+            formData.append('Datatype', Datatype);
+            formData.append('PartsOfPlant', PartsOfPlant);
+            formData.append('SampleType', SampleType);
+            formData.append('TaxonomistName', TaxonomistName);
+            formData.append('VoucherNo', VoucherNo);
+            formData.append('HerbariumDepositedAt', HerbariumDepositedAt);
+            formData.append('DateOfCollection', DateOfCollection);
+            formData.append('GeoLocation', GeoLocation);
+            formData.append('SpectrumAveraging', SpectrumAveraging);
+            formData.append('plantMetabolitesKey', $('#plantMetabolitesKey').val());
+            formData.append('HPLCProfile', HPLCProfile);
+            formData.append('LCMSProfile', LCMSProfile);
+
+            if (FingerprintFile) formData.append('FingerprintFile', FingerprintFile);
+            if (ExtractionMethodeFile) formData.append('ExtractionMethodeFile', ExtractionMethodeFile);
+            if (HPLCUPLCMethodeFile) formData.append('HPLCUPLCMethodeFile', HPLCUPLCMethodeFile);
+            if (MS1RefFile) formData.append('MS1RefFile', MS1RefFile);
+
+            HPLCProfilesArr.forEach((item, index) => {
+                formData.append(`HPLCProfiles[${index}].File`, item.file);
+                formData.append(`HPLCProfiles[${index}].Remark`, item.remark);
+            });
+
+            LCMSProfilesArr.forEach((item, index) => {
+                formData.append(`LCMSProfiles[${index}].File`, item.file);
+                formData.append(`LCMSProfiles[${index}].Remark`, item.remark);
+            });
+
+            RawFilesArr.forEach((item, index) => {
+                formData.append(`RawFiles[${index}].File`, item.file);
+                formData.append(`RawFiles[${index}].Remark`, item.remark);
+            });
+
+            $.ajax({
+                url: '/PlantMetabolites/SaveMS1',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    alert('MS1 form saved successfully');
+                },
+                error: function (xhr, status, error) {
+                    alert('Error saving MS1 form');
+                }
+            });
+        }
+
+
     </script>
 }

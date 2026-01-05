@@ -33,6 +33,6 @@ namespace TandemDB.ViewModel
 
         public string PlantFamilyName { get; set; }
 
-        public IEnumerable<Master_Database> Database { get; set; }
+        public List<Master_Database> Database { get; set; }
     }
 }
