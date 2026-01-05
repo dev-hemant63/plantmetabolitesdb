@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="compound-stats">
+</div>
+
+<div class="row">
+    <!-- All Users -->
+    <div class="registered-users col-md-6 col-lg-6 col-xl-4 mb-4 mb-xl-0">
+    </div>
+
+    <!--/ All Users -->
+    <div class="admin-users col-xl-8">
+    </div>
+    
+</div>
+
+@section Scripts
+{
+    <script src="../assets/js/dashboards-analytics.js"></script>
+    <script>
+
+        $(function () {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetCompundStats", "Dashboard")',
+                contentType: "application/json; charset=utf-8",
+                data: {},
+                datatype: "json",
+                success: function (data) {
+                    $('.compound-stats').html(data)
+                },
+                error: function () {
+                    alert("Data load failed.");
+                }
+            });
+
+             $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetCountryWiseRegisteredUsers", "Dashboard")',
+                contentType: "application/json; charset=utf-8",
+                data: {},
+                datatype: "json",
+                success: function (data) {
+                    $('.registered-users').html(data)
+                },
+                error: function () {
+                    alert("Data load failed.");
+                }
+             });
+
+
+             $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetAminUsers", "Dashboard")',
+                contentType: "application/json; charset=utf-8",
+                data: {},
+                datatype: "json",
+                success: function (data) {
+                    $('.admin-users').html(data)
+                },
+                error: function () {
+                    alert("Data load failed.");
+                }
+            });
+        });
+    </script>
+}

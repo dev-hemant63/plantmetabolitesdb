@@ -1,0 +1,139 @@
+﻿
+@{
+    ViewBag.Title = "ESI / APCI Adduct Ion Calculator";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model  PlantMetabolitesDB.ViewModel.AductIonMassViewModel
+
+<div class="breadcrumb-grid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <h3 class="header_title">ESI / APCI Adduct Ion Calculator</h3>
+                <ol class="breadcrumb">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Utility</a></li>
+                    <li class="active">ESI / APCI Adduct Ion Calculator </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="inner-grid">
+
+    <div class="feedback-container">
+        <div class="container">
+            @using (Html.BeginForm("", "", FormMethod.Get, new { @id = "aductCalForm", @class = "" }))
+            {
+                <div class="row">
+                    <div class="col-md-4 col-sm-12 col-xs-12">
+                        <div class="col-12 feedback-form">
+                            @Html.LabelFor(e => e.MolecularWeight, new { @class = "form__label" })
+                            @Html.TextBoxFor(e => e.MolecularWeight, new { @class = "form__input", @placeholder = "" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 col-sm-12 col-xs-12">
+                        <label for="name" class="form__label">&nbsp;</label>
+                        <button type="submit" id="submitButton" name="submitButton" class="wel-readmore">
+                            <span class="form__btn--visible">Calculate</span>
+                        </button>
+                    </div>
+
+                    @{
+                        Html.RenderPartial("_AductIonMass", Model);
+                    }
+
+                </div>
+            }
+
+        </div>
+    </div>
+</section>
+
+<script src="~/assets/vendor/libs/jquery/jquery.js"></script>
+<script src="~/assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js"></script>
+<script src="~/assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
+<script>
+    $(function () {
+        $(".table.table-bordered.table-striped tbody tr:even").find('input').css({ "border": "none", "background-color": "rgb(242,242,242,1)", "font-weight": "600" })
+        $(".table.table-bordered.table-striped tbody tr:odd").find('input').css({ "border": "none", "background-color": "#fff", "font-weight": "600" })
+
+    });
+
+</script>
+<script>
+    $(function (e) {
+        const a = document.getElementById("aductCalForm");
+        const submitButton = document.getElementById('submitButton');
+        const fv = FormValidation.formValidation(a, {
+            fields: {
+                MolecularWeight: {
+
+                    validators: {
+                        notEmpty: {
+                            message: 'Please enter value',
+                        },
+                        callback: {
+                            message: 'The value is not a correct format (ony 4 digit allowed before & after decimal)',
+                            callback: function (input) {
+                                var regex = new RegExp("^[0-9]{0,4}(?:[.][0-9]{0,4})?$");
+                                if (!regex.test(input.value)) {
+                                   return false
+                                }                             
+                                return true;
+                            },
+                        },
+                        //notEmpty: {
+                        //    message: 'Please enter value',
+                        //},
+                        //numeric: {
+                        //    message: 'The value is not a number',
+                        //    thousandsSeparator: '',
+                        //    decimalSeparator: '.',
+                        //}
+                    }
+                }
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap5: new FormValidation.plugins.Bootstrap5({
+                    eleValidClass: "",
+                    rowSelector: ".col-12",
+                }),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+
+            },
+        });
+
+        fv.on('core.form.valid', function () {
+            Calculate();
+        });
+    });
+
+    function Calculate() {
+        var mw = $('#MolecularWeight').val();
+        var i = 0, j = 1, k = 2, l = 3;
+        var txtIon = $('table tr.clsPositive input');
+        var txtNIon = $('table tr.clsNegative input');
+        for (; i < txtIon.length; i = i + 4, j = j + 4, k = k + 4, l = l + 4) {
+            txtIon[k].value = (parseFloat(txtIon[i].value) * parseFloat(mw) + parseFloat(txtIon[j].value)).toFixed(2);
+            txtIon[k].style.display = "block";
+            txtIon[l].value = (txtIon[2].value - txtIon[k].value).toFixed(2);
+            txtIon[l].style.display = "block";
+        }
+        i = 0, j = 1, k = 2, l = 3;
+        for (; i < txtNIon.length; i = i + 4, j = j + 4, k = k + 4, l = l + 4) {
+            txtNIon[k].value = (parseFloat(txtNIon[i].value) * parseFloat(mw) + parseFloat(txtNIon[j].value)).toFixed(2);
+            txtNIon[k].style.display = "block";
+            txtNIon[l].value = (txtNIon[2].value - txtNIon[k].value).toFixed(2);
+            txtNIon[l].style.display = "block";
+        }
+
+        return false;
+    }
+</script>
+
+

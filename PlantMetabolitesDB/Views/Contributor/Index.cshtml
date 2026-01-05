@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewBag.Title = "Contributor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model  IEnumerable<PlantMetabolitesDB.ViewModel.CollaboratorsViewModel>
+
+<div class="breadcrumb-grid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <h3 class="header_title">Contributor</h3>
+                <ol class="breadcrumb">
+                    <li><a href="#">Home</a></li>
+                    <li class="active">Contributor </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="inner-grid">
+    <div class="container">
+
+        <div class="about-text">
+            <div class="row">
+                @if (Model != null)
+                {
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                       <div class="col-md-6 col-xs-12">
+                           <div class="blog-item">
+                               <div class="inve-content">
+                                   <div class="title">
+                                       @Model.ElementAt(i).Name
+                                   </div>
+                                   <div class="rounded"></div>
+                                   <p>
+                                       @Model.ElementAt(i).Affiliation
+                                   </p>
+                               </div>
+                           </div>
+                       </div> 
+                    }
+                }
+                @*<div class="col-md-6 col-xs-12">
+                    <div class="blog-item">
+                        <div class="inve-content">
+                            <div class="title">
+                                Dr. Dipankar koley
+                            </div>
+                            <div class="rounded"></div>
+                            <p>
+                                M.P.C.Division, CSIR-Central Drug Research Institute (India)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <div class="blog-item">
+                        <div class="inve-content">
+                            <div class="title">
+                                Dr. T. Narender
+                            </div>
+                            <div class="rounded"></div>
+                            <p>
+                                M.P.C.Division, CSIR-Central Drug Research Institute (India)
+                            </p>
+                        </div>
+                    </div>
+                </div>*@
+            </div>
+        </div>
+
+    </div>
+
+</section>

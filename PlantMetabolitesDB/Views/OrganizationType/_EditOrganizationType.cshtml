@@ -1,0 +1,82 @@
+﻿@model PlantMetabolitesDB.ViewModel.OrganizationTypeViewModel
+
+<div class="text-center mb-4">
+    <h3>Edit Organization Type</h3>
+</div>
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { @id = "editOrganizationTypeForm", @class = "row" }))
+{
+    <div class="col-12 mb-3">
+        @Html.HiddenFor(d => d.OrganizationTypeKey)
+        @Html.LabelFor(d => d.OrganizationTypeName, new { @class = "form-label" })
+        @Html.TextBoxFor(e => e.OrganizationTypeName, new { @class = "form-control", @placeholder = "Organization Type Name", @autofocus = "autofocus" })
+    </div>
+    <div class="col-12 text-center demo-vertical-spacing">
+        <input type="submit" value="Update" class="btn btn-primary me-sm-3 me-1" id="submitButton" name="submitButton" />
+        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+    </div>
+}
+
+<script>
+    $(function (e) {
+        const submitButton = document.getElementById('submitButton');
+        FormValidation.formValidation(
+            document.getElementById("editOrganizationTypeForm"), {
+            fields: {
+                OrganizationTypeName: {
+                    validators: {
+                        notEmpty: { message: "Please enter organization type name" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap5: new FormValidation.plugins.Bootstrap5({
+                    eleValidClass: "",
+                    rowSelector: ".col-12",
+                }),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+                autoFocus: new FormValidation.plugins.AutoFocus(),
+            },
+
+
+        }).on('core.form.valid', function () {
+            // Disable the submit button
+            submitButton.setAttribute('disabled', true);
+            document.getElementById('submitButton').value = 'Updating...';
+
+            var valdata = $("#editOrganizationTypeForm").serialize();
+            $.ajax({
+                url: "/OrganizationType/EditOrganizationType",
+                type: "POST",
+                dataType: 'json',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: valdata,
+                success: function (response) {
+                    //$('#organizationTypeModal').modal('hide');
+                    //LoadTable();
+                    Swal.fire({
+                        icon: "success",
+                        title: "Updated",
+                        text: "Data updated successfully.",
+                        customClass: { confirmButton: "btn btn-success" },
+                    });
+
+                    $('.swal2-confirm').on('click', function () {
+                        $('#organizationTypeModal').modal('hide');
+                        LoadTable();
+                    });
+                },
+                error: function (response) {
+
+                }
+            });
+            // Do something else such as sending the form to back-end via Ajax request
+            // ...
+        });
+    });
+</script>

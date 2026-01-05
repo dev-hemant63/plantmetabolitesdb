@@ -1,0 +1,187 @@
+﻿
+@model PlantMetabolitesDB.ViewModel.DataCoverageViewModel
+
+<style type="text/css">
+    #com_data div {
+        padding: 4px 0px;
+    }
+
+    #com_data1 div {
+        padding: 4px 0px;
+    }
+
+    .clsgd {
+        color: #009933 !important;
+        font-weight: normal !important;
+        text-decoration: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-size: 18px !important;
+        font-family: Arial, Helvetica, sans-serif !important;
+    }
+
+    .right_value {
+        text-align: left !important;
+        width: 89px !important;
+    }
+
+    .left_value {
+        float: left !important;
+        text-align: left !important;
+        width: 89px !important;
+    }
+</style>
+
+<div class="col-12 mb-2" id="printContainer">
+
+    <div id="hspor1">
+        <div style="width: 99% !important;">
+            <div style="width: 75%; height: 91px; float: left; background-image: url(../Content/images/logo-print.png) !important; background-repeat: no-repeat;"></div>
+            <div style="width: 25%; height: 91px; float: right; background-image: url(../Content/images/right-logo-print.png)!important; background-repeat: no-repeat;"></div>
+        </div>
+        <div style="clear: both; padding: 1px 4px; background-color: rgb(235, 234, 234); display: table; width: 100%; font-family: Arial, Helvetica, sans-serif !important;width:100%!important ">
+            <h3 style="float: left;margin-left: 10px">
+                <strong>Data Coverage - Standard/Library Vs Input Data</strong>
+            </h3>
+            <h4 style="float:right;margin-right: 10px;">@ViewBag.CurrDate</h4>
+        </div>
+    </div>
+    <div class="row  m-lg-1 mb-4">
+        <div class="alert alert-info dcsub-heading">
+            Standard/Library Data
+        </div>
+        <table class="pe-1 mb-2 dctbl" width="100%" cellpadding="5" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td class="pe-3">Compound:</td>
+                    <td>@Model.StandardData.CompoundName</td>
+                    <td class="pe-3">Molecular Weight:</td>
+                    <td>@Model.StandardData.MolecularWeight_Input</td>
+                </tr>
+                <tr>
+                    <td class="pe-3">Mass Spectrum:</td>
+                    <td>@Model.StandardData.MassSpectrum</td>
+                    <td class="pe-3">Formula:</td>
+                    <td>@Model.StandardData.Formula</td>
+                </tr>
+
+                <tr>
+                    <td class="pe-3">Instrument:</td>
+                    <td>@Model.StandardData.InstrumentName</td>
+                    <td class="pe-3">CAS No:</td>
+                    <td>@Model.StandardData.CASNo</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row m-lg-1 mb-4">
+        <div class="alert alert-warning dcsub-heading">
+            Data Coverage (Standard/Library vs Input Data)
+        </div>
+    <div style="margin-left: 25px;">
+        <table class="mt-2" width="100%" cellpadding="5" cellspacing="0">
+            <tbody>
+                <tr class="mt-2">
+                    <td class="pe-3" valign="top" id="com_data">
+                        <div class="card-title mb-2 clsgd">Standard/Library Data</div>
+                    </td>
+                    <td class="pe-3" valign="top" id="com_data1">
+                        <div class="card-title mb-2 clsgd">Input Data</div>
+                    </td>
+                </tr>
+                <tr class="mt-2">
+                    <td class="pe-3" valign="top" id="com_data">
+                        <div class="card-title mb-0">START IONS</div>
+                        <div class="card-title mb-0">TITLE = @Model.StandardData.Title</div>
+                        <div class="card-title mb-0">CHARGE = @Model.StandardData.Charge</div>
+                        <div class="card-title mb-0">PREMASS = @Model.StandardData.Premass</div>
+                    </td>
+                    <td class="pe-3" valign="top" id="com_data1">
+                        <div class="card-title mb-0">START IONS</div>
+                        <div class="card-title mb-0">TITLE = @Model.SampleData.Title</div>
+                        <div class="card-title mb-0">CHARGE = @Model.SampleData.Charge</div>
+                        <div class="card-title mb-0">PREMASS = @Model.SampleData.Premass</div>
+                    </td>
+                </tr>
+                @foreach (var item in Model.MassSpectraResultData)
+                {
+                    <tr class="mt-2">
+                        <td class="@item.ClassName">
+                            @if (item.library_mz_int == 0)
+                            {
+                                <span class="left_value">--</span>
+                            }
+                            else
+                            {
+                                <span class="left_value">@item.library_mz_int</span>
+                            }
+
+                            <span class="right_value"> @item.library_relative</span>
+                        </td>
+
+                        <td class="@item.ClassName">
+                            @if (item.input_mz_int == 0)
+                            {
+                                <span class="left_value">--</span>
+                            }
+                            else
+                            {
+                                <span class="left_value">@item.input_mz_int</span>
+                            }
+
+                            <span class="right_value"> @item.input_relative</span>
+                        </td>
+
+                    </tr>
+                }
+                <tr class="mt-2">
+                    <td class="pe-3" valign="top">
+                        <div class="card-title mb-2">END IONS</div>
+                    </td>
+                    <td class="pe-3" valign="top">
+                        <div class="card-title mb-2">END IONS</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+        
+
+    </div>
+    <div id="footerprint1">
+        <div style="clear: both; margin-top: 41px; padding: 1px 4px;background-color: rgb(235, 234, 234);font-size: 12px;font-family: Arial, Helvetica, sans-serif; text-align: center;">
+            <p style="margin: 10px 1px;">Copyright © 2022-23: CSIR - Central Drug Research Institute, Lucknow, (U.P.) India. All Rights Reserved. (Beta Version 1.2) </p>
+            <p style="margin: 10px 1px;">Powered by MARGSOFT Technologies (P) Ltd.</p>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#hspor1').hide();
+        $('#footerprint1').hide();
+    });
+
+    function PrintDataCoverate() {
+        $('#hspor1').show();
+        $('#footerprint1').show();
+        var printContents = document.getElementById('printContainer');
+        var url = location.origin + location.pathname;
+        var printWindow = window.open(url, '', '');
+        printWindow.document.write('<html><head><title>Data Coverage - Standard/Library Vs Input Data</title>');
+        printWindow.document.write('<link href="../Content/css/print.css" rel="stylesheet" />');
+        printWindow.document.write('</head><body>');
+        printWindow.document.write(printContents.innerHTML);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        setTimeout(function () {
+            printWindow.print();
+            printWindow.close();
+        }, 500);
+
+        $('#hspor1').hide();
+        $('#footerprint1').hide();
+    }
+
+</script>

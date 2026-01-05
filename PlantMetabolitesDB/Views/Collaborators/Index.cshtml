@@ -1,0 +1,312 @@
+﻿
+@{
+    ViewBag.Title = "Collaborators";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h4 class="py-3 breadcrumb-wrapper mb-2">Collaborator/Contributor List</h4>
+
+<!-- Collaborators Table -->
+<div class="card" id="collaboratorsTable">
+    <div class="card-datatable table-responsive">
+        <table class="datatables-Collaborators table border-top">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Email Id</th>
+                    <th>Affliation</th>
+                    @*<th>Country</th>*@
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<div class="collaborators-form-body" id="collaboratorsFrom">
+
+</div>
+
+
+<!--/ Collaborators Table -->
+@section Scripts
+{
+    <script>
+        $(function () {
+            $('#collaboratorsFrom').hide();
+            LoadTable();
+        });
+
+        function LoadTable() {
+            var e,
+            a = $(".datatables-Collaborators")
+            a.DataTable().destroy();
+            a.length &&
+                (e = a.DataTable({
+                    "ajax": {
+                        "url": "/Collaborators/GetCollaborators",
+                        "type": "GET",
+                        "datatype": "json"
+                    },
+                    columns: [
+                        { data: "" },
+                        { data: "CollaboratorsKey" },
+                        { data: "Name" },
+                        { data: "CollaboratorTypeName" },
+                        { data: "EmailId" },
+                        { data: "Affiliation" },
+                      /*  { data: "CountryName" },*/
+                        { data: "IsActive" },
+                        { data: "" },
+                    ],
+                    columnDefs: [
+                        {
+                            className: "control",
+                            orderable: !1,
+                            searchable: !1,
+                            responsivePriority: 2,
+                            targets: 0,
+                            render: function (e, a, t, s) {
+                                return "";
+                            },
+                        },
+                        { targets: 1, searchable: !1, visible: !1, orderable: 1},
+                        {
+                            targets: 2,
+                            render: function (e, a, t, s) {
+                                return (
+                                    '<span class="text-nowrap fw-semibold">' + t.Name + "</span>"
+                                );
+                            },
+                        },
+                        {
+                            targets: 3,
+                            render: function (e, a, t, s) {
+                                return (
+                                    '<span class="text-nowrap fw-semibold">' + t.CollaboratorTypeName + "</span>"
+                                );
+                            },
+                        },
+                        {
+                            targets: 4,
+                            render: function (e, a, t, s) {
+                                return (
+                                    '<span class="text-nowrap fw-semibold">' + t.EmailId + "</span>"
+                                );
+                            },
+                        },
+                        {
+                            targets: 5,
+                            render: function (e, a, t, s) {
+                                return (
+                                    '<span class="text-nowrap fw-semibold">' + t.Affiliation + "</span>"
+                                );
+                            },
+                        },
+                        //{
+                        //    targets: 6,
+                        //    render: function (e, a, t, s) {
+                        //        return '<span class="text-nowrap fw-semibold">' + t.CountryName + "</span>";
+                        //    },
+                        //},
+                        {
+                            targets: 6,
+                            searchable: !1,
+                            orderable: !1,
+                            render: function (e, a, t, s) {
+                                var r = t.IsActive == true ? "<a href='javascript:void(0)' data-isactive='De-Activate' data-id=" + t.CollaboratorsKey + " class='active-deactive'><span class='badge bg-label-primary m-1'>Disable</span></a>" : "<a href='javascript:void(0)' data-id=" + t.CollaboratorsKey + " data-isactive='Activate' class='active-deactive'><span class='badge bg-label-warning m-1'>Enable</span></a>"
+                                return '<span class="text-nowrap">' + r + "</span>";
+                            },
+                        },
+
+                        {
+                            targets: -1,
+                            searchable: !1,
+                            title: "Actions",
+                            orderable: !1,
+                            render: function (e, a, t, s) {
+                                return '<span class="text-nowrap"><button class="edit-record btn btn-sm btn-icon me-2" "data-bs-toggle": "modal" data-bs-target="#databaseModal"  data-id=' + t.CollaboratorsKey + '><i class="bx bx-edit"></i></button><button class="btn btn-sm btn-icon delete-record" data-id=' + t.CollaboratorsKey +'><i class="bx bx-trash"></i></button></span>';
+                            },
+                        },
+                    ],
+                    order: [[1, "desc"]],
+                    dom: '<"row mx-1"<"col-sm-12 col-md-3" l><"col-sm-12 col-md-9"<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-md-end justify-content-center flex-wrap me-1"<"me-3"f>B>>>t<"row mx-2"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+                    language: {
+                        sLengthMenu: "_MENU_",
+                        search: "Search",
+                        searchPlaceholder: "Search..",
+                    },
+                    buttons: [
+                        {
+                            text: "Add Collaborator/Contributor",
+                            className: "add-new btn btn-primary mb-3 mb-md-0",
+                            //attr: {
+                            //    "data-bs-target": "#databaseModal",
+                            //},
+                            init: function (e, a, t) {
+                                $(a).removeClass("btn-secondary");
+                            },
+                        },
+                    ],
+                    //responsive: {
+                    //    details: {
+                    //        display: $.fn.dataTable.Responsive.display.modal({
+                    //            header: function (e) {
+                    //                return "Details of " + e.data().Name;
+                    //            },
+                    //        }),
+                    //        type: "column",
+                    //        renderer: function (e, a, t) {
+                    //            t = $.map(t, function (e, a) {
+                    //                return "" !== e.title
+                    //                    ? '<tr data-dt-row="' +
+                    //                    e.rowIndex +
+                    //                    '" data-dt-column="' +
+                    //                    e.columnIndex +
+                    //                    '"><td>' +
+                    //                    e.title +
+                    //                    ":</td> <td>" +
+                    //                    e.data +
+                    //                    "</td></tr>"
+                    //                    : "";
+                    //            }).join("");
+                    //            return !!t && $('<table class="table"/><tbody />').append(t);
+                    //        },
+                    //    },
+                    //},
+                })),
+                $(".datatables-Collaborators tbody").on("click", ".active-deactive", function () {
+                    var id = $(this).attr('data-id');
+                    var statustext = $(this).attr('data-isactive');
+                    Swal.fire({
+                        title: "Are you sure want to " + statustext + "?",
+                            text: "You won't be able to revert this!",
+                            icon: "warning",
+                            showCancelButton: !0,
+                        confirmButtonText: "Yes, " + statustext +" it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary me-3",
+                                cancelButton: "btn btn-label-secondary",
+                            },
+                            buttonsStyling: !1,
+                        }).then(function (t) {
+                            if (t.isConfirmed) {
+                                $.ajax({
+                                    type: "GET",
+                                     url: '@Url.Action("ActivateDeActivate", "Collaborators")',
+                                    contentType: "application/json; charset=utf-8",
+                                    data: {"CollaboratorsKey": id},
+                                    datatype: "json",
+                                    success: function (data) {
+                                        var txtmsg = statustext == "Activate" ? "Activated" :"De-Activated"
+                                        t.value &&
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: txtmsg,
+                                            text: "Your data has been " + txtmsg +".",
+                                            customClass: { confirmButton: "btn btn-success" },
+                                        });
+
+                                        $('.swal2-confirm').on('click', function () { LoadTable() });
+                                    },
+                                    error: function () {
+                                        alert("Error Occured!");
+                                    }
+                                });
+                            }
+
+                        });
+                }),
+
+                $(".datatables-Collaborators tbody").on("click", ".delete-record", function () {
+                        var id = $(this).attr('data-id');
+                        Swal.fire({
+                            title: "Are you sure want to delete?",
+                            text: "You won't be able to revert this!",
+                            icon: "warning",
+                            showCancelButton: !0,
+                            confirmButtonText: "Yes, delete it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary me-3",
+                                cancelButton: "btn btn-label-secondary",
+                            },
+                            buttonsStyling: !1,
+                        }).then(function (t) {
+                            if (t.isConfirmed) {
+                                $.ajax({
+                                    type: "GET",
+                                     url: '@Url.Action("DeleteCollaborators", "Collaborators")',
+                                    contentType: "application/json; charset=utf-8",
+                                    data: {"CollaboratorsKey": id},
+                                    datatype: "json",
+                                    success: function (data) {
+                                        t.value &&
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "Deleted!",
+                                            text: "Your data has been deleted.",
+                                            customClass: { confirmButton: "btn btn-success" },
+                                        });
+
+                                        $('.swal2-confirm').on('click', function () { LoadTable() });
+                                    },
+                                    error: function () {
+                                        alert("Data not deleted.");
+                                    }
+                                });
+                            }
+
+                        });
+                }),
+
+                $(".add-new").on("click", function () {
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("AddCollaborators", "Collaborators")',
+                        contentType: "application/json; charset=utf-8",
+                        data: {},
+                        datatype: "json",
+                        success: function (data) {
+                            $('.collaborators-form-body').html(data)
+                            $('#collaboratorsTable').hide();
+                            $('#collaboratorsFrom').show();
+                        },
+                        error: function () {
+                            alert("Data load failed.");
+                        }
+                    });
+                }),
+
+                $(".datatables-Collaborators tbody").on(
+                    "click",
+                    ".edit-record", function () {
+                    var id = $(this).attr('data-id');
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("EditCollaborators", "Collaborators")',
+                        contentType: "application/json; charset=utf-8",
+                        data: {"CollaboratorsKey": id},
+                        datatype: "json",
+                        success: function (data) {
+                            $('.collaborators-form-body').html(data)
+                            $('#collaboratorsTable').hide();
+                            $('#collaboratorsFrom').show();
+                        },
+                        error: function () {
+                            alert("Data load failed.");
+                        }
+                    });
+                }),
+                setTimeout(() => {
+                    $(".dataTables_filter .form-control").removeClass("form-control-sm"),
+                        $(".dataTables_length .form-select").removeClass("form-select-sm");
+                }, 300);
+    }
+
+    </script>
+
+}

@@ -1,0 +1,475 @@
+﻿
+@model PlantMetabolitesDB.ViewModel.CompoundViewModel
+<style>
+    .file-button-hide-show {
+        float: right;
+    }
+</style>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <h5 class="card-header">Edit Compound</h5>
+            <hr class="mt-0 mb-0" />
+            <div class="card-body">
+                @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "editCompoundForm", @class = "row g-3", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(d => d.CompoundKey)
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.DatabaseKey, new { @class = "form-label" })
+                        @Html.DropDownListFor(e => e.DatabaseKey, new SelectList(Model.Databases, "DatabaseKey", "DatabaseName"), "Select", new { @class = "form-select", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.CompoundName, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.CompoundName, new { @class = "form-control typeahead compound", @placeholder = "Compound Name", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.CompiledBy, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.CompiledBy, new { @class = "form-control typeahead compiledBy", @placeholder = "Compiled By", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.Formula, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.Formula, new { @class = "form-control", @placeholder = "Formula", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.MolecularWeight_Input, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.MolecularWeight_Input, new { @class = "form-control", @placeholder = "Molecular Weight", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.CASNo, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.CASNo, new { @class = "form-control typeahead casno", @placeholder = "CAS No", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.Smiles, new { @class = "form-label" })
+                        @Html.TextAreaFor(e => e.Smiles, new { @class = "form-control", @placeholder = "Canonical Smiles", @autofocus = "autofocus", @rows = "4" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.IUPACName, new { @class = "form-label" })
+                        @Html.TextAreaFor(e => e.IUPACName, new { @class = "form-control", @placeholder = "IUPAC Name", @autofocus = "autofocus", @rows = "4" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.OtherNames, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.OtherNames, new { @class = "form-control typeahead othernames", @placeholder = "Other Names", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.ChemicalStructureFile, new { @class = "form-label" })
+                        <input class="form-control" type="file" id="ChemicalStructureImageFile" name="ChemicalStructureImageFile">
+                        @if (Model.ChemicalStructureFile != null)
+                        {
+                            @Html.HiddenFor(d => d.ChemicalStructureFile)
+                            <div class="file-button-hide-show">
+                                <a href="~/UploadedFiles/Compound/ChemicalStructure/@Model.ChemicalStructureFile" target="_blank" class="btn btn-sm btn-secondary mt-2"><i class="bx bx-show-alt"></i> View</a>
+                                @*<button type="button" class="btn btn-sm btn-danger mt-2"><i class="bx bx-trash"></i> Remove</button>*@
+                            </div>
+                        }
+
+                    </div>
+
+                    <div class="col-12">
+                        <h6 class="mt-2 fw-normal">Add Mass Spectrum</h6>
+                        <hr class="mt-0" />
+                    </div>
+                    <div class="row gy-3 mt-0">
+                        <div class="col-xl-4 col-md-6 col-sm-8 col-12">
+                            <div class="form-check custom-option custom-option-icon">
+                                <label class="form-check-label custom-option-content" for="basicPlanMain1">
+                                    <span class="custom-option-body">
+                                        <span class="badge badge-center rounded-pill bg-info">@Model.MS2Count</span>
+                                        <span class="custom-option-title"> MS2 Mass Spectrum </span>
+
+                                    </span>
+                                    @*<button type="button" name="ms2MSButton" class="btn btn-primary m-lg-2" id="ms2MSButton">Add</button>*@
+                                    @*<a href="javascript:;" class="btn btn-label-slack me-2"><i class="bx bx-plus"></i>Add</a>*@
+                                    <a href="javascript:;" class="add-ms btn btn-label-slack me-2" data-bs-target="#compoundMsModal"
+                                       data-id=@Model.CompoundKey data-databasekey=@Model.DatabaseKey data-ms="MS2"><i class="bx bx-plus"></i>Add</a>
+
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6 col-sm-8 col-12">
+                            <div class="form-check custom-option custom-option-icon">
+                                <label class="form-check-label custom-option-content" for="basicPlanMain2">
+                                    <span class="custom-option-body">
+                                        <span class="badge badge-center rounded-pill bg-info">@Model.MS3Count</span>
+                                        <span class="custom-option-title"> MS3 Mass Spectrum </span>
+
+                                    </span>
+                                    @*<button type="button" name="ms3MSButton" class="btn btn-secondary m-lg-2" id="ms3MSButton">Add</button>*@
+                                    @*<a href="javascript:;" class="btn btn-label-slack me-2"><i class="bx bx-plus"></i>Add</a>*@
+                                    <a href="javascript:;" class="add-ms  btn btn-label-slack me-2" data-bs-target="#compoundMsModal"
+                                       data-id=@Model.CompoundKey data-databasekey=@Model.DatabaseKey data-ms="MS3"><i class="bx bx-plus"></i>Add</a>
+
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6 col-sm-8 col-12">
+                            <div class="form-check custom-option custom-option-icon">
+                                <label class="form-check-label custom-option-content" for="basicPlanMain3">
+                                    <span class="custom-option-body">
+                                        <span class="badge badge-center rounded-pill bg-info">@Model.AductCount</span>
+                                        <span class="custom-option-title"> Aduct Mass Spectrum </span>
+
+                                    </span>
+                                    @*<button type="button" name="aductMSButton" class="btn btn-warning m-lg-2" id="aductMSButton">Add</button>*@
+                                    @*<a href="javascript:;" class="btn btn-label-slack me-2"><i class="bx bx-plus"></i>Add</a>*@
+
+                                    <a href="javascript:;" class="add-ms btn btn-label-slack me-2" data-bs-target="#compoundMsModal"
+                                       data-id=@Model.CompoundKey data-databasekey=@Model.DatabaseKey data-ms="Aduct"><i class="bx bx-plus"></i>Add</a>
+
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="submit" value="Update" class="btn btn-primary" id="submitButton" name="submitButton" />
+                        <button type="button" name="cancelButton" class="btn btn-secondary m-lg-2" id="cancelButton">Close</button>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#cancelButton").click(function () {
+        $('#compoundTable').show();
+        $('#compoundFrom').hide();
+    });
+</script>
+<script>
+    $(function (e) {
+        const submitButton = document.getElementById('submitButton');
+        const a = document.getElementById("editCompoundForm");
+        const fv = FormValidation.formValidation(
+            a, {
+            fields: {
+                DatabaseKey: {
+                    validators: { notEmpty: { message: "Please select database" } },
+                },
+                CompoundName: {
+                    validators: {
+                        notEmpty: { message: "Please enter compound name" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        }, },
+                },
+                CompiledBy: {
+                    validators: {
+                        notEmpty: { message: "Please enter compiled by" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                Formula: {
+                    validators: {
+                        notEmpty: { message: "Please enter formula" },
+                        callback: {
+                            message: 'Only character and number are allowed',
+                            callback: function (input) {
+                                var regex = new RegExp("^[a-zA-Z0-9]+\$");
+                                if (!regex.test(input.value)) {
+                                    return false
+                                }
+                                return true;
+                            },
+                        },
+                    },
+                },
+                MolecularWeight_Input: {
+                    validators: {
+                        notEmpty: { message: "Please enter molecular weight" },
+                        callback: {
+                            message: 'The value is not a correct format (ony 4 digit allowed before & after decimal)',
+                            callback: function (input) {
+                                var regex = new RegExp("^[0-9]{0,4}(?:[.][0-9]{0,4})?$");
+                                if (!regex.test(input.value)) {
+                                    return false
+                                }
+                                return true;
+                            },
+                        },
+                    },
+                },
+                IUPACName: {
+                    validators: {
+                        notEmpty: { message: "Please enter IUPAC" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                    CASNo: {
+                        validators: {
+                            // notEmpty: { message: "Please enter IUPAC" },
+                            callback: {
+                                message: 'Only number and dash(-) are allowed',
+                                callback: function (input) {
+                                    var regex = new RegExp("^\[0-9]+(-\[0-9]+)*$");
+                                    if (!regex.test(input.value)) {
+                                        return false
+                                    }
+                                    return true;
+                                },
+                            },
+                        },
+                    },
+                    Smiles: {
+                        validators: {
+                            //notEmpty: { message: "Please enter IUPAC" },
+                            regexp: {
+                                regexp: /^[^<%>]+$/,
+                                message: 'Invalid character not allowed'
+                            },
+                        },
+                    },
+                    OtherNames: {
+                        validators: {
+                            //notEmpty: { message: "Please enter IUPAC" },
+                            regexp: {
+                                regexp: /^[^<%>]+$/,
+                                message: 'Invalid character not allowed'
+                            },
+                        },
+                    },
+                ChemicalStructureImageFile: {
+                    validators: {
+                        //notEmpty: {
+                        //    message: 'Please choose a chemical structure file to upload',
+                        //},
+                        file: {
+                            extension: 'jpg, jpeg',
+                            type: 'image/jpg,image/jpeg',
+                            maxSize: 50 * 1024,
+                            message: 'The file must be in jpg, jpeg format and must not exceed 50 KB in size',
+                        },
+                    },
+                },
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap5: new FormValidation.plugins.Bootstrap5(),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+                autoFocus: new FormValidation.plugins.AutoFocus(),
+
+            },
+
+        });
+
+        fv.on('core.form.valid', function () {
+            // Disable the submit button
+            submitButton.setAttribute('disabled', true);
+            document.getElementById('submitButton').value = 'Updating...';
+            var form = $("#editCompoundForm").get(0);
+            var formData = new FormData(form);
+            //var valdata = $("#editCompoundForm").serialize();
+            $.ajax({
+                url: "/Compound/EditCompound",
+                type: "POST",
+                dataType: 'json',
+                //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    if (response == "Success") {
+                        //$('#compoundTable').show();
+                        //$('#compoundFrom').hide();
+                        //LoadTable();
+                        Swal.fire({
+                            icon: "success",
+                            title: "Updated",
+                            text: "Data updated successfully.",
+                            customClass: { confirmButton: "btn btn-success" },
+                        });
+
+                        $('.swal2-confirm').on('click', function () {
+                            $('#compoundTable').show();
+                            $('#compoundFrom').hide();
+                            LoadTable();
+                        });
+                    }
+                    else {
+                        $('#compoundTable').hide();
+                        $('#compoundFrom').show();
+                        submitButton.setAttribute('disabled', false);
+                        document.getElementById('submitButton').value = 'Edit';
+                    }
+
+                },
+                error: function (response) {
+                    submitButton.setAttribute('disabled', false);
+                    document.getElementById('submitButton').value = 'Edit';
+                }
+            });
+        });
+    });
+
+    $(".add-ms").on("click", function () {
+        var id = $(this).attr('data-id');
+        var databasekey = $(this).attr('data-databasekey');
+        var mstype = $(this).attr('data-ms');
+        var options = { "backdrop": "static", keyboard: true };
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("AddCompoundMS2", "Compound")',
+            contentType: "application/json; charset=utf-8",
+            data: { "CompoundKey": id, "DatabaseKey": databasekey, "MSTypeKey": mstype },
+            datatype: "json",
+            success: function (data) {
+                $('.modal-body').html(data)
+                $('#compoundMSModal').modal(options);
+                $('#compoundMSModal').modal('show');
+            },
+            error: function () {
+                alert("Data load failed.");
+            }
+        });
+    });
+</script>
+
+<script>
+    $(function () {
+        $.ajax({
+            url: "/Compound/GetCASNoNames",
+            type: "Get",
+            dataType: "json",
+            data: {},
+            success: function (data) {
+                var result = [];
+                for (var i in data)
+                    result.push(data[i].CASNo);
+                var s, e = result;
+                $(".typeahead.casno").typeahead(
+                    { hint: !isRtl, highlight: !0, minLength: 1 },
+                    {
+                        name: "CASNo",
+                        source:
+                            ((s = e),
+                                function (e, a) {
+                                    var t = [],
+                                        o = new RegExp(e, "i");
+                                    $.each(s, function (e, a) {
+                                        o.test(a) && t.push(a);
+                                    }),
+                                        a(t);
+                                }),
+                    }
+                ),
+                    new Bloodhound({
+                        datumTokenizer: Bloodhound.tokenizers.whitespace,
+                        queryTokenizer: Bloodhound.tokenizers.whitespace,
+                        local: e,
+                    })
+            },
+        });
+
+        $.ajax({
+            url: "/Compound/GetOtherNames",
+            type: "Get",
+            dataType: "json",
+            data: {},
+            success: function (data) {
+                var result = [];
+                for (var i in data)
+                    result.push(data[i].OtherNames);
+                var s, e = result;
+                $(".typeahead.othernames").typeahead(
+                    { hint: !isRtl, highlight: !0, minLength: 1 },
+                    {
+                        name: "OtherNames",
+                        source:
+                            ((s = e),
+                                function (e, a) {
+                                    var t = [],
+                                        o = new RegExp(e, "i");
+                                    $.each(s, function (e, a) {
+                                        o.test(a) && t.push(a);
+                                    }),
+                                        a(t);
+                                }),
+                    }
+                ),
+                    new Bloodhound({
+                        datumTokenizer: Bloodhound.tokenizers.whitespace,
+                        queryTokenizer: Bloodhound.tokenizers.whitespace,
+                        local: e,
+                    })
+            },
+        });
+
+        $.ajax({
+            url: "/Compound/GetCompoundNames",
+            type: "Get",
+            dataType: "json",
+            data: {},
+            success: function (data) {
+                var result = [];
+                for (var i in data)
+                    result.push(data[i].CompoundName);
+                var s, e = result;
+                $(".typeahead.compound").typeahead(
+                    { hint: !isRtl, highlight: !0, minLength: 1 },
+                    {
+                        name: "CompoundName",
+                        source:
+                            ((s = e),
+                                function (e, a) {
+                                    var t = [],
+                                        o = new RegExp(e, "i");
+                                    $.each(s, function (e, a) {
+                                        o.test(a) && t.push(a);
+                                    }),
+                                        a(t);
+                                }),
+                    }
+                ),
+                    new Bloodhound({
+                        datumTokenizer: Bloodhound.tokenizers.whitespace,
+                        queryTokenizer: Bloodhound.tokenizers.whitespace,
+                        local: e,
+                    })
+            },
+        });
+
+        $.ajax({
+            url: "/Compound/GetCompiledByNames",
+            type: "Get",
+            dataType: "json",
+            data: {},
+            success: function (data) {
+                var result = [];
+                for (var i in data)
+                    result.push(data[i].CompiledBy);
+                var s, e = result;
+                $(".typeahead.compiledBy").typeahead(
+                    { hint: !isRtl, highlight: !0, minLength: 1 },
+                    {
+                        name: "CompiledBy",
+                        source:
+                            ((s = e),
+                                function (e, a) {
+                                    var t = [],
+                                        o = new RegExp(e, "i");
+                                    $.each(s, function (e, a) {
+                                        o.test(a) && t.push(a);
+                                    }),
+                                        a(t);
+                                }),
+                    }
+                ),
+                    new Bloodhound({
+                        datumTokenizer: Bloodhound.tokenizers.whitespace,
+                        queryTokenizer: Bloodhound.tokenizers.whitespace,
+                        local: e,
+                    })
+            },
+        });
+
+    });
+
+</script>

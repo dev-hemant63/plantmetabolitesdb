@@ -1,0 +1,19 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "User Verification";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>User Verification</title>
+</head>
+<body>
+    <h2>User Verification Process</h2>
+    <div class="danger alert-danger">
+        <strong>Message..!!</strong>  @ViewBag.Message,  please click here to Login @Html.ActionLink("Login", "Login", "Account")
+    </div>
+</body>
+</html>

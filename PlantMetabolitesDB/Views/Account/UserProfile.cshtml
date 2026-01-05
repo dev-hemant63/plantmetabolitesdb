@@ -1,0 +1,215 @@
+﻿@model PlantMetabolitesDB.ViewModel.UsersViewModel
+
+@{
+    ViewBag.Title = "UserProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="breadcrumb-grid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <h3 class="header_title">User Profile</h3>
+                <ol class="breadcrumb">
+                    <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+                    <li class="active">User Profie </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="inner-grid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="about-text">
+                    @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "editUsersForm", @class = "row g-3" }))
+                    {
+                        @Html.AntiForgeryToken();
+
+                        @Html.HiddenFor(e => e.UserKey)
+                        <div class="container feedback-container">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-12 col-xs-12 ">
+                                    <div class="feedback-form">
+                                        @Html.LabelFor(d => d.Username, new { @class = "form-label" })
+                                        @Html.TextBoxFor(e => e.Username, new { @class = "form-control", @placeholder = "Username", @autofocus = "autofocus", @disabled = "disabled" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-xs-12">
+                                    <div class="feedback-form">
+                                        @Html.LabelFor(d => d.FName, new { @class = "form-label" })
+                                        @Html.TextBoxFor(e => e.FName, new { @class = "form-control", @placeholder = "First Name", @autofocus = "autofocus" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-xs-12">
+                                    <div class="feedback-form">
+                                        @Html.LabelFor(d => d.LName, new { @class = "form-label" })
+                                        @Html.TextBoxFor(e => e.LName, new { @class = "form-control", @placeholder = "Last Name", @autofocus = "autofocus" })
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="feedback-form">
+                                        @Html.LabelFor(d => d.Address, new { @class = "form-label" })
+                                        @Html.TextAreaFor(e => e.Address, new { @class = "form-control", @placeholder = "Address", @row = "4", @autofocus = "autofocus" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-xs-12">
+                                    <div class="feedback-form">
+                                        @Html.LabelFor(d => d.CountryKey, new { @class = "form-label" })
+                                        @Html.DropDownListFor(e => e.CountryKey, new SelectList(Model.Countries, "CountryKey", "CountryName"), "Select",
+                                       new { @class = "form-select", @autofocus = "autofocus" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-xs-12">
+                                    <div class="feedback-form">
+                                        @Html.LabelFor(d => d.Phone, new { @class = "form-label" })
+                                        @Html.TextBoxFor(e => e.Phone, new { @class = "form-control", @placeholder = "Phone", @autofocus = "autofocus" })
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-xs-12">
+                                    <div class="feedback-form">
+                                        @Html.LabelFor(d => d.Mobile, new { @class = "form-label" })
+                                        @Html.TextBoxFor(e => e.Mobile, new { @class = "form-control", @placeholder = "Mobile", @autofocus = "autofocus" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 col-sm-12 col-xs-12">
+                                    <div class="feedback-form">
+                                        @Html.LabelFor(d => d.OrganizationTypeKey, new { @class = "form-label" })
+                                        @Html.DropDownListFor(e => e.OrganizationTypeKey, new SelectList(Model.OrganizationTypes, "OrganizationTypeKey", "OrganizationTypeName"), "Select", new { @class = "form-select", @autofocus = "autofocus" })
+                                    </div>
+                                </div>
+                                <div class="col-md-8 col-sm-12 col-xs-12">
+                                    <div class="feedback-form">
+                                        @Html.LabelFor(d => d.Affiliation, new { @class = "form-label" })
+                                        @Html.TextBoxFor(e => e.Affiliation, new { @class = "form-control", @placeholder = "Affiliation", @autofocus = "autofocus" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1 col-sm-12 col-xs-12 mt-2">
+                                    <input type="submit" value="Edit Profile" class="btn btn-primary" id="submitButton" name="submitButton" />
+                                </div>
+                                <div class="col-md-9 col-sm-12 col-xs-12 mt-lg-3 m-lg-2">
+                                    <span id="successMesasge" class="text-success"></span>
+                                    <span id="errorMessage" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="~/assets/vendor/libs/jquery/jquery.js"></script>
+<script src="~/assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js"></script>
+<script src="~/assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
+<script src="~/assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js"></script>
+<script>
+
+    $(function (e) {
+
+        const a = document.getElementById("editUsersForm");
+        d = jQuery(a.querySelector('[name="CountryKey"]'));
+        const submitButton = document.getElementById('submitButton');
+
+        s = FormValidation.formValidation(
+            a, {
+            fields: {
+                Username: {
+                    validators: {
+                        notEmpty: { message: "Please enter username" },
+                        emailAddress: {
+                            message: "Please enter a valid email address",
+                        },
+                    },
+                },
+                FName: {
+                    validators: {
+                        notEmpty: { message: "Please enter first name" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+
+                Mobile: {
+                    validators: {
+                        notEmpty: { message: "Please enter mobile number" },
+                        integer: {
+                            message: 'Please enter a valid mobile number',
+                        },
+                    },
+                },
+                Address: {
+                    validators: {
+                        notEmpty: { message: "Please enter address" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                CountryKey: {
+                    validators: { notEmpty: { message: "Please select country" } },
+                },
+                OrganizationTypeKey: {
+                    validators: { notEmpty: { message: "Please select organization type" } },
+                },
+                Phone: {
+                    validators: {
+                        integer: {
+                            message: 'Please enter a valid phone number',
+                        },
+                    },
+                },
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap5: new FormValidation.plugins.Bootstrap5({
+                    eleValidClass: "",
+                    rowSelector: ".feedback-form",
+                }),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+                autoFocus: new FormValidation.plugins.AutoFocus(),
+            },
+
+
+        }).on('core.form.valid', function () {
+            // Disable the submit button
+            $('#successMesasge').text('');
+            $('#errorMessage').text('');
+            submitButton.setAttribute('disabled', true);
+            document.getElementById('submitButton').value = 'Updating...';
+
+            var valdata = $("#editUsersForm").serialize();
+            $.ajax({
+                url: "/Account/UserProfile",
+                type: "POST",
+                dataType: 'json',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: valdata,
+                success: function (response) {
+                    if (response == "Success") {
+                        submitButton.removeAttribute('disabled');
+                        document.getElementById('submitButton').value = 'Edit Profile';
+                        $('#successMesasge').text('User updated successfully.');
+                    }
+                    else {
+                        $('#errorMessage').text('User not updated.Try again!');
+                    }
+                },
+                error: function (response) {
+                    $('#errorMessage').text('something went wrong. Try again!')
+                }
+            });
+        });
+    });
+</script>
+

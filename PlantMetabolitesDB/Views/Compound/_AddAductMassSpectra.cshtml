@@ -1,0 +1,25 @@
+﻿@model PlantMetabolitesDB.ViewModel.AductMassSpectraViewModel
+
+<div class="mb-2">
+    <h5>Add Adduct Mass Spectra</h5>
+    <hr class="mt-0 mb-0" />
+</div>
+
+<div class="row aductAddEdit">
+    @{
+        Html.RenderPartial("_AddEditAductMassSpectra", Model);
+    }
+</div>
+
+<div class="col-12 mt-4">
+    <h5>Adduct Mass Spectra List</h5>
+</div>
+
+<div class="row aductlist">
+</div>
+
+<script>
+    var databasekey = '@ViewBag.DatabaseKey';
+</script>
+
+

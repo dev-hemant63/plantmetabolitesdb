@@ -1,0 +1,399 @@
+﻿@model IEnumerable<PlantMetabolitesDB.ViewModel.DatabaseViewModel>
+@{
+    ViewBag.Title = "Plant family";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h4 class="py-3 breadcrumb-wrapper mb-2">Plant family List</h4>
+<!-- Database Table -->
+<div class="card">
+    <div class="card-datatable table-responsive">
+        <table class="datatables-database table border-top">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Name of plant family</th>
+                    <th>Created Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+<!--/ Database Table -->
+
+<div class="modal fade" id="databaseModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-3 p-md-5">
+            <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+
+    <script>
+        $(function () {
+            LoadTable();
+        });
+
+        function LoadTable() {
+            var e,
+            a = $(".datatables-database"),
+            l = {
+                    1: { title: "Active", class: "bg-label-success" },
+                    2: { title: "Inactive", class: "bg-label-secondary" },
+                };
+            a.DataTable().destroy();
+            a.length &&
+                (e = a.DataTable({
+                    "ajax": {
+                        "url": "/Database/GetDatabase",
+                        "type": "GET",
+                        "datatype": "json"
+                    },
+                    columns: [
+                        { data: "" },
+                        { data: "DatabaseKey" },
+                        { data: "DatabaseName" },
+                        { data: "CreatedOn" },
+                        { data: "StatusName" },
+                        { data: "" },
+                    ],
+                    columnDefs: [
+                        {
+                            className: "control",
+                            orderable: !1,
+                            searchable: !1,
+                            responsivePriority: 2,
+                            targets: 0,
+                            render: function (e, a, t, s) {
+                                return "";
+                            },
+                        },
+                        { targets: 1, searchable: !1, visible: !1, orderable: 1},
+                        {
+                            targets: 2,
+                            render: function (e, a, t, s) {
+                                return (
+                                    '<span class="text-nowrap fw-semibold">' + t.DatabaseName + "</span>"
+                                );
+                            },
+                        },
+                        {
+                            targets: 3,
+                            orderable: !1,
+                            render: function (e, a, t, s) {
+                                return '<span class="text-nowrap">' + ConvertJsonDateString(t.CreatedOn) + "</span>";
+                            },
+                        },
+                        {
+                            targets: 4,
+                          /*  searchable: !1,*/
+                            orderable: !1,
+                            render: function (e, a, t, s) {
+                                t = t.StatusName;
+                                var indx = t == "Active" ? 1 : 2;
+                                return (
+                                    '<span class="badge ' +
+                                    l[indx].class +
+                                    '">' +
+                                    l[indx].title +
+                                    "</span>"
+                                );
+                                //return (
+                                //    "<span class='text-truncate d-flex align-items-center'>" +
+                                //    {
+                                //        Active:
+                                //            '<span class="badge bg-label-success w-px-30 h-px-30 me-2"></span>',
+                                //        InActive:
+                                //            '<span class="badge bg-label-secondary w-px-30 h-px-30 me-2"></span>',
+                                //    }[t] +
+                                //    t +
+                                //    "</span>"
+                                //);
+                                //var r = t.IsActive == true ? "<a href='javascript:void(0)' data-isactive='De-Activate' data-id=" + t.DatabaseKey + " class='active-deactive'><span class='badge bg-label-primary m-1'>Disable</span></a>" : "<a href='javascript:void(0)' data-id=" + t.DatabaseKey + " data-isactive='Activate' class='active-deactive'><span class='badge bg-label-warning m-1'>Enable</span></a>"
+                                //return '<span class="text-nowrap">' + r + "</span>";
+                            },
+                        },
+
+                        {
+                            targets: -1,
+                            searchable: !1,
+                            title: "Actions",
+                            orderable: !1,
+                            render: function (e, a, t, s) {
+                                var r = t.IsActive == true ? "<a href='javascript:void(0)' data-isactive='De-Activate' data-id=" + t.DatabaseKey + " class='active-deactive'><span class='btn btn-xs btn-outline-dark m-1'>Deactivate</span></a>" : "<a href='javascript:void(0)' data-id=" + t.DatabaseKey + " data-isactive='Activate' class='active-deactive'><span class='btn btn-xs btn-outline-dark m-1'>Activate</span></a>"
+                                var lnk = '<span class="text-nowrap"><button class="edit-record btn btn-sm btn-icon me-2" "data-bs-toggle": "modal" data-bs-target="#databaseModal" data-id=' + t.DatabaseKey + '><i class="bx bx-edit"></i></button>'
+                                lnk = lnk + '<button class="btn btn-sm btn-icon delete-record" data-id=' + t.DatabaseKey + ' > <i class="bx bx-trash"></i></button></span>'
+
+                                @*if (@User.IsInRole("Superadmin").ToString().ToLower()) {
+                                     }*@
+                                //else {
+                                //    lnk = lnk +'</span>'
+                                //}
+                                lnk = lnk + r + '</span>'
+                               return lnk;
+
+                            },
+                        },
+                    ],
+                    order: [[1, "desc"]],
+                  //  dom: '<"row mx-1"<"col-sm-12 col-md-3" l><"col-sm-12 col-md-9"<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-md-end justify-content-center flex-wrap me-1"<"me-3"f>B>>>t<"row mx-2"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+                    //dom: '<"row mx-2"<"col-sm-12 col-md-4 col-lg-6" l><"col-sm-12 col-md-8 col-lg-6"<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-md-end justify-content-center align-items-center flex-sm-nowrap flex-wrap me-1"<"me-3"f><"database_status w-px-200 pb-3 pb-sm-0">>>>t<"row mx-2"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+                    dom: '<"row ms-2 me-3"<"col-12 col-md-6 d-flex align-items-center justify-content-center justify-content-md-start gap-2"l<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start mt-md-0 mt-3"B>><"col-12 col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row pe-3 gap-md-2"f<"database_status mb-3 mb-md-0">>>t<"row mx-2"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+
+                    language: {
+                        sLengthMenu: "_MENU_",
+                        search: "Search",
+                        searchPlaceholder: "Search..",
+                    },
+                    buttons: [
+                        {
+                            text: '<i class="bx bx-plus me-0 me-lg-2"></i><span class="d-none d-lg-inline-block">Add Plant family</span>',
+                            className: "add-new btn btn-primary mb-3 mb-md-0",
+                            attr: {
+                                "data-bs-target": "#databaseModal",
+                            },
+                            init: function (e, a, t) {
+                                $(a).removeClass("btn-secondary");
+                            },
+                        },
+                    ],
+                    //responsive: {
+                    //    details: {
+                    //        display: $.fn.dataTable.Responsive.display.modal({
+                    //            header: function (e) {
+                    //                return "Details of " + e.data().DatabaseName;
+                    //            },
+                    //        }),
+                    //        type: "column",
+                    //        renderer: function (e, a, t) {
+                    //            t = $.map(t, function (e, a) {
+                    //                return "" !== e.title
+                    //                    ? '<tr data-dt-row="' +
+                    //                    e.rowIndex +
+                    //                    '" data-dt-column="' +
+                    //                    e.columnIndex +
+                    //                    '"><td>' +
+                    //                    e.title +
+                    //                    ":</td> <td>" +
+                    //                    e.data +
+                    //                    "</td></tr>"
+                    //                    : "";
+                    //            }).join("");
+                    //            return !!t && $('<table class="table"/><tbody />').append(t);
+                    //        },
+                    //    },
+                    //},
+                    initComplete: function () {
+                        this.api()
+                            .columns(4)
+                            .every(function () {
+                                var a = this,
+                                    t = $(
+                                        '<select id="DatabaseStatus" class="form-select text-capitalize"><option value=""> All </option></select>'
+                                    )
+                                        .appendTo(".database_status")
+                                        .on("change", function () {
+                                            var e = $.fn.dataTable.util.escapeRegex($(this).val());
+                                            a.search(e ? "^" + e + "$" : "", !0, !1).draw();
+                                        });
+                                a.data()
+                                    .unique()
+                                    .sort()
+                                    .each(function (e, a) {
+                                        t.append(
+                                            '<option value="' +
+                                            e +
+                                            '" class="text-capitalize">' +
+                                            e +
+                                            "</option>"
+                                        );
+                                    });
+                            });
+                    },
+                    //initComplete: function () {
+                    //    this.api()
+                    //        .columns(3)
+                    //        .every(function () {
+                    //            var a = this,
+                    //                t = $(
+                    //                    '<select id="UserRole" class="form-select text-capitalize"><option value=""> Select Role </option></select>'
+                    //                )
+                    //                    .appendTo(".user_role")
+                    //                    .on("change", function () {
+                    //                        var e = $.fn.dataTable.util.escapeRegex($(this).val());
+                    //                        a.search(e ? "^" + e + "$" : "", !0, !1).draw();
+                    //                    });
+                    //            a.data()
+                    //                .unique()
+                    //                .sort()
+                    //                .each(function (e, a) {
+                    //                    t.append(
+                    //                        '<option value="' +
+                    //                        e +
+                    //                        '" class="text-capitalize">' +
+                    //                        e +
+                    //                        "</option>"
+                    //                    );
+                    //                });
+                    //        });
+                    //},
+                })),
+                $(".datatables-database tbody").on("click", ".active-deactive", function () {
+                    var id = $(this).attr('data-id');
+                    var statustext = $(this).attr('data-isactive');
+                    Swal.fire({
+                        title: "Are you sure want to " + statustext + "?",
+                            text: "You won't be able to revert this!",
+                            icon: "warning",
+                            showCancelButton: !0,
+                        confirmButtonText: "Yes, " + statustext +" it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary me-3",
+                                cancelButton: "btn btn-label-secondary",
+                            },
+                            buttonsStyling: !1,
+                        }).then(function (t) {
+                            if (t.isConfirmed) {
+                                $.ajax({
+                                    type: "GET",
+                                     url: '@Url.Action("ActivateDeActivate", "Database")',
+                                    contentType: "application/json; charset=utf-8",
+                                    data: {"DatabaseKey": id},
+                                    datatype: "json",
+                                    success: function (data) {
+                                        var txtmsg = statustext == "Activate" ? "Activated" :"De-Activated"
+                                        t.value &&
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: txtmsg,
+                                            text: "Your data has been " + txtmsg +".",
+                                            customClass: { confirmButton: "btn btn-success" },
+                                        });
+
+                                        $('.swal2-confirm').on('click', function () { LoadTable() });
+                                    },
+                                    error: function () {
+                                        alert("Data not deleted.");
+                                    }
+                                });
+                            }
+
+                        });
+                }),
+
+                $(".datatables-database tbody").on("click", ".delete-record", function () {
+                        var id = $(this).attr('data-id');
+                        Swal.fire({
+                            title: "Are you sure want to delete?",
+                            text: "You won't be able to revert this!",
+                            icon: "warning",
+                            showCancelButton: !0,
+                            confirmButtonText: "Yes, delete it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary me-3",
+                                cancelButton: "btn btn-label-secondary",
+                            },
+                            buttonsStyling: !1,
+                        }).then(function (t) {
+                            if (t.isConfirmed) {
+                                $.ajax({
+                                    type: "GET",
+                                     url: '@Url.Action("DeleteDatabase", "Database")',
+                                    contentType: "application/json; charset=utf-8",
+                                    data: {"DatabaseKey": id},
+                                    datatype: "json",
+                                    success: function (data) {
+                                        t.value &&
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "Deleted!",
+                                            text: "Your data has been deleted.",
+                                            customClass: { confirmButton: "btn btn-success" },
+                                        });
+
+                                        $('.swal2-confirm').on('click', function () { LoadTable() });
+                                    },
+                                    error: function () {
+                                        alert("Data not deleted.");
+                                    }
+                                });
+                            }
+
+                        });
+                }),
+
+                $(".add-new").on("click", function () {
+                    var options = { "backdrop": "static", keyboard: true };
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("AddDatabase", "Database")',
+                        contentType: "application/json; charset=utf-8",
+                        data: {},
+                        datatype: "json",
+                        success: function (data) {
+                            $('.modal-body').html(data)
+                            $('#databaseModal').modal(options);
+                            $('#databaseModal').modal('show');
+                        },
+                        error: function () {
+                            alert("Data load failed.");
+                        }
+                    });
+                }),
+
+                $(".datatables-database tbody").on(
+                    "click",
+                    ".edit-record", function () {
+                    var id = $(this).attr('data-id');
+                    var options = { "backdrop": "static", keyboard: true };
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("EditDatabase", "Database")',
+                        contentType: "application/json; charset=utf-8",
+                        data: {"DatabaseKey": id},
+                        datatype: "json",
+                        success: function (data) {
+                            $('.modal-body').html(data)
+                            $('#databaseModal').modal(options);
+                            $('#databaseModal').modal('show');
+                        },
+                        error: function () {
+                            alert("Data load failed.");
+                        }
+                    });
+                }),
+                setTimeout(() => {
+                    $(".dataTables_filter .form-control").removeClass("form-control-sm"),
+                        $(".dataTables_length .form-select").removeClass("form-select-sm");
+                }, 300);
+    }
+
+    function ConvertJsonDateString(jsonDate) {
+        var shortDate = null;
+        if (jsonDate) {
+            var regex = /-?\d+/;
+            var matches = regex.exec(jsonDate);
+            var dt = new Date(parseInt(matches[0]));
+            var month = dt.getMonth() + 1;
+            var monthString = month > 9 ? month : '0' + month;
+            var day = dt.getDate();
+            var dayString = day > 9 ? day : '0' + day;
+            var year = dt.getFullYear();
+            shortDate = dayString + '-' + monthString + '-' + year;
+        }
+        return shortDate;
+    };
+    </script>
+
+
+
+}
+

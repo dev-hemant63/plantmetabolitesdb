@@ -1,0 +1,150 @@
+﻿@model PlantMetabolitesDB.ViewModel.AnnotationViewModel
+
+<div class="text-center mb-4">
+    <h3>Add Annotation</h3>
+</div>
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { @id = "addAnnotationForm", @class = "row" }))
+{
+    <div class="col-12 mb-3">
+        @Html.LabelFor(d => d.Polarity, new { @class = "form-label" })
+        @Html.DropDownListFor(e => e.Polarity, new SelectList(Model.Polarities, "Value", "Text"), new { @class = "form-select" })
+    </div>
+    <div class="col-12 mb-3">
+        @Html.LabelFor(d => d.AnnotationType, new { @class = "form-label" })
+        @Html.DropDownListFor(e => e.AnnotationType, new SelectList(Model.AnnotationTypes, "Value", "Text"), new { @class = "form-select" })
+    </div>
+    <div class="col-12 mb-3">
+        @Html.LabelFor(d => d.AnnotationName, new { @class = "form-label" })
+        @Html.TextBoxFor(e => e.AnnotationName, new { @class = "form-control typeahead", @placeholder = "Annotation Name", @autofocus = "autofocus" })
+    </div>
+    <div class="col-12 text-center demo-vertical-spacing">
+        <input type="submit" value="Create" class="btn btn-primary me-sm-3 me-1" id="submitButton" name="submitButton" />
+        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+    </div>
+}
+<script>
+    $(function () {
+        $.ajax({
+            url: "/Annotation/GetAnnotationNames",
+            type: "Get",
+            dataType: "json",
+            data: {},
+            success: function (data) {
+                var result = [];
+                for (var i in data)
+                    result.push(data[i].AnnotationName);
+                var s,
+                    e = result;
+                $(".typeahead").typeahead(
+                    { hint: !isRtl, highlight: !0, minLength: 1 },
+                    {
+                        name: "AnnotationName",
+                        source:
+                            ((s = e),
+                                function (e, a) {
+                                    var t = [],
+                                        o = new RegExp(e, "i");
+                                    $.each(s, function (e, a) {
+                                        o.test(a) && t.push(a);
+                                    }),
+                                        a(t);
+                                }),
+                    }
+                ),
+                    new Bloodhound({
+                        datumTokenizer: Bloodhound.tokenizers.whitespace,
+                        queryTokenizer: Bloodhound.tokenizers.whitespace,
+                        local: e,
+                    })
+            },
+        });
+    });
+</script>
+<script>
+    $(function (e) {
+        const submitButton = document.getElementById('submitButton');
+        const getWhiteSpace = function () {
+            return {
+                validate: function (input) {
+                    const value = input.value;
+                    // Check the white space
+                    if (value.indexOf(' ') >= 0) {
+                        return {
+                            valid: false,
+                        };
+                    }
+                    return {
+                        valid: true,
+                    };
+                }
+            }
+        };
+        const fv = FormValidation.formValidation(
+            document.getElementById("addAnnotationForm"), {
+            fields: {
+                AnnotationName: {
+                    validators: {
+                        notEmpty: { message: "Please enter annotation name" },
+                        checkWhiteSpace: {
+                            message: 'Space not allowed',
+                        },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                Polarity: {
+                    validators: { notEmpty: { message: "Please select polarity" } },
+                },
+                AnnotationType: {
+                    validators: { notEmpty: { message: "Please select annotation type" } },
+                },
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap5: new FormValidation.plugins.Bootstrap5({
+                    eleValidClass: "",
+                    rowSelector: ".col-12",
+                }),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+                autoFocus: new FormValidation.plugins.AutoFocus(),
+            },
+        });
+
+        fv.on('core.form.valid', function () {
+            // Disable the submit button
+            submitButton.setAttribute('disabled', true);
+            document.getElementById('submitButton').value = 'Saving...';
+
+            var valdata = $("#addAnnotationForm").serialize();
+            $.ajax({
+                url: "/Annotation/AddAnnotation",
+                type: "POST",
+                dataType: 'json',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: valdata,
+                success: function (response) {
+                    //$('#annotationModal').modal('hide');
+                    //LoadTable();
+                    Swal.fire({
+                        icon: "success",
+                        title: "Saved",
+                        text: "Data saved successfully.",
+                        customClass: { confirmButton: "btn btn-success" },
+                    });
+
+                    $('.swal2-confirm').on('click', function () {
+                        $('#annotationModal').modal('hide');
+                        LoadTable();
+                    });
+                },
+                error: function (response) {
+
+                }
+            });
+        });
+        fv.registerValidator('checkWhiteSpace', getWhiteSpace);
+    });
+</script>

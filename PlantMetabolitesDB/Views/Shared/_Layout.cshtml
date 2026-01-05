@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Welcome to Plant Metabolites Database</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="~/Content/images/fav.png" rel="icon">
+    <link href="~/Content/images/fav.png" rel="apple-touch-icon">
+    <link href="~/Content/css/font-awesome.css" rel="stylesheet" type="text/css" media="all">
+    <link rel="stylesheet" href="~/Content/css/bootstrap.css" type="text/css" media="all">
+    <link href="~/Content/css/stylesheet.css" rel="stylesheet" type="text/css" media="all">
+    <link href="~/Content/css/main-menu.css" rel="stylesheet" type="text/css" media="all"/>
+    <link href="~/Content/css/responsive.css" rel="stylesheet" type="text/css" media="all">
+    <link rel="stylesheet" type="text/css" media="all" href="~/Content/css/owl.carousel.css" >
+    <link rel="stylesheet" type="text/css" media="all" href="~/Content/css/owl.theme.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <link href="~/assets/vendor/libs/typeahead-js/typeahead.css" rel="stylesheet" media="all"/>
+    <link rel="stylesheet" href="~/assets/vendor/libs/apex-charts/apex-charts.css" media="all"/>
+    <script src="~/assets/vendor/libs/chartjs/chartjs.js" async></script>
+
+    @RenderSection("Styles", false)
+
+</head>
+<body>
+
+
+    @{
+        Html.RenderPartial("_FrontHeaderPartialPage");
+    }
+    <div class="content">
+        @RenderBody()
+
+        @{
+            Html.RenderPartial("_FrontFooterPartialPage");
+        }
+
+    </div>
+
+    <div class="scroll-top-wrapper show">
+        <span class="scroll-top-inner"> <i class="fa fa-angle-up" aria-hidden="true"></i></span>
+    </div>
+
+
+    <script src="~/Scripts/js/jquery-3.6.0.min.js" type="text/javascript" ></script>
+    <script src="~/Scripts/js/bootstrap.js" type="text/javascript" ></script>
+    <script src="~/Scripts/js/myscript.js" type="text/javascript" ></script>
+    <script src="~/Scripts/js/main-menu.js" type="text/javascript" ></script>
+    <script src="~/Scripts/js/news-scroller.js" type="text/javascript" ></script>
+
+    <script src="~/assets/vendor/libs/block-ui/block-ui.js" ></script>
+    <script src="~/assets/vendor/libs/typeahead-js/typeahead.js" ></script>
+    <script src="~/assets/vendor/libs/bloodhound/bloodhound.js" ></script>
+
+
+    <script>
+        $(window).on('load', function () {
+            setTimeout(function () { // allowing 3 secs to fade out loader
+                $('.page-loader').fadeOut('slow');
+            }, 3500);
+        });
+    </script>
+    <script src="~/Scripts/js/owl.carousel.min.js" ></script>
+    <script>
+        //owl-product-grid//
+
+        $(document).ready(function () {
+            //owl-PARTNERS//
+            $('.owlCarousel5').owlCarousel({
+                loop: true,
+                margin: 10,
+                autoplay: true,
+                autoplayTimeout: 5000,
+                autoplayHoverPause: true,
+                responsiveClass: true,
+                nav: true,
+                responsive: {
+                    0: {
+                        items: 2,
+                        nav: true
+                    },
+                    600: {
+                        items: 2,
+                        nav: true
+                    },
+                    1000: {
+                        items: 5,
+                        nav: true,
+                        loop: true,
+                        margin: 20
+                    }
+                }
+            })
+
+            //owl-PARTNERS//
+            $('.owlCarousel6').owlCarousel({
+                loop: true,
+                margin: 10,
+                autoplay: true,
+                autoplayTimeout: 3000,
+                autoplayHoverPause: true,
+                responsiveClass: true,
+                nav: true,
+                responsive: {
+                    0: {
+                        items: 1,
+                        nav: true
+                    },
+                    600: {
+                        items: 1,
+                        nav: true
+                    },
+                    1000: {
+                        items: 1,
+                        nav: true,
+                        loop: true,
+                        margin: 20
+                    }
+                }
+            })
+
+        })
+    </script>
+
+    @RenderSection("Scripts", false/*required*/)
+
+</body>
+</html>

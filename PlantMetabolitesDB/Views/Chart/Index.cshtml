@@ -1,0 +1,174 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link class="include" rel="stylesheet" type="text/css" href="~/assets/GraphPlugins/jquery.jqplot.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/assets/GraphPlugins/examples.min.css" />
+    <link type="text/css" rel="stylesheet" href="~/assets/GraphPlugins/syntaxhighlighter/styles/shCoreDefault.min.css" />
+    <link type="text/css" rel="stylesheet" href="~/assets/GraphPlugins/syntaxhighlighter/styles/shThemejqPlot.min.css" />
+    <script src="~/assets/GraphPlugins/jquery.min.js"></script>
+</head>
+<body>
+    <div>
+        <div id="chart1" style="width:800px; height:350px;"></div>
+        <button class="button-reset" onclick="return false;">Reset Zoom</button>
+    </div>
+   
+    <!-- Don't touch this! -->
+    <script class="include" type="text/javascript" src="~/assets/GraphPlugins/jquery.jqplot.min.js"></script>
+    <script type="text/javascript" src="~/assets/GraphPlugins/syntaxhighlighter/scripts/shCore.min.js"></script>
+    <script type="text/javascript" src="~/assets/GraphPlugins/syntaxhighlighter/scripts/shBrushJScript.min.js"></script>
+    <script type="text/javascript" src="~/assets/GraphPlugins/syntaxhighlighter/scripts/shBrushXml.min.js"></script>
+    <!-- Additional plugins go here -->
+    <script class="include" type="text/javascript" src="~/assets/GraphPlugins/plugins/jqplot.barRenderer.min.js"></script>
+    <script class="include" type="text/javascript" src="~/assets/GraphPlugins/plugins/jqplot.highlighter.min.js"></script>
+    <script class="include" type="text/javascript" src="~/assets/GraphPlugins/plugins/jqplot.cursor.min.js"></script>
+    <script class="include" type="text/javascript" src="~/assets/GraphPlugins/plugins/jqplot.pointLabels.min.js"></script>
+
+    <script type="text/javascript" src="~/assets/GraphPlugins/plugins/jqplot.canvasTextRenderer.min.js"></script>
+    <script type="text/javascript" src="~/assets/GraphPlugins/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>
+    <!-- End additional plugins -->
+    <link rel="stylesheet" type="text/css" hrf="~/assets/GraphPlugins/jquery.jqplot.min.css" />
+
+    <script class="code">
+        var array = @Html.Raw(Json.Encode(@ViewBag.ChartData));
+        array = JSON.parse("[" + array + "]");
+         setTimeout(function () {
+            plot1 = $.jqplot("chart1", [array], {
+                        // Turns on animatino for all series in this plot.
+                        animate: true,
+                        // Will animate plot on calls to plot1.replot({resetAxes:true})
+                        animateReplot: true,
+                        cursor: {
+                            show: true,
+                            zoom: true,
+                            looseZoom: true,
+                            showTooltip: false
+                        },
+                        series: [
+                            {
+                                pointLabels: {
+                                    show: false
+                                },
+                                renderer: $.jqplot.BarRenderer,
+                                showHighlight: true,
+                                shadow: false,
+                                color: '#000000',
+                                rendererOptions: {
+                                    // Speed up the animation a little bit.
+                                    // This is a number of milliseconds.
+                                    // Default for bar series is 3000.
+                                    animation: {
+                                        speed: 3000
+                                    },
+                                    barWidth: 2,
+                                    barPadding: -15,
+                                    barMargin: 0,
+                                    highlightMouseOver: true
+                                }
+                            },
+                            {
+                                rendererOptions: {
+                                    // speed up the animation a little bit.
+                                    // This is a number of milliseconds.
+                                    // Default for a line series is 2500.
+                                    animation: {
+                                        speed: 2000
+                                    }
+                                }
+                            }
+                        ],
+                        axesDefaults: {
+                            pad: 1.1
+                        },
+                        axes: {
+                            // These options will set up the x axis like a category axis.
+                            xaxis: {
+                                tickInterval: 1,
+                                drawMajorGridlines: false,
+                                drawMinorGridlines: false,
+                                drawMajorTickMarks: false,
+                                rendererOptions: {
+                                    tickInset: 0.5,
+                                    minorTicks: 1
+                                },
+                                renderer: $.jqplot.DateAxisRenderer,
+                                tickOptions: {
+                                    formatString: '%d'
+                                },
+                                labelOptions: {
+
+                                    fontSize: '14pt'
+                                },
+                                label: "m/z"
+
+                            },
+                            yaxis: {
+
+                                renderer: $.jqplot.LogAxisRenderer,
+                                //min: 0,
+                                //max: 100,
+                                tickOptions: {
+                                    formatString: "%'.2f",
+                                    labelPosition: 'middle',
+                                    angle: -30
+                                },
+                                tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                                labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+
+                                rendererOptions: {
+                                    forceTickAt0: true
+                                },
+                                labelOptions: {
+
+                                    fontSize: '14pt'
+                                },
+                                label: "Relative Abundance"
+                            },
+                            y2axis: {
+                                tickOptions: {
+                                    formatString: '%.2f'
+                                },
+                                rendererOptions: {
+                                    // align the ticks on the y2 axis with the y axis.
+                                    alignTicks: true,
+                                    forceTickAt0: true
+                                }
+                            }
+                        },
+                        axesDefaults: {
+                            tickOptions: {
+                                showGridline: false
+                            }
+                        },
+                        highlighter: {
+                            show: true,
+                            sizeAdjust: 7.5
+                        }
+                    });
+
+                    brass = {
+                        grid: {
+                            backgroundColor: '#FFF',
+                            drawBorder: false,
+                            shadow: false,
+                        }
+                    }
+
+                    brass = plot1.themeEngine.newTheme('brass', brass);
+                    plot1.activateTheme('brass');
+                    $('.button-reset').click(function () { plot1.resetZoom() });
+                }, 500);
+
+
+    </script>
+</body>
+
+</html>

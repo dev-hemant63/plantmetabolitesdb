@@ -1,0 +1,35 @@
+Name of compound:    Sakuranetin
+Source:              Purchased from Extrasynthatase
+Software Version:    Analyst 1.4.1
+Scan Type:	     Product Ion (ESIMS2)
+Polarity:	     Negative 
+Scan Mode:           Profile
+Ion Source:	     ESI Turbo Spray
+Product Of:	     285.08 amu
+Resolution Q1:	     Unit
+Resolution Q3:	     Unit
+Intensity Thres.:    0.00 cps
+Settling Time:	     0.0000 msec
+MR Pause:	     5.0070 msec
+Step Size:	     0.10 amu 
+Parameter Table
+CUR: 	             10.00
+GS1: 	             15.00
+GS2: 	             0.00
+TEM: 	             0.00
+ihe: 	             ON
+CAD: 	             3.00
+IS: 	            -4500.00
+DP	            -75.00
+EP	            -10.00
+CE	            -28.00
+CXP	            -10.00
+
+HPLC
+ 
+Solvent system :    80:20 Acetonitrile:0.1% Formic acid
+  
+Flow           :    0.010 ml/min
+
+
+

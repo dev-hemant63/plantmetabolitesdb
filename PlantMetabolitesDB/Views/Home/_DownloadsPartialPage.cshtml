@@ -1,0 +1,18 @@
+﻿@model  IEnumerable<PlantMetabolitesDB.ViewModel.DownloadViewModel>
+
+<div class="centres-border">
+    <h2>Downloads<span></span></h2>
+</div>
+<div class="latest-downloads">
+    @if (Model != null)
+    {
+        for (int i = 0; i < Model.Count(); i++)
+        {
+           <a href="~/UploadedFiles/LatestUpdates/@Model.ElementAt(i).FileName" target="_blank" class="text-start">&bull; @Model.ElementAt(i).Title</a>
+        }
+    }
+    @*<a href="~/Content/images/AvailableDownloads/How-to-convert-MS-MS-spectrum-to-tms-data-format.pdf" target="_blank" class="text-start">&bull; How to convert MS/MS spectrum to tms data format</a>
+    <a href="http://www.tmsdatabase.org/UploadedFiles/LatestUpdates/test_file4af9fabb-5964-4c9d-a64a-e47a0f663c20.txt" target="_blank" class="text-start">&bull; Sample data.txt (demo file, for advance search)</a>
+    <a href="~/Content/images/AvailableDownloads/User-instruction-manual.pdf" target="_blank" class="text-start">&bull; User instruction manual</a>*@
+
+</div>

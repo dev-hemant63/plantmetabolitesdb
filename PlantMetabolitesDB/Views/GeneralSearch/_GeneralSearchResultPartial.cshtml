@@ -1,0 +1,235 @@
+﻿@model IEnumerable<PlantMetabolitesDB.ViewModel.GeneralSearchResultViewModel>
+
+<div class="col-md-12 col-sm-12 col-xs-12 mt-2">
+
+    <div class="card mb-2">
+        <h6 class="card-header"><strong>Search Criteria</strong></h6>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tr>
+                    <td><strong>Name of plant species</strong></td>
+                    <td><span class="lblNameOfPlantSpecies"></span></td>
+                </tr>
+                <tr>
+                    <td><strong>Family of plant species</strong></td>
+                    <td><span class="lblFamilyOfPlantSpecies"></span></td>
+                </tr>
+                <tr>
+                    <td><strong>Specific biological activity</strong></td>
+                    <td><span class="lblSpecificBiologicalActivity"></span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="card mb-2">
+        <h6 class="card-header">
+            <strong>Search Result</strong><br />
+            <span> (*). Click on the Plant Species Name / Metabolites/MSFP to see more data.</span>
+        </h6>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-striped">
+                    <colgroup>
+                        <col style="width: 40%">
+                        <col style="width: 30%">
+                        <col style="width: 30%">
+
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>
+                                <strong>Name of plant species</strong>
+                            </th>
+                            <th>
+                                <strong>Family of plant species</strong>
+                            </th>
+
+                            <th>
+                                <strong>Metabolites</strong>
+                            </th>
+                            <th>
+                                <strong>MSFP</strong>
+                            </th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        @if (Model.Count() > 0)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="javascript:;" class="view-record" data-bs-target="#compoundMsModal" data-id='@item.CompoundKey'>@item.NameOfPlantSpecies</a>
+                                    </td>
+                                    <td>
+                                        <a href="javascript:;" class="view-record" data-bs-target="#compoundMsModal" data-id='@item.CompoundKey'>@item.FamilyOfPlantSpecies</a>
+                                    </td>
+                                    <td>
+                                        <a href="javascript:;" class="view-record" data-bs-target="#compoundMsModal" data-id='@item.CompoundKey'>@item.Metabolites</a>
+                                    </td>
+                                    <td>
+                                        <a href="javascript:;" class="view-record" data-bs-target="#compoundMsModal" data-id='@item.CompoundKey'>@item.MSFP</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="100" class="text-danger">
+                                    record not found.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<div id="ResultPrintContainer">
+    <div id="hspor2">
+        <div style="width: 99% !important;">
+            <div style="width: 75%; height: 91px; float: left; background-image: url(../Content/images/logo.png) !important; background-repeat: no-repeat;"></div>
+            <div style="width: 25%; height: 91px; float: right; background-image: url(../Content/images/right-logo.png)!important; background-repeat: no-repeat;"></div>
+        </div>
+        <div style="clear: both; padding: 1px 4px; background-color: rgb(235, 234, 234); display: table; font-family: Arial, Helvetica, sans-serif !important;width:100%!important ">
+            <h3 style="float: left;margin-left: 10px">
+                <strong>Search By Name of plant species or family of plant species or specific biological activity</strong>
+            </h3>
+            <h4 style="float:right;margin-right: 10px;">@ViewBag.CurrDate</h4>
+        </div>
+    </div>
+    <div style="display: table; font-family: Arial, Helvetica, sans-serif !important; width: 100%; padding: 20px 7px; ">
+        <span style="font-size: 18px; font-weight: 600; margin-bottom: 11px;">Search Criteria</span>
+        <hr style="border-color: rgb(235, 234, 234); margin-bottom:0px" />
+        <table width="100%" cellpadding="4" cellspacing="4" style="font-family: Arial, Helvetica, sans-serif !important;border-collapse:collapse">
+            <tbody>
+                <tr>
+                    <td width="100px"><strong>Name of plant species</strong></td>
+                    <td><span class="lblNameOfPlantSpecies"></span></td>
+                    <td width="100px"><strong>Family of plant species</strong></td>
+                    <td><span id="lblFamilyOfPlantSpecies"></span></td>
+                    <td width="100px"><strong>Specific biological activity</strong></td>
+                    <td><span id="lblSpecificBiologicalActivity"></span></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div style="display: table;font-family: Arial, Helvetica, sans-serif !important;width:100%;padding: 20px 7px;">
+        <span style="font-size: 18px;font-weight:600;margin-bottom:11px">Search Result </span>
+        <hr style="border-color:rgb(235, 234, 234)" />
+        <table width="100%" cellspacing="4" cellpadding="4" style="font-family: Arial, Helvetica, sans-serif !important;border-collapse:collapse">
+            <thead>
+                <tr>
+                    <th>
+                        <strong>Name of plant species</strong>
+                    </th>
+                    <th>
+                        <strong>Family of plant species</strong>
+                    </th>
+
+                    <th>
+                        <strong>Metabolites</strong>
+                    </th>
+                    <th>
+                        <strong>MSFP</strong>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a href="javascript:;" class="view-record" data-bs-target="#compoundMsModal" data-id='@item.CompoundKey'>@item.NameOfPlantSpecies</a>
+                            </td>
+                            <td>
+                                <a href="javascript:;" class="view-record" data-bs-target="#compoundMsModal" data-id='@item.CompoundKey'>@item.FamilyOfPlantSpecies</a>
+                            </td>
+                            <td>
+                                <a href="javascript:;" class="view-record" data-bs-target="#compoundMsModal" data-id='@item.CompoundKey'>@item.Metabolites</a>
+                            </td>
+                            <td>
+                                <a href="javascript:;" class="view-record" data-bs-target="#compoundMsModal" data-id='@item.CompoundKey'>@item.MSFP</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="100" class="text-danger">
+                            record not found.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="footerprint2">
+        <div style="clear: both; margin-top: 41px; padding: 1px 4px;background-color: rgb(235, 234, 234);font-size: 12px;font-family: Arial, Helvetica, sans-serif; text-align: center;">
+            <p style="margin: 10px 1px;">Copyright © 2022-23: CSIR - Central Drug Research Institute, Lucknow, (U.P.) India. All Rights Reserved. (Beta Version 1.2) </p>
+            <p style="margin: 10px 1px;">Powered by MARGSOFT Technologies (P) Ltd.</p>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#ResultPrintContainer').hide();
+
+        $(".view-record").click(function () {
+            $.blockUI({
+                message:
+                    '<div class="spinner-border text-white" role="status"></div>',
+                css: { backgroundColor: "transparent", border: "0" },
+                overlayCSS: { opacity: 0.5 },
+            });
+            var id = $(this).attr('data-id');
+            // var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: "/GeneralSearch/CompoundSummary",
+                contentType: "application/json; charset=utf-8",
+                data: { "CompoundKey": id },
+                datatype: "json",
+                success: function (data) {
+                    $.unblockUI();
+                    $('.compound-preview-body').html(data)
+                    $('#search-result').hide();
+                    $('#compound-summary').show();
+                    $('#search-filter').hide();
+                },
+                error: function () {
+                    $.unblockUI();
+                    alert("Data load failed.");
+                }
+            });
+        });
+    })
+
+    function PrintSearchResult() {
+        //$('#lblName1').text($('#hdCompoundName').text());
+        //$('#lblCASNo1').text($('#hdCasNo').text());
+        var printContents = document.getElementById('ResultPrintContainer');
+        var url = location.origin + location.pathname;
+        var printWindow = window.open(url, '', '');
+        printWindow.document.write('<html><head><title>Search By Name of plant species or family of plant species or specific biological activity</title>');
+        printWindow.document.write('<link href="../Content/css/print.css" rel="stylesheet" media="print" />');
+        printWindow.document.write('</head><body>');
+        printWindow.document.write(printContents.innerHTML);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        setTimeout(function () {
+            printWindow.print();
+            printWindow.close();
+        }, 500);
+    }
+</script>

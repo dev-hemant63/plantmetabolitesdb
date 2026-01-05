@@ -1,0 +1,143 @@
+﻿@model PlantMetabolitesDB.ViewModel.CompoundPreviewViewModel
+<style>
+    @@media print {
+
+        a {
+            text-shadow: none !important;
+            color: #0d638f !important;
+        }
+    }
+</style>
+<div id="hspor">
+    <div style="width: 99% !important;">
+        <div style="width: 75%; height: 91px; float: left; background-image: url(../Content/images/logo-print.png) !important; background-repeat: no-repeat;"></div>
+        <div style="width: 25%; height: 91px; float: right; background-image: url(../Content/images/right-logo-print.png)!important; background-repeat: no-repeat;"></div>
+    </div>
+    <div style="clear: both; padding: 1px 4px; background-color: rgb(235, 234, 234); display: table; width: 100%; font-family: Arial, Helvetica, sans-serif !important;width:100%!important ">
+        <h3 style="float: left;margin-left: 10px">
+            <strong>Compound Summary</strong>
+        </h3>
+        <h4 style="float:right;margin-right: 10px;">@ViewBag.CurrDate</h4>
+    </div>
+</div>
+<div id="compoundContent" style="width: 100% !important;">
+    <table width="100%" cellpadding="5" cellspacing="5" class="dctbl">
+        <tr>
+            <td width="250px">Database</td>
+            <td>@Model.DatabaseName</td>
+        </tr>
+        <tr>
+            <td width="250px">Name</td>
+            <td>@Model.CompoundName</td>
+        </tr>
+        <tr>
+            <td width="250px">
+                Molecular Weight<br /> (Monoisotopic Mass)
+            </td>
+            <td>@Model.MolecularWeight_Input</td>
+        </tr>
+        <tr>
+            <td width="250px">Formula</td>
+            <td>@Model.Formula</td>
+        </tr>
+        <tr>
+            <td width="250px">CAS Registry Number</td>
+            <td>@Model.CASNo</td>
+        </tr>
+        <tr>
+            <td width="250px">IUPAC Name</td>
+            <td style="overflow-wrap: break-word;line-height:1.2em">@Model.IUPACName</td>
+        </tr>
+        <tr>
+            <td valign="top" width="250px">Canonical SMILES</td>
+            <td style="overflow-wrap: break-word;line-height: 1.2em">@Model.Smiles</td>
+        </tr>
+        @if (Model.ChemicalStructureFile != null && Model.ChemicalStructureFile != "")
+        {
+            <tr>
+                <td valign="top" width="250px">Chemical Structure</td>
+                <td><img src="~/UploadedFiles/Compound/ChemicalStructure/@Model.ChemicalStructureFile" style="width:300px" /></td>
+            </tr>
+        }
+        @if (Model.OtherNames != null && Model.OtherNames != "")
+        {
+            <tr>
+                <td valign="top" width="250px">Other Names</td>
+                <td>@Model.OtherNames</td>
+            </tr>
+        }
+
+    </table>
+    @if (Model.MSMajorNaturalLoses.Count > 0)
+    {
+        <table width="100%" cellpadding="5" cellspacing="5" class="dctbl">
+            <tr>
+                <td width="250px" valign="top">MS/MS Major <br />Neutral Loses</td>
+                <td>
+                    <table width="100%" cellpadding="4" cellspacing="4" style="margin-left:-47px!important">
+                        <thead>
+                            <tr>
+                                <td rowspan="10">
+                                    <strong>Precursor Ion</strong>
+                                </td>
+                                <td>
+                                    <strong>Product</strong>
+                                </td>
+                                <td>
+                                    <strong>Intensity</strong>
+                                </td>
+                                <td>
+                                    <strong>Loss</strong>
+                                </td>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr><td rowspan="10" valign="top"><strong>@ViewBag.ParentIon</strong></td></tr>
+                            @foreach (var item in Model.MSMajorNaturalLoses)
+                            {
+                                <tr>
+                                    <td>@item.Product</td>
+                                    <td>@item.RelativeIntensity</td>
+                                    <td>@item.NaturalLoss</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    }
+
+</div>
+@if (ViewBag.OtherInformation != "")
+{
+    <div id="OtherInformation" style="width: 100% !important; font-family: Arial, Helvetica, sans-serif !important; page-break-before: always ">
+        <h5 style="margin:10px 0 0 10px!important;font-size:20px!important">Other Related Information</h5>
+        <hr style="margin-bottom: 1em !important; border: 1px solid rgba(0, 0, 0, 0.125) !important;" />
+
+        <table cellpadding="4" cellspacing="4" class="dctbl">
+            @Html.Raw(@ViewBag.OtherInformation)
+        </table>
+    </div>
+    <figcaption style="margin-bottom: 0 !important; text-align: right; margin-right: 18px">
+        <span title="Source Title">Source : </span>
+        <a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" title="NCBI" class="text-success">National Center for Biotechnology Information</a>
+    </figcaption>
+}
+<hr style="margin-bottom: 1em !important; border: 1px solid rgba(0, 0, 0, 0.125) !important;" />
+<div style="width: 100% !important;">
+    <table width="100%" cellpadding="5" cellspacing="5" class="dctbl">
+        <tr>
+            <td width="250px"> Compiled By</td>
+            <td>@Model.CompiledBy</td>
+        </tr>
+    </table>
+</div>
+<div id="footerprint">
+    <div style="clear: both; margin-top: 41px; padding: 1px 4px;background-color: rgb(235, 234, 234);font-size: 12px;font-family: Arial, Helvetica, sans-serif; text-align: center;">
+        <p style="margin: 10px 1px;">Copyright © 2022-23: CSIR - Central Drug Research Institute, Lucknow, (U.P.) India. All Rights Reserved. (Beta Version 1.2) </p>
+        <p style="margin: 10px 1px;">Powered by MARGSOFT Technologies (P) Ltd.</p>
+
+    </div>
+</div>

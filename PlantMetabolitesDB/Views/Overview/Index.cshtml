@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewBag.Title = "Overview";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="breadcrumb-grid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <h3 class="header_title">Overview</h3>
+                <ol class="breadcrumb">
+                    <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+                    <li class="active">Overview </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="inner-grid">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-12 col-xs-12">
+                <div class="about-text">
+
+                    @*<p>Mass Spectrometry is a powerful analytical technique that is used to determine the molecular weight and generate fragment ion spectrum of a compound for identification/confirmation using tandem mass spectrometry. This fragmentation pattern offers a unique molecular signature of organic compounds. As a result, a web-based library of the MS/MS spectrum provides an important tool for the identification of previously characterized natural products.</p>*@
+                    <p>Plants have the potential to synthesize a wide variety of chemical compounds, which can perform important biological functions. However the chemical diversity of bioactive compounds or their derivatives in higher plants has not been extensively explored, and a small amount of the world’s biodiversity has been tested for biological activity. Thus, discovering known bioactive compounds from previously unknown sources is vital to the discovery process which saves time and resources.</p>
+                    <p>Over the past decades, high-performance liquid chromatography-mass spectrometry (LC-MS) has revolutionized analytical chemistry. The hyphenated MS techniques not only report the precise mass of compounds but also generate fragment ion spectra to identify or confirm compounds. This fragmentation pattern offers a unique molecular signature of organic compounds. As a result, a web-based LC-MS/MS library of plant secondary metabolites with a suitable software search algorithm serves the purpose of inverse search (distribution of known bioactive compounds in different plant species).</p>
+
+                    @*<p>The general approaches for most common search are</p>*@
+                    <p>The developed database explores the following possibilities using LC-MS and LC-MS/MS data.</p>
+                    <ol type="I">
+                        <li>Identification of plant species based on their chemical fingerprints.</li>
+                        <li>Discovery of known bioactive compounds from previously unknown sources.</li>
+                        <li>Distribution of known compounds in different biological sources (Plants/herbs).</li>
+                        <li>Identification of known/unknown derivatives of bioactive compounds in different biological sources (Plants/herbs).</li>
+                    </ol>
+
+                    <p> <b>General Search:</b>  by Name of plant species,Family of plant species, and Specific biological activity.</p>
+
+
+
+
+                    <p> <b> Mass Spectrometry-Based Search:</b> by Molecular Weight, MS/MS fragments, and Advanced Search.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<div class="container">
+<section class="centres-grid">
+    <div class="container">
+        <div class="row">
+            @{
+                Html.RenderPartial("_GeneralSearchPartialPage");
+            }
+            <div class="col-md-1 col-12">
+                <span class="vertical-border"></span>
+            </div>
+            @{
+                Html.RenderPartial("_MSBasedSearchPartialPage");
+            }
+        </div>
+    </div>
+</section>
+</div>
+<br><br>

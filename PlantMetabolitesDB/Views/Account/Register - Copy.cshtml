@@ -1,0 +1,255 @@
+﻿@model PlantMetabolitesDB.ViewModel.UsersViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="~/Content/images/fav.png" rel="icon">
+    <link href="~/Content/images/fav.png" rel="apple-touch-icon">
+    <link rel="stylesheet" href="~/Content/css/bootstrap.css" type="text/css">
+    <link href="~/Content/css/font-awesome.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" media="all" href="~/Content/css/signin-style.css">
+    <link href="~/Content/css/responsive.css" rel="stylesheet" type="text/css">
+    <link href="~/assets/vendor/libs/formvalidation/dist/css/formValidation.min.css" rel="stylesheet" />
+    <style>
+
+        .invalid-feedback {
+            color: #ffff00 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="ag-night-sky_clouds"></div>
+    <div class="bg-img"></div>
+    <section>
+        <div class="logn-logo-grid">
+            <div class="container">
+                <div class="row">
+                    <a href="@Url.Action("Index", "Home")"><img src="~/Content/images/logo.png" alt="" class=""></a>
+                </div>
+            </div>
+        </div>
+        <div id="login-box">
+            @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "login-form", @class = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <h3 class=""> Sign Up Now <small style="font-size: 12px; display: block; line-height: normal;">Create your account and enjoy</small></h3>
+
+                <div class="alert-success"> @ViewBag.Message </div>
+
+                <div class="col-12 form-group-text">
+                    <span><img src="~/Content/images/mobile-icon.png" alt="user-icon"></span>
+                    @*<select name="country" id="" class="form-control-iwwa">
+                    <option>Choose Country</option>
+                </select>*@
+                    @Html.DropDownListFor(e => e.CountryKey, new SelectList(Model.Countries, "CountryKey", "CountryName"), "Select",
+                   new { @class = "form-control-iwwa select2", data_allow_clear = "true" })
+                </div>
+                <div class="col-12 form-group-text">
+                    <span><img src="~/Content/images/user-icon.png" alt="user-icon"></span>
+                    @*<input type="text" name="FName" id="" class="form-control-iwwa" placeholder="First Name">*@
+                    @Html.TextBoxFor(e => e.FName, new { @class = "form-control-iwwa", @placeholder = "First Name" })
+                </div>
+                <div class="col-12 form-group-text">
+                    <span><img src="~/Content/images/user-icon.png" alt="user-icon"></span>
+                    @*<input type="text" name="LName" id="" class="form-control-iwwa" placeholder="Last Name">*@
+                    @Html.TextBoxFor(e => e.LName, new { @class = "form-control-iwwa", @placeholder = "Last Name" })
+                </div>
+                <div class="col-12 form-group-text">
+                    <span><img src="~/Content/images/email-icon.png" alt="user-icon"></span>
+                    @*<input type="text" name="Email" id="" class="form-control-iwwa" placeholder="Email ID">*@
+                    @Html.TextBoxFor(e => e.Username, new { @class = "form-control-iwwa", @placeholder = "Email ID" })
+                    @Html.ValidationMessageFor(e => e.Username)
+                </div>
+                <span style="font-weight:bolder; font-size:14px; color:yellow;">@ViewBag.UserExists</span>
+                <div class="col-12 form-group-text">
+                    <span><img src="~/Content/images/password-icon.png" alt="password-icon"></span>
+                    @*<input type="password" name="password" id="" class="form-control-iwwa" placeholder="Password">*@
+                    @Html.PasswordFor(e => e.Password, new { @class = "form-control-iwwa", @placeholder = "Password" })
+                </div>
+                <div class="col-12 form-group-text">
+                    <span><img src="~/Content/images/password-icon.png" alt="password-icon"></span>
+                    @*<input type="password" name="ConfirmPassword" id="" class="form-control-iwwa" placeholder="Confirm Password">*@
+                    @Html.PasswordFor(e => e.ConfirmPassword, new { @class = "form-control-iwwa", @placeholder = "Confirm Password" })
+                </div>
+                <div class="form-group">
+                    <label class="col-12  member_remember">
+                        <input type="checkbox" name="agree" value="agree" />
+                        <span>Agree with the <a href="@Url.Action("Index", "TermsConditions")" class="member_forgot"> <b>terms and conditions</b> </a></span>
+                    </label>
+                    @*<label class="member_remember">
+
+                    <span><input type="checkbox" value="" id="chkTermsconditions"></span>
+                    <span>I agree to all <a href="@Url.Action("Index", "TermsConditions")" class="member_forgot"> <b>Terms</b> </a></span>
+                </label>*@
+                </div>
+                <!-- The captcha container -->
+                @*<div id="captchaContainer"></div>*@
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    @*<button type="button" name="Sign Up" class="submit_btn" value="Sign Up">Sign Up</button>*@
+                    <input type="submit" value="Create" class="submit_btn" id="submitButton" name="submitButton" />
+                </div>
+                <div class="form-group">
+                    <p class="member_register">Already have an account? <a href="@Url.Action("Login", "Account")"> Sign In</a></p>
+                </div>
+                <div class="form-group">
+                    <a href="@Url.Action("Index", "Home")" class="home_btn">Go To Home </a>
+                </div>
+
+            }
+        </div>
+    </section>
+
+    <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js"></script>
+    <script src="../assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
+    <script>
+        $(function (e) {
+            const a = document.getElementById("login-form");
+            const submitButton = document.getElementById('submitButton');
+            const fv = FormValidation.formValidation(a, {
+                fields: {
+                    CountryKey: {
+                        validators: { notEmpty: { message: "Please select country" } },
+                    },
+                    FName: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Please enter first name',
+                            },
+                            regexp: {
+                                regexp: /^[a-z\s]+$/i,
+                                message: 'The first name allowed alphabetical characters and spaces only',
+                            },
+
+                        }
+                    },
+                    LName: {
+                        validators: {
+                            notEmpty: {
+                                message: 'please enter last name',
+                            },
+                            regexp: {
+                                regexp: /^[a-z\s]+$/i,
+                                message: 'The last name allowed alphabetical characters and spaces only',
+                            },
+
+                        }
+                    },
+                    //username: {
+                    //    validators: {
+                    //        notEmpty: {
+                    //            message: 'The username is required',
+                    //        },
+                    //        stringLength: {
+                    //            min: 6,
+                    //            max: 30,
+                    //            message: 'The username must be more than 6 and less than 30 characters long',
+                    //        },
+                    //        regexp: {
+                    //            regexp: /^[a-zA-Z0-9_\.]+$/,
+                    //            message: 'The username can only consist of alphabetical, number, dot and underscore',
+                    //        },
+                    //    },
+                    //},
+                    Username: {
+                        validators: {
+                            notEmpty: {
+                                message: 'The email address is required',
+                            },
+                            emailAddress: {
+                                message: 'The input is not a valid email address',
+                            },
+                        },
+                    },
+                    Password: {
+                        validators: {
+                            notEmpty: {
+                                message: 'The password is required',
+                            },
+                            different: {
+                                field: 'emailAddress',
+                                message: 'The password cannot be the same as username',
+                            },
+                        },
+                    },
+                    ConfirmPassword: {
+                        validators: {
+                            notEmpty: { message: "Please enter confirm password" },
+                            identical: {
+                                compare: function () {
+                                    return a.querySelector('[name="Password"]').value;
+                                },
+                                message: "The password and its confirm are not the same",
+                            },
+                        },
+                    },
+                    agree: {
+                        validators: {
+                            notEmpty: {
+                                message: 'You must agree with the terms and conditions',
+                            },
+                        },
+                    },
+                },
+                plugins: {
+                    trigger: new FormValidation.plugins.Trigger(),
+                    bootstrap5: new FormValidation.plugins.Bootstrap5({
+                        eleValidClass: "",
+                        rowSelector: ".col-12",
+                    }),
+
+                    // tachyons: new FormValidation.plugins.Tachyons(),
+                    //icon: new FormValidation.plugins.Icon({
+                    //    valid: 'fa fa-check',
+                    //    invalid: 'fa fa-times',
+                    //    validating: 'fa fa-refresh',
+                    //}),
+                    submitButton: new FormValidation.plugins.SubmitButton(),
+                    //recaptcha: new FormValidation.plugins.Recaptcha({
+                    //    element: 'captchaContainer',
+                    //    message: 'The captcha is not valid',
+                    //    // Replace with the site key provided by Google
+                    //    siteKey: '6Letq1wUAAAAAPOueXjmi7-Xt0fZyqFLB0GYzeNz',
+                    //    theme: 'light',
+                    //    timeout: 120,
+                    //}),
+                },
+            });
+
+            fv.on('core.form.valid', function () {
+                // Disable the submit button
+                submitButton.setAttribute('disabled', true);
+              //  document.getElementById('submitButton').value = 'Saving...';
+
+                var valdata = $("#login-form").serialize();
+                $.ajax({
+                    url: "/Account/Register",
+                    type: "POST",
+                    dataType: 'json',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: valdata,
+                    success: function (response) {
+                        if (response == "Success") {
+                            window.location.href = "/Account/UserVerification";
+                        }
+                    },
+                    error: function (response) {
+
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+
+</html>

@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "Available Database";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model  IEnumerable<PlantMetabolitesDB.ViewModel.AvailableDatabaseViewModel>
+<div class="breadcrumb-grid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <h3 class="header_title">Available Plant Families</h3>
+                <ol class="breadcrumb">
+                    <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+                    <li class="active">Available Database</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="inner-grid">
+    <div class="container">
+        <div class="row">
+            <div class="available-database">
+                @if (Model != null)
+                {
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <article>@Model.ElementAt(i).DatabaseName<span>@Model.ElementAt(i).Count</span></article>
+                    }
+
+                }
+            </div>
+           
+
+        </div>
+
+    </div>
+
+</section>

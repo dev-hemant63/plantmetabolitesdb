@@ -1,0 +1,308 @@
+﻿@model PlantMetabolitesDB.ViewModel.CompoundPreviewViewModel
+
+@if (Model != null)
+{
+    <div class="col-12 mb-4">
+        <div class="col-12">
+            <div class="timeline ms-2">
+                <div class="timeline-item timeline-item-transparent mb-4">
+                    <span class="timeline-point timeline-point-warning"></span>
+                    <div class="row">
+                        <div class="col-md-4 mb-1">
+                            <h6 class="mb-0">Database</h6>
+                        </div>
+                        <div class="col-md-8  mb-1">
+                            <label class="mb-0 text-secondary">@Model.DatabaseName</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item timeline-item-transparent mb-4">
+                    <span class="timeline-point timeline-point-primary"></span>
+                    <div class="row">
+                        <div class="col-md-4 mb-1">
+                            <h6 class="mb-0">Name</h6>
+                        </div>
+                        <div class="col-md-8  mb-1">
+                            <label class="mb-0 text-secondary">@Model.CompoundName</label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="timeline-item timeline-item-transparent mb-4">
+                    <span class="timeline-point timeline-point-gray"></span>
+                    <div class="row">
+                        <div class="col-md-4 mb-1">
+                            <h6 class="mb-0">
+                                Molecular Weight
+                                (Monoisotopic Mass)
+                            </h6>
+                        </div>
+                        <div class="col-md-8  mb-1">
+                            <label class="mb-0 text-secondary">@Model.MolecularWeight_Input</label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="timeline-item timeline-item-transparent mb-4">
+                    <span class="timeline-point timeline-point-warning"></span>
+                    <div class="row">
+                        <div class="col-md-4 mb-1">
+                            <h6 class="mb-0">Formula</h6>
+                        </div>
+                        <div class="col-md-8  mb-1">
+                            <label class="mb-0 text-secondary">@Model.Formula</label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="timeline-item timeline-item-transparent mb-4">
+                    <span class="timeline-point timeline-point-danger"></span>
+                    <div class="row">
+                        <div class="col-md-4 mb-1">
+                            <h6 class="mb-0">CAS Registry Number</h6>
+                        </div>
+                        <div class="col-md-8  mb-1">
+                            <label class="mb-0 text-secondary">@Model.CASNo</label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="timeline-item timeline-item-transparent mb-4">
+                    <span class="timeline-point timeline-point-success"></span>
+                    <div class="row">
+                        <div class="col-md-4 mb-1">
+                            <h6 class="mb-0">IUPAC Name</h6>
+                        </div>
+                        <div class="col-md-8  mb-1">
+                            <label class="mb-0 text-secondary" style="overflow-wrap: break-word">@Model.IUPACName</label>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="timeline-item timeline-item-transparent mb-4">
+                    <span class="timeline-point timeline-point-primary"></span>
+                    <div class="row">
+                        <div class="col-md-4 mb-1">
+                            <h6 class="mb-0"> Canonical SMILES</h6>
+                        </div>
+                        <div class="col-md-8  mb-1">
+                            <label class="mb-0 text-secondary" style="overflow-wrap: break-word">@Model.Smiles</label>
+                        </div>
+
+                    </div>
+                </div>
+                @if (Model.ChemicalStructureFile != null && Model.ChemicalStructureFile != "")
+                {
+                    <div class="timeline-item timeline-item-transparent mb-4">
+                        <span class="timeline-point timeline-point-secondary"></span>
+                        <div class="row">
+                            <div class="col-md-4 mb-1">
+                                <h6 class="mb-0"> Chemical Structure</h6>
+                            </div>
+                            <div class="col-md-8  mb-1">
+                                <h6 class="mb-0">
+                                    <img src="~/UploadedFiles/Compound/ChemicalStructure/@Model.ChemicalStructureFile" style="width:300px" />
+                                </h6>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+
+                @if (Model.OtherNames != null && Model.OtherNames != "")
+                {
+                    <div class="timeline-item timeline-item-transparent mb-4">
+                        <span class="timeline-point timeline-point-warning"></span>
+                        <div class="row">
+                            <div class="col-md-4 mb-1">
+                                <h6 class="mb-0">Other Names</h6>
+                            </div>
+                            <div class="col-md-8  mb-1">
+                                <label class="mb-0 text-secondary">@Model.OtherNames</label>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+                @if (Model.MS2List.Count > 0)
+                {
+                    <div class="timeline-item timeline-item-transparent mb-4">
+                        <span class="timeline-point timeline-point-danger"></span>
+                        <div class="row">
+                            <div class="col-md-4 mb-1">
+                                <h6 class="mb-0">MS2 Mass Spectrum</h6>
+                            </div>
+                            <div class="col-md-8 mb-1">
+                                @foreach (var item in Model.MS2List)
+                                {
+                                    <button type="button" data-bs-target="#modalSpectraDetails" data-id="@item.Value" onclick="MassSpectra('@item.Value','MS2')"
+                                            data-msType="MS2" class="btn mb-2">
+                                        @item.Text
+                                    </button>
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.MS3List.Count > 0)
+                {
+                    <div class="timeline-item timeline-item-transparent mb-4">
+                        <span class="timeline-point timeline-point-danger"></span>
+                        <div class="row">
+                            <div class="col-md-4 mb-1">
+                                <h6 class="mb-0">MS3 Mass Spectrum</h6>
+                            </div>
+                            <div class="col-md-8 mb-1">
+                                @foreach (var item in Model.MS3List)
+                                {
+                                    <button type="button" data-bs-target="#modalSpectraDetails" data-id="@item.Value" onclick="MassSpectra('@item.Value','MS3')"
+                                            data-msType="MS3" class="btn mb-2">
+                                        @item.Text
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.AductList.Count > 0)
+                {
+                    <div class="timeline-item timeline-item-transparent mb-4">
+                        <span class="timeline-point timeline-point-danger"></span>
+                        <div class="row">
+                            <div class="col-md-4 mb-1">
+                                <h6 class="mb-0">Adducts Ion Mass Spectrum</h6>
+                            </div>
+                            <div class="col-md-8 mb-1">
+                                @foreach (var item in Model.AductList)
+                                {
+                                    <button type="button" data-bs-target="#modalSpectraDetails" data-id="@item.Value" onclick="MassSpectra('@item.Value','Aduct')"
+                                            data-msType="Aduct" class="btn mb-2">
+                                        @item.Text
+                                    </button>
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.MSMajorNaturalLoses.Count > 0)
+                {
+                    <div class="timeline-item timeline-item-transparent mb-4">
+                        <span class="timeline-point timeline-point-success"></span>
+                        <div class="row">
+                            <div class="col-md-4 mb-1">
+                                <h6 class="mb-0">MS/MS Major Neutral Loses</h6>
+                            </div>
+                            <div class="col-md-8  mb-1 table-responsive text-nowrap">
+                                <table class="table table-borderless">
+                                    <thead>
+                                        <tr>
+                                            <td rowspan="10">
+                                                <strong>Precursor Ion</strong>
+                                            </td>
+                                            <td>
+                                                <strong>Product</strong>
+                                            </td>
+                                            <td>
+                                                <strong>Intensity</strong>
+                                            </td>
+                                            <td>
+                                                <strong>Loss</strong>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-border-bottom-0">
+                                        <tr><td rowspan="10" valign="top"><strong>@ViewBag.ParentIon</strong></td></tr>
+                                        @foreach (var item in Model.MSMajorNaturalLoses)
+                                        {
+                                            <tr>
+                                                <td>@item.Product</td>
+                                                <td>@item.RelativeIntensity</td>
+                                                <td>@item.NaturalLoss</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+                @if (ViewBag.OtherInformation != "")
+                {
+                    <div class="col-12 m-lg-1">
+                        <div class="card shadow-none bg-transparent border11 border-info111 mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title m-0">Other Related Information</h5>
+                                <hr class="m-0 mb-3 mt-2" />
+                                @*<p class="card-text">@Html.Raw(@ViewBag.OtherInformation)</p>*@
+                                <table class="table-borderless">
+                                    @Html.Raw(@ViewBag.OtherInformation)
+                                </table>
+                            </div>
+                            <figcaption class="mb-0 text-danger" style="text-align:right;margin-right:18px">
+                                <span title="Source Title">Source : </span>
+                                <a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" title="NCBI" class="text-success">National Center for Biotechnology Information</a>
+                            </figcaption>
+                            @*<hr class="m-0 mb-2 mt-2" />*@
+                        </div>
+                    </div>
+                }
+
+                <div class="timeline-item timeline-item-transparent mb-4">
+                    <span class="timeline-point timeline-point-gray"></span>
+                    <div class="row">
+                        <div class="col-md-4 mb-1">
+                            <label class="mb-0">
+                                Compiled By
+                            </label>
+                        </div>
+                        <div class="col-md-8  mb-1">
+                            <label class="mb-0 text-secondary">@Model.CompiledBy</label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="printSummaryContainer">
+
+        @{
+            
+            Html.RenderPartial("~/Views/Compound/_PrintCompoundSummary.cshtml",Model);
+        }
+    </div>
+
+}
+<script>
+    $(function () {
+        $('#printSummaryContainer').hide();
+            $('#hspor').hide();
+            $('#footerprint').hide();     
+    });
+    function PrintCompoundSummary() {
+        $('#hspor').show();
+        $('#footerprint').show();
+        var printContents = document.getElementById('printSummaryContainer');
+        var url = location.origin + location.pathname;
+        var printWindow = window.open(url, '', '');
+        printWindow.document.write('<html><head><title>Compound Summary</title>');
+        printWindow.document.write('<link href="../Content/css/print.css" rel="stylesheet" media="print" />');
+        printWindow.document.write('</head><body>');
+        printWindow.document.write(printContents.innerHTML);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        setTimeout(function () {
+            printWindow.print();
+            printWindow.close();
+        }, 500);
+
+        $('#hspor').hide();
+        $('#footerprint').hide();
+    }
+</script>

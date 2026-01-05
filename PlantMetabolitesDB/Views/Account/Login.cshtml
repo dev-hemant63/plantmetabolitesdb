@@ -1,0 +1,91 @@
+﻿@model PlantMetabolitesDB.ViewModel.LoginViewModel
+@{
+    Layout = null;
+}
+@using BotDetect.Web.Mvc;
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="~/Content/images/fav.png" rel="icon">
+    <link href="~/Content/images/fav.png" rel="apple-touch-icon">
+    <link rel="stylesheet" href="~/Content/css/bootstrap.css" type="text/css">
+    <link href="~/Content/css/font-awesome.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" media="all" href="~/Content/css/signin-style.css">
+    <link href="~/Content/css/responsive.css" rel="stylesheet" type="text/css">
+    <link href="@BotDetect.Web.CaptchaUrls.Absolute.LayoutStyleSheetUrl" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/js/jquery-3.6.0.min.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function () {
+            $("a[title ~= 'BotDetect']").removeAttr("style");
+            $("a[title ~= 'BotDetect']").removeAttr("href");
+            $("a[title ~= 'BotDetect']").css('visibility', 'hidden');
+
+        });
+    </script>
+</head>
+<body>
+    <div class="ag-night-sky_clouds"></div>
+    <div class="bg-img"></div>
+    <section>
+        <div class="logn-logo-grid">
+            <div class="container">
+                <div class="row">
+                    <a href="@Url.Action("Index", "Home")"><img src="~/Content/images/logo.png" alt="" class=""></a>
+                </div>
+            </div>
+        </div>
+        <div id="login-box">
+            @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @id = "login-form", @class = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <h3 class=""> Login</h3>
+                <span style="font-weight:bolder; font-size:14px; color:yellow;">@ViewBag.Message</span>
+                <div class="form-group-text">
+                    <span><img src="~/Content/images/user-icon.png" alt="user-icon"></span>
+                    @Html.TextBoxFor(e => e.UserName, new { @class = "form-control-iwwa", @placeholder = "Username" })
+                </div>
+                <div class="form-group-text">
+                    <span><img src="~/Content/images/password-icon.png" alt="password-icon"></span>
+                    @Html.PasswordFor(e => e.UserPassword, new { @class = "form-control-iwwa", @placeholder = "Password" })
+                </div>
+                <div class="form-group">
+                    <label class="member_remember">
+                        <span>
+                            <input type="checkbox" value="remember-me" id="remember_me">
+                        </span> <span>Remember Me</span>
+                    </label>
+                    <div class="pull-right"> <a href="@Url.Action("ForgotPassword", "Account")" class="member_forgot">Forgot Password ?</a> </div>
+                </div>
+                <div class="form-group-text mt-2">
+                    @{
+                        MvcCaptcha exampleCaptcha = new MvcCaptcha("ExampleCaptcha");
+                        exampleCaptcha.UserInputID = "CaptchaCode";                    
+                        @Html.Captcha(exampleCaptcha);
+                    }
+                </div>
+
+                <div class="form-group-text mt-1">
+                    @Html.TextBox("CaptchaCode")
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <button type="submit" name="Login" class="submit_btn" value="Login">Login</button>
+                </div>
+                <div class="form-group">
+                    <p class="member_register">New User? <a href="@Url.Action("Register", "Account")">Register Here</a></p>
+                </div>
+                <div class="form-group">
+                    <a href="@Url.Action("Index", "Home")" class="home_btn">Go To Home </a>
+                </div>
+
+            }
+
+        </div>
+    </section>
+</body>
+</html>

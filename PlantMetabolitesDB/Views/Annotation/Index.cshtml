@@ -1,0 +1,388 @@
+﻿@model IEnumerable<PlantMetabolitesDB.ViewModel.AnnotationViewModel>
+@{
+    ViewBag.Title = "Annotation";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h4 class="py-3 breadcrumb-wrapper mb-2">Annotation List</h4>
+<!-- Annotation Table -->
+<div class="card">
+    <div class="card-datatable table-responsive">
+        <table class="datatables-annotation table border-top">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Annotation Name</th>
+                    <th>Polarity</th>
+                    <th>Annotation Type</th>
+                    @*<th>Created Date</th>*@
+                    <th>Status</th>
+                    <th width="16%">Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+<!--/ Annotation Table -->
+
+<div class="modal fade" id="annotationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-3 p-md-5">
+            <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+
+    <script>
+        $(function () {
+            LoadTable();
+        });
+
+        function LoadTable() {
+            var e,
+                a = $(".datatables-annotation"),
+                l = {
+                    1: { title: "Active", class: "bg-label-success" },
+                    2: { title: "Inactive", class: "bg-label-secondary" },
+                };
+            a.DataTable().destroy();
+            a.length &&
+                (e = a.DataTable({
+                    "ajax": {
+                        "url": "/Annotation/GetAnnotation",
+                        "type": "GET",
+                        "datatype": "json"
+                    },
+                    columns: [
+                        { data: "" },
+                        { data: "AnnotationKey" },
+                        { data: "AnnotationName" },
+                        { data: "PolarityName" },
+                        { data: "AnnotationTypeName" },
+                      /*  { data: "CreatedOn" },*/
+                        { data: "StatusName" },
+                        { data: "" },
+                    ],
+                    columnDefs: [
+                        {
+                            className: "control",
+                            orderable: !1,
+                            searchable: !1,
+                            responsivePriority: 2,
+                            targets: 0,
+                            render: function (e, a, t, s) {
+                                return "";
+                            },
+                        },
+                        { targets: 1, searchable: !1, visible: !1, orderable: 1 },
+                        {
+                            targets: 2,
+                            render: function (e, a, t, s) {
+                                return (
+                                    '<span class="text-nowrap fw-semibold">' + t.AnnotationName + "</span>"
+                                );
+                            },
+                        },
+                        {
+                            targets: 3,
+                            render: function (e, a, t, s) {
+                                return (
+                                    '<span class="text-nowrap fw-semibold">' + t.PolarityName + "</span>"
+                                );
+                            },
+                        },
+                        {
+                            targets: 4,
+                            render: function (e, a, t, s) {
+                                return (
+                                    '<span class="text-nowrap fw-semibold">' + t.AnnotationTypeName + "</span>"
+                                );
+                            },
+                        },
+                        //{
+                        //    targets: 5,
+                        //    orderable: !1,
+                        //    render: function (e, a, t, s) {
+                        //        return '<span class="text-nowrap">' + ConvertJsonDateString(t.CreatedOn) + "</span>";
+                        //    },
+                        //},
+                        {
+                            targets: 5,
+                            // searchable: !1,
+                           // orderable: !1,
+                            render: function (e, a, t, s) {
+                                //var r = t.IsActive == true ? "<a href='javascript:void(0)' data-isactive='De-Activate' data-id=" + t.AnnotationKey + " class='active-deactive'><span class='badge bg-label-primary m-1'>Disable</span></a>" : "<a href='javascript:void(0)' data-id=" + t.AnnotationKey + " data-isactive='Activate' class='active-deactive'><span class='badge bg-label-warning m-1'>Enable</span></a>"
+                                //return '<span class="text-nowrap">' + r + "</span>";                               
+                                t = t.StatusName;
+                                var indx = t == "Active" ? 1 : 2;
+                                return (
+                                    '<span class="badge ' +
+                                    l[indx].class +
+                                    '">' +
+                                    l[indx].title +
+                                    "</span>"
+                                );
+                            },
+                        },
+
+                        {
+                            targets: -1,
+                            searchable: !1,
+                            title: "Actions",
+                            orderable: !1,
+                            render: function (e, a, t, s) {
+                                @*var lnk = '<span class="text-nowrap"><button class="edit-record btn btn-sm btn-icon me-2" "data-bs-toggle": "modal" data-bs-target="#annotationModal" data-id=' + t.AnnotationKey + '><i class="bx bx-edit"></i></button>'
+                                if (@User.IsInRole("Superadmin").ToString().ToLower()) {
+                                    lnk = lnk + '<button class="btn btn-sm btn-icon delete-record" data-id=' + t.AnnotationKey +'><i class="bx bx-trash"></i></button></span>'
+                                } else {
+                                    lnk = lnk + '</span>'
+                                }
+                                return lnk;*@
+                                var r = t.IsActive == true ? "<a href='javascript:void(0)' data-isactive='De-Activate' data-id=" + t.AnnotationKey + " class='active-deactive'><span class='btn btn-xs btn-outline-dark m-1'>Deactivate</span></a>" : "<a href='javascript:void(0)' data-id=" + t.AnnotationKey + " data-isactive='Activate' class='active-deactive'><span class='btn btn-xs btn-outline-dark m-1'>Activate</span></a>"
+                                var lnk = '<span class="text-nowrap"><button class="edit-record btn btn-sm btn-icon me-2" "data-bs-toggle": "modal" data-bs-target="#annotationModal" data-id=' + t.AnnotationKey + '><i class="bx bx-edit"></i></button>'
+                                lnk = lnk + '<button class="btn btn-sm btn-icon delete-record" data-id=' + t.AnnotationKey + ' > <i class="bx bx-trash"></i></button></span>'
+
+                                @*if (@User.IsInRole("Superadmin").ToString().ToLower()) {
+                                     }*@
+                                //else {
+                                //    lnk = lnk +'</span>'
+                                //}
+                                lnk = lnk + r + '</span>'
+                                return lnk;
+
+                            },
+                        },
+                    ],
+                    order: [[1, "desc"]],
+                    //dom: '<"row mx-1"<"col-sm-12 col-md-3" l><"col-sm-12 col-md-9"<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-md-end justify-content-center flex-wrap me-1"<"me-3"f>B>>>t<"row mx-2"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+                    dom: '<"row ms-2 me-3"<"col-12 col-md-6 d-flex align-items-center justify-content-center justify-content-md-start gap-2"l<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start mt-md-0 mt-3"B>><"col-12 col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row pe-3 gap-md-2"f<"annotation_status mb-3 mb-md-0">>>t<"row mx-2"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+
+                    language: {
+                        sLengthMenu: "_MENU_",
+                        search: "Search",
+                        searchPlaceholder: "Search..",
+                    },
+                    buttons: [
+                        {
+                            text: '<i class="bx bx-plus me-0 me-lg-2"></i><span class="d-none d-lg-inline-block">Add Annotation</span>',
+                            className: "add-new btn btn-primary mb-3 mb-md-0",
+                            attr: {
+                                //  "data-bs-toggle": "modal",
+                                "data-bs-target": "#annotationModal",
+                            },
+                            init: function (e, a, t) {
+                                $(a).removeClass("btn-secondary");
+                            },
+                        },
+                    ],
+                    //responsive: {
+                    //    details: {
+                    //        display: $.fn.dataTable.Responsive.display.modal({
+                    //            header: function (e) {
+                    //                return "Details of " + e.data().AnnotationName;
+                    //            },
+                    //        }),
+                    //        type: "column",
+                    //        renderer: function (e, a, t) {
+                    //            t = $.map(t, function (e, a) {
+                    //                return "" !== e.title
+                    //                    ? '<tr data-dt-row="' +
+                    //                    e.rowIndex +
+                    //                    '" data-dt-column="' +
+                    //                    e.columnIndex +
+                    //                    '"><td>' +
+                    //                    e.title +
+                    //                    ":</td> <td>" +
+                    //                    e.data +
+                    //                    "</td></tr>"
+                    //                    : "";
+                    //            }).join("");
+                    //            return !!t && $('<table class="table"/><tbody />').append(t);
+                    //        },
+                    //    },
+                    //},
+                    initComplete: function () {
+                        this.api()
+                            .columns(5)
+                            .every(function () {
+                                var a = this,
+                                    t = $(
+                                        '<select id="AnnotationStatus" class="form-select text-capitalize"><option value=""> Select Status </option></select>'
+                                    )
+                                        .appendTo(".annotation_status")
+                                        .on("change", function () {
+                                            var e = $.fn.dataTable.util.escapeRegex($(this).val());
+                                            a.search(e ? "^" + e + "$" : "", !0, !1).draw();
+                                        });
+                                a.data()
+                                    .unique()
+                                    .sort()
+                                    .each(function (e, a) {
+                                        t.append(
+                                            '<option value="' +
+                                            e +
+                                            '" class="text-capitalize">' +
+                                            e +
+                                            "</option>"
+                                        );
+                                    });
+                            });
+                    },
+                })),
+                $(".datatables-annotation tbody").on("click", ".active-deactive", function () {
+                    var id = $(this).attr('data-id');
+                    var statustext = $(this).attr('data-isactive');
+                    Swal.fire({
+                        title: "Are you sure want to " + statustext + "?",
+                            text: "You won't be able to revert this!",
+                            icon: "warning",
+                            showCancelButton: !0,
+                        confirmButtonText: "Yes, " + statustext +" it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary me-3",
+                                cancelButton: "btn btn-label-secondary",
+                            },
+                            buttonsStyling: !1,
+                        }).then(function (t) {
+                            if (t.isConfirmed) {
+                                $.ajax({
+                                    type: "GET",
+                                     url: '@Url.Action("ActivateDeActivate", "Annotation")',
+                                    contentType: "application/json; charset=utf-8",
+                                    data: {"AnnotationKey": id},
+                                    datatype: "json",
+                                    success: function (data) {
+                                        var txtmsg = statustext == "Activate" ? "Activated" :"De-Activated"
+                                        t.value &&
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: txtmsg,
+                                            text: "Your data has been " + txtmsg +".",
+                                            customClass: { confirmButton: "btn btn-success" },
+                                        });
+
+                                        $('.swal2-confirm').on('click', function () { LoadTable() });
+                                    },
+                                    error: function () {
+                                        alert("Error Occured!");
+                                    }
+                                });
+                            }
+
+                        });
+                }),
+                $(".datatables-annotation tbody").on(
+                    "click",
+                    ".delete-record",
+                    function () {
+                        var id = $(this).attr('data-id');
+
+                        Swal.fire({
+                            title: "Are you sure want to delete?",
+                            text: "You won't be able to revert this!",
+                            icon: "warning",
+                            showCancelButton: !0,
+                            confirmButtonText: "Yes, delete it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary me-3",
+                                cancelButton: "btn btn-label-secondary",
+                            },
+                            buttonsStyling: !1,
+                        }).then(function (t) {
+                            if (t.isConfirmed) {
+                                $.ajax({
+                                    type: "GET",
+                                     url: '@Url.Action("DeleteAnnotation", "Annotation")',
+                                    contentType: "application/json; charset=utf-8",
+                                    data: {"AnnotationKey": id},
+                                    datatype: "json",
+                                    success: function (data) {
+                                        t.value &&
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "Deleted!",
+                                            text: "Your data has been deleted.",
+                                            customClass: { confirmButton: "btn btn-success" },
+                                        });
+
+                                        $('.swal2-confirm').on('click', function () { LoadTable() });
+                                    },
+                                    error: function () {
+                                        alert("Data not deleted.");
+                                    }
+                                });
+                            }
+
+                        });
+                    }
+                ),
+                $(".add-new").on("click", function () {
+                    var options = { "backdrop": "static", keyboard: true };
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("AddAnnotation", "Annotation")',
+                        contentType: "application/json; charset=utf-8",
+                        data: {},
+                        datatype: "json",
+                        success: function (data) {
+                            $('.modal-body').html(data)
+                            $('#annotationModal').modal(options);
+                            $('#annotationModal').modal('show');
+                        },
+                        error: function () {
+                            alert("Data load failed.");
+                        }
+                    });
+                }),
+                $(".datatables-annotation tbody").on(
+                    "click",
+                    ".edit-record", function () {
+                    var id = $(this).attr('data-id');
+                    var options = { "backdrop": "static", keyboard: true };
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("EditAnnotation", "Annotation")',
+                        contentType: "application/json; charset=utf-8",
+                        data: {"AnnotationKey": id},
+                        datatype: "json",
+                        success: function (data) {
+                            $('.modal-body').html(data)
+                            $('#annotationModal').modal(options);
+                            $('#annotationModal').modal('show');
+                        },
+                        error: function () {
+                            alert("Data load failed.");
+                        }
+                    });
+                }),
+                setTimeout(() => {
+                    $(".dataTables_filter .form-control").removeClass("form-control-sm"),
+                        $(".dataTables_length .form-select").removeClass("form-select-sm");
+                }, 300);
+    }
+
+    function ConvertJsonDateString(jsonDate) {
+        var shortDate = null;
+        if (jsonDate) {
+            var regex = /-?\d+/;
+            var matches = regex.exec(jsonDate);
+            var dt = new Date(parseInt(matches[0]));
+            var month = dt.getMonth() + 1;
+            var monthString = month > 9 ? month : '0' + month;
+            var day = dt.getDate();
+            var dayString = day > 9 ? day : '0' + day;
+            var year = dt.getFullYear();
+            shortDate = dayString + '-' + monthString + '-' + year;
+        }
+        return shortDate;
+    };
+    </script>
+
+
+}

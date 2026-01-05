@@ -1,0 +1,40 @@
+Name of compound:       Theaflavin
+Source:                 Purchased from sigma
+Mass Spectrometer	API 4000 Q TRAP
+Software Version:       Analyst 1.4.2
+Scan Type:	        Product Ion (EMS2)
+Polarity:	        Positive
+Scan Mode:	        Profile
+Ion Source:	        Turbo Spray
+Product Of:	        565.13 amu
+Resolution Q1:	        Unit
+Resolution Q3:	        Unit
+Intensity Thres.:       0.00 cps
+Settling Time:	        0.0000 msec
+MR Pause:	        5.0070 msec
+Step Size:	        0.10 amu 
+Parameter Table(Period 1  Experiment   1)
+CUR: 	                10.00
+IS: 	                4500.00
+TEM: 	                0.00
+GS1: 	                10.00
+GS2: 	                0.00
+ihe: 	                ON
+CAD: 	                Medium
+DP	                138.00
+EP	                10.00
+CE	                40.00
+CXP	                10.00
+ 
+
+
+HPLC
+ 
+Solvent system :        80:20 Acetonitrile:0.1% Formic acid
+Flow           :        0.010 ml/min
+
+
+
+
+
+

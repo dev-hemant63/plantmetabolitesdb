@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<AdductIonMass>  
+  <!--<Ion>
+       <IonName>2. Negative ion mode</IonName>
+       <IonMass></IonMass>
+       <Charge></Charge>
+       <Mult></Mult>
+       <Mass>▲(M- - adduct)</Mass>
+   </Ion>-->
+  <Ion>
+    <IonName>M-H</IonName>
+    <IonMass>M – 1.007276</IonMass>
+    <Charge>1-</Charge>
+    <Mult>1</Mult>
+    <Mass>-1.007276</Mass>
+  </Ion>
+  <Ion>
+    <IonName>M+Na-2H</IonName>
+    <IonMass>M + 20.974666</IonMass>
+    <Charge>1-</Charge>
+    <Mult>1</Mult>
+    <Mass>20.974666</Mass>
+  </Ion>
+  <Ion>
+    <IonName>M+Cl</IonName>
+    <IonMass>M + 34.969402</IonMass>
+    <Charge>1-</Charge>
+    <Mult>1</Mult>
+    <Mass>34.969402</Mass>
+  </Ion>
+  <Ion>
+    <IonName>M+K-2H</IonName>
+    <IonMass>M + 36.948606</IonMass>
+    <Charge>1-</Charge>
+    <Mult>1</Mult>
+    <Mass>36.948606</Mass>
+  </Ion>
+  <Ion>
+    <IonName>M+HCOOH-H</IonName>
+    <IonMass>M + 44.998201</IonMass>
+    <Charge>1-</Charge>
+    <Mult>1</Mult>
+    <Mass>44.998201</Mass>
+  </Ion>
+  <Ion>
+    <IonName>M+CH3COOH-H</IonName>
+    <IonMass>M + 59.013851</IonMass>
+    <Charge>1-</Charge>
+    <Mult>1</Mult>
+    <Mass>59.013851</Mass>
+  </Ion>
+  <Ion>
+    <IonName>M+Br</IonName>
+    <IonMass>M + 78.918885</IonMass>
+    <Charge>1-</Charge>
+    <Mult>1</Mult>
+    <Mass>78.918885</Mass>
+  </Ion>
+  <Ion>
+    <IonName>M+TFA-H</IonName>
+    <IonMass>M + 112.985586</IonMass>
+    <Charge>1-</Charge>
+    <Mult>1</Mult>
+    <Mass>112.985586</Mass>
+  </Ion>
+  <Ion>
+    <IonName>2M-H</IonName>
+    <IonMass>2M – 1.007276</IonMass>
+    <Charge>1-</Charge>
+    <Mult>2</Mult>
+    <Mass>-1.007276</Mass>
+  </Ion>
+  <Ion>
+    <IonName>2M+HCOOH-H</IonName>
+    <IonMass>2M + 44.998201</IonMass>
+    <Charge>1-</Charge>
+    <Mult>2</Mult>
+    <Mass>44.998201</Mass>
+  </Ion>
+  <Ion>
+    <IonName>2M+CH3COOH-H</IonName>
+    <IonMass>2M + 59.013851</IonMass>
+    <Charge>1-</Charge>
+    <Mult>2</Mult>
+    <Mass>59.013851</Mass>
+  </Ion>
+  <Ion>
+    <IonName>3M-H</IonName>
+    <IonMass>3M – 1.007276</IonMass>
+    <Charge>1-</Charge>
+    <Mult>3</Mult>
+    <Mass>-1.007276</Mass>
+  </Ion>
+</AdductIonMass>

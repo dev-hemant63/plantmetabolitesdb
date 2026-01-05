@@ -1,0 +1,73 @@
+﻿@model PlantMetabolitesDB.ViewModel.CompoundStats
+
+
+<div class="row g-4 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="card bg-danger text-white">
+            <div class="card-body">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div class="content-left">
+                        <span>Total Compound</span>
+                        <div class="d-flex align-items-end mt-2">
+                            <h4 class="mb-0 me-2 text-white">@Model.CompoundCount</h4>                         
+                        </div>                     
+                    </div>
+                    <span class="badge bg-label-primary rounded p-2">
+                        <i class="bx bx-user bx-sm"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card bg-warning text-white mb-3">
+            <div class="card-body">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div class="content-left">
+                        <span>Total MS2</span>
+                        <div class="d-flex align-items-end mt-2">
+                            <h4 class="mb-0 me-2 text-white">@Model.MS2Count</h4>                        
+                        </div>
+                    </div>
+                    <span class="badge bg-label-danger rounded p-2">
+                        <i class="bx bx-user-plus bx-sm"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card bg-success text-white mb-3">
+            <div class="card-body">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div class="content-left">
+                        <span>Total MS3</span>
+                        <div class="d-flex align-items-end mt-2">
+                            <h4 class="mb-0 me-2 text-white">@Model.MS3Count</h4>
+                        </div>
+                    </div>
+                    <span class="badge bg-label-success rounded p-2">
+                        <i class="bx bx-group bx-sm"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card bg-info text-white mb-3">
+            <div class="card-body">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div class="content-left">
+                        <span>Total Adduct</span>
+                        <div class="d-flex align-items-end mt-2">
+                            <h4 class="mb-0 me-2 text-white">@Model.AductCount</h4>
+                        </div>
+                    </div>
+                    <span class="badge bg-label-warning rounded p-2">
+                        <i class="bx bx-user-voice bx-sm"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

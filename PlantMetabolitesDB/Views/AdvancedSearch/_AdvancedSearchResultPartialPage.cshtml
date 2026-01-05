@@ -1,0 +1,309 @@
+﻿@model IEnumerable<PlantMetabolitesDB.ViewModel.MassSpectra_MSAdv_Search>
+
+<div class="col-md-12 col-sm-12 col-xs-12 mt-2">
+
+    <div class="card mb-2">
+        <h6 class="card-header"><strong>Search Criteria</strong></h6>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tr>
+                    <td><strong>Database</strong></td>
+                    <td><span id="lblDatabase"></span></td>
+                    <td><strong>Instrument</strong></td>
+                    <td><span id="lblInstrument"></span></td>
+                </tr>
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <div class="card mb-2">
+        <h6 class="card-header">
+            <strong>Advanced Search Result</strong><br />
+            <span> Click on the Name / Molecular Weight / Formula to see more data.</span>
+        </h6>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-striped">
+                    <colgroup>
+                        <col style="width: 24%">
+                        <col style="width: 8%">
+                        <col style="width: 8%">
+                        <col style="width: 15%">
+                        <col style="width: 15%">
+                        <col style="width: 8%">
+                        <col style="width: 12%">
+                        <col style="width: 10%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>
+                                <strong>Query</strong>
+                            </th>
+                            <th>
+                                <strong>QM</strong>
+                            </th>
+
+                            <th>
+                                <strong>M.W.</strong>
+                            </th>
+                            <th>
+                                <strong>Name</strong>
+                            </th>
+                            <th>
+                                <strong>Formula</strong>
+                            </th>
+                            <th>
+                                <strong>Score</strong>
+                            </th>
+                            <th>
+                                <strong>Hit</strong>
+                            </th>
+                            <th>
+                                <strong>Data Coverage</strong>
+                            </th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        @if (Model.Count() > 0)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.Query
+                                    </td>
+                                    <td>
+                                        @item.Data_QM
+                                    </td>
+
+                                    <td>
+                                        <a href="javascript:;" class="view-record" data-id='@item.Data_CompoundKey'>@item.Data_MW</a>
+                                    </td>
+                                    <td>
+                                        <a href="javascript:;" class="view-record" data-id='@item.Data_CompoundKey'>@item.Data_Name</a>
+                                    </td>
+                                    <td>
+                                        <a href="javascript:;" class="view-record" data-id='@item.Data_CompoundKey'>@item.Data_Formula</a>
+                                    </td>
+                                    <td>
+                                        @Math.Round(item.Data_mz_MatchFactor, 3)
+                                    </td>
+                                    <td>
+                                        @item.Data_MHit
+                                    </td>
+                                    <td>
+                                        <a href="javascript:void(0);" title="Click to View" class="view-data-coverage btn btn-sm btn-primary"
+                                           data-matchedAnnotationType='@item.matchedAnnotationType' data-matchedMassSpectraKey='@item.matchedMassSpectraKey'
+                                           data-matchedInputIndex='@item.matchedInputIndex' data-compoundKey='@item.Data_CompoundKey'>View</a>
+
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="ResultPrintContainer">
+    <div id="hspor2">
+        <div style="width: 99% !important;">
+            <div style="width: 75%; height: 91px; float: left; background-image: url(../Content/images/logo-print.png) !important; background-repeat: no-repeat;"></div>
+            <div style="width: 25%; height: 91px; float: right; background-image: url(../Content/images/right-logo-print.png)!important; background-repeat: no-repeat;"></div>
+        </div>
+        <div style="clear: both; padding: 1px 4px; background-color: rgb(235, 234, 234); display: table; font-family: Arial, Helvetica, sans-serif !important;width:100%!important ">
+            <h3 style="float: left;margin-left: 10px">
+                <strong>Search By Advanced </strong>
+            </h3>
+            <h4 style="float:right;margin-right: 10px;">@ViewBag.CurrDate</h4>
+        </div>
+    </div>
+    <div style="display: table; font-family: Arial, Helvetica, sans-serif !important; width: 100%; padding: 20px 7px; ">
+        <span style="font-size: 18px; font-weight: 600; margin-bottom: 11px;">Search Criteria</span>
+        <hr style="border-color: rgb(235, 234, 234); margin-bottom:0px" />
+        <table width="100%" cellpadding="4" cellspacing="4" style="font-family: Arial, Helvetica, sans-serif !important;border-collapse:collapse">
+            <tbody>
+                <tr>
+                    <td width="100px"><strong>Database</strong></td>
+                    <td><span id="lblDatabase1"></span></td>
+                    <td width="100px"><strong>Instrument</strong></td>
+                    <td><span id="lblInstrument1"></span></td>
+                </tr>
+              
+            </tbody>
+        </table>
+
+    </div>
+    <div style="display: table;font-family: Arial, Helvetica, sans-serif !important;width:100%;padding: 20px 7px;">
+        <span style="font-size: 18px;font-weight:600;margin-bottom:11px">Search Result </span>
+        <hr style="border-color:rgb(235, 234, 234)" />
+        <table width="100%" cellspacing="4" cellpadding="4" style="font-family: Arial, Helvetica, sans-serif !important;border-collapse:collapse">
+            <thead>
+                <tr>
+                    <td>
+                        <strong>Query</strong>
+                    </td>
+                    <td>
+                        <strong>QM</strong>
+                    </td>
+
+                    <td>
+                        <strong>M.W.</strong>
+                    </td>
+                    <td>
+                        <strong>Name</strong>
+                    </td>
+                    <td>
+                        <strong>Formula</strong>
+                    </td>
+                    <td>
+                        <strong>Score</strong>
+                    </td>
+                    <td>
+                        <strong>Hit</strong>
+                    </td>
+                </tr>
+
+            </thead>
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.Query
+                            </td>
+                            <td>
+                                @item.Data_QM
+                            </td>
+
+                            <td>
+                                @item.Data_MW
+                            </td>
+                            <td>
+                                @item.Data_Name
+                            </td>
+                            <td>
+                                @item.Data_Formula
+                            </td>
+                            <td>
+                                @Math.Round(item.Data_mz_MatchFactor, 3)
+                            </td>
+                            <td>
+                                @item.Data_MHit
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="footerprint2">
+        <div style="clear: both; margin-top: 41px; padding: 1px 4px;background-color: rgb(235, 234, 234);font-size: 12px;font-family: Arial, Helvetica, sans-serif; text-align: center;">
+            <p style="margin: 10px 1px;">Copyright © 2022-23: CSIR - Central Drug Research Institute, Lucknow, (U.P.) India. All Rights Reserved. (Beta Version 1.2) </p>
+            <p style="margin: 10px 1px;">Powered by MARGSOFT Technologies (P) Ltd.</p>
+
+        </div>
+    </div>
+</div>
+<script>
+
+    $(function () {
+        $(".view-record").click(function () {
+            $.blockUI({
+                message:
+                    '<div class="spinner-border text-white" role="status"></div>',
+                css: { backgroundColor: "transparent", border: "0" },
+                overlayCSS: { opacity: 0.5 },
+            });
+            var id = $(this).attr('data-id');
+            $.ajax({
+                type: "GET",
+                url: "/GeneralSearch/CompoundSummary",
+                contentType: "application/json; charset=utf-8",
+                data: { "CompoundKey": id },
+                datatype: "json",
+                success: function (data) {
+                    $.unblockUI();
+                    $('.compound-preview-body').html(data)
+                    $('#search-result').hide();
+                    $('#compound-summary').show();
+                    $('#search-filter').hide();
+                },
+                error: function () {
+                    $.unblockUI();
+                    alert("Data load failed.");
+                }
+            });
+        });
+    });
+</script>
+<script>
+    $(function () {
+        $('#ResultPrintContainer').hide();
+
+        $(".view-data-coverage").click(function () {
+            $.blockUI({
+                message:
+                    '<div class="spinner-border text-white" role="status"></div>',
+                css: { backgroundColor: "transparent", border: "0" },
+                overlayCSS: { opacity: 0.5 },
+            });
+            var compoundKey = $(this).attr('data-compoundKey');
+            var mAnnotationType = $(this).attr('data-matchedAnnotationType');
+            var mMassSpectraKey = $(this).attr('data-matchedMassSpectraKey');
+            var mInputIndex = $(this).attr('data-matchedInputIndex');
+
+            $.ajax({
+                type: "GET",
+                url: "/AdvancedSearch/GetDataCoverage",
+                contentType: "application/json; charset=utf-8",
+                data: {
+                    "CompoundKey": compoundKey,
+                    "matchedAnnotationType": mAnnotationType,
+                    "matchedMassSpectraKey": mMassSpectraKey,
+                    "matchedInputIndex": mInputIndex
+
+                },
+                datatype: "json",
+                success: function (data) {
+                    $.unblockUI();
+                    $('.data-coverage-body').html(data)
+                    $('#search-result').hide();
+                    $('#compound-summary').hide();
+                    $('#search-filter').hide();
+                    $('#data-coverage').show();
+                },
+                error: function () {
+                    $.unblockUI();
+                    alert("Data load failed.");
+                }
+            });
+        });
+    });
+
+    function PrintSearchResult() {
+        $('#lblDatabase1').text($('#hdDatabase').text());
+        $('#lblInstrument1').text($('#hdInstrument').text());
+        var printContents = document.getElementById('ResultPrintContainer');
+        var url = location.origin + location.pathname;
+        var printWindow = window.open(url, '', '');
+        printWindow.document.write('<html><head><title>Search By Advanced</title>');
+        printWindow.document.write('<link href="../Content/css/print.css" rel="stylesheet" media="print" />');
+        printWindow.document.write('</head><body>');
+        printWindow.document.write(printContents.innerHTML);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        setTimeout(function () {
+            printWindow.print();
+            printWindow.close();
+        }, 500);
+    }
+</script>

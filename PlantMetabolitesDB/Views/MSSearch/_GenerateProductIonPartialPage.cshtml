@@ -1,0 +1,22 @@
+﻿@model  IList<PlantMetabolitesDB.ViewModel.GenerateProductIon>
+
+@for (int i = 0; i < Model.Count(); i++)
+{
+    <div class="row">
+        <div class="col-md-4 col-sm-12 col-xs-12">
+            <div class="feedback-form">
+                @Html.TextBoxFor(e => Model[i].mz, new { @id = "mz_" + @i, @class = "clsmz form__input mb-1", @placeholder = "", @onkeyup = "checkmzinput(" + i + ")" })
+
+            </div>
+            <span id="spnmz_@i" class="text-danger mt-2"></span>
+        </div>
+
+        <div class="col-md-4 col-sm-12 col-xs-12">
+            <div class="feedback-form">
+                @Html.TextBoxFor(e => Model[i].Intensity, new { @id = "intensity_" + @i, @class = "clsintensity form__input mb-1", @placeholder = "", @onkeyup = "checkintensityinput(" + i + ")" })
+
+            </div>
+            <span id="spnintensity_@i" class="text-danger mt-2"></span>
+        </div>
+    </div>
+}

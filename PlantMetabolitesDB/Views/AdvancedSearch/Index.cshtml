@@ -1,0 +1,392 @@
+﻿@model PlantMetabolitesDB.ViewModel.AdvancedSearchViewModel
+@{
+    ViewBag.Title = "Advanced Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .modal-backdrop {
+        /* bug fix - no overlay */
+        display: none;
+    }
+</style>
+<div class="breadcrumb-grid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <h3 class="header_title">Advanced Search</h3>
+                <ol class="breadcrumb">
+                    <li><a href="#">Home</a></li>
+                    <li class="active">Advanced Search</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="inner-grid">
+    <div class="feedback-container">
+
+        @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "advancedSearchForm", enctype = "multipart/form-data" }))
+        {
+            <div class="container">
+                <div id="search-filter" class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <p class="title-head"><b>Identification of multiple Compounds / Metabolites browsing LC / MS / MS data / *.txt file.</b></p>
+                    </div>
+                    <div class="col-md-8 offset-md-2">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <div class="feedback-form">
+                                    @Html.LabelFor(d => d.DatabaseKey, new { @class = "form__label" })
+                                    @Html.DropDownListFor(e => e.DatabaseKey, new SelectList(Model.Databases, "DatabaseKey", "DatabaseName"), "All", new { @class = "form__input" })
+                                    @Html.Hidden("hdDatabase")
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <div class="feedback-form">
+                                    @Html.LabelFor(d => d.InstrumentKey, new { @class = "form__label" })
+                                    @Html.DropDownListFor(e => e.InstrumentKey, new SelectList(Model.Instruments, "InstrumentKey", "InstrumentName"), "Select", new { @class = "form__input" })
+                                    @Html.Hidden("hdInstrument")
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <div class="feedback-form">
+                                    <label class="form__label">MS2 Ions Search</label>
+                                    <div class="form-check">
+                                        @Html.RadioButtonFor(x => x.MS2IonSearch, "true", new { @class = "ms2-yes form-check-input" })
+                                        <label class="form-check-label">Yes</label>
+                                    </div>
+                                    <div class="form-check">
+                                        @Html.RadioButtonFor(x => x.MS2IonSearch, "false", new { @class = "ms2-no form-check-input" })
+                                        <label class="form-check-label">No</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <div class="feedback-form">
+                                    <label class="form__label">MS3 Ions Search</label>
+                                    <div class="form-check">
+                                        @Html.RadioButtonFor(x => x.MS3IonSearch, "true", new { @class = "ms3-yes form-check-input " })
+                                        <label class="form-check-label">Yes</label>
+                                    </div>
+                                    <div class="form-check">
+                                        @Html.RadioButtonFor(x => x.MS3IonSearch, "false", new { @class = "ms3-no form-check-input" })
+                                        <label class="form-check-label">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <div class="feedback-form">
+                                    @Html.LabelFor(d => d.IntensityTypeKey, new { @class = "form__label" })
+                                    @Html.DropDownListFor(e => e.IntensityTypeKey, new SelectList(Model.IntensityTypes, "Value", "Text"), new { @class = "form__input" })
+
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <div class="feedback-form">
+                                    @Html.LabelFor(d => d.ReportTopKey, new { @class = "form__label" })
+                                    @Html.DropDownListFor(e => e.ReportTopKey, new SelectList(Model.ReportTops, "Value", "Text"), new { @class = "form__input" })
+
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <div class="feedback-form">
+                                    @Html.LabelFor(d => d.DataFileName, new { @class = "form__label" })
+                                    <input class="form__input" type="file" id="DataFile" name="DataFile">
+                                    <div id="output"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <div class="feedback-form">
+                                    @Html.LabelFor(d => d.ToleranceKey, new { @class = "form__label" })
+                                    @Html.DropDownListFor(e => e.ToleranceKey, new SelectList(Model.Tolerances, "Value", "Text"), new { @class = "form__input" })
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-6">
+                                <input type="button" value="Search" class="search-btn" id="submitButton" name="submitButton" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="search-result" class="row">
+                    <div class="col-md-12 no-print">
+                        <input type="button" class="btn btn-success" id="printSearchResult" onclick="PrintSearchResult()" value="Print" style="float:right" />
+                        <button type="button" id="btnBacktofilter" class="btn btn-dark" style="float:right; margin-right:7px">Back</button>
+
+                    </div>
+                    <div id="SearchResult"></div>
+                </div>
+
+                <div id="compound-summary">
+                    <div class="row">
+                        <div class="col-md-10"> <h4 class="mb-0 pull-left"><strong>Compound Summary</strong></h4></div>
+                        <div class="col-md-2">
+                            <button type="button" id="btnBack" class="btn btn-dark">Back</button>
+                            <input type="button" class="btn btn-success" id="printCompound" onclick="PrintCompoundSummary()" value="Print" />
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="compound-preview-body">
+
+                        </div>
+                    </div>
+                </div>
+                <div id="data-coverage">
+                    <div class="row">
+                        <div class="col-md-10"> <h4 class="mb-0 pull-left"><strong>Data Coverage - Standard/Library Vs Input Data</strong></h4></div>
+                        <div class="col-md-2">
+                            <button type="button" id="btnDCBack" class="btn btn-dark">Back</button>
+                            <input type="button" class="btn btn-success" id="printDataConverage" onclick="PrintDataCoverate()" value="Print" />
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="data-coverage-body">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+    <!-- Modal 2-->
+    <div class="modal fade" id="modalSpectraDetails" aria-hidden="true" aria-labelledby="modalToggleLabel2" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#deebff">
+                    <h5 class="modal-title" id="modalToggleLabel2"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body mass-detail-body">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="btnPreviewModel" data-bs-dismiss="modal">Back to Compound Summary</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            $('#search-result').hide();
+            $('#search-filter').show();
+            $('#compound-summary').hide();
+            $('#data-coverage').hide();
+            FillInstrument(0);
+
+            $('#DatabaseKey').on("change", function () {
+                var dbKey = $('#DatabaseKey option:selected').val();
+                if (dbKey != "") {
+                    FillInstrument(dbKey);
+                }
+                else {
+                    FillInstrument(0);
+                }
+            });
+
+            $(".ms2-no").on("click", function () {
+                $('.ms3-yes').prop('checked', true);
+            });
+
+            $(".ms3-no").on("click", function () {
+                $('.ms2-yes').prop('checked', true);
+            });
+
+        });
+
+          function FillInstrument(dbKey) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetInstrument", "AdvancedSearch")',
+                contentType: "application/json; charset=utf-8",
+                data: { "databaseKey": dbKey },
+                datatype: "json",
+                success: function (response) {
+                    $('#InstrumentKey').html('');
+                    var options = '';
+                    options += '<option value="">Select</option>';
+                    for (var i = 0; i < response.length; i++) {
+                        options += '<option value="' + response[i].InstrumentKey + '">' + response[i].InstrumentName + '</option>';
+                    }
+                    $('#InstrumentKey').append(options);
+                },
+                failure: function (response) {
+                    console.log(response.responseText);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.status);
+                    console.log(thrownError);
+                }
+            });
+          }
+
+    </script>
+    <script>
+        $('#submitButton').click(function (e) {
+            e.preventDefault();
+            debugger;
+            if ($('#InstrumentKey').val() == '') {
+                alert('Please select instrument.');
+                $('#InstrumentKey').focus();
+                return false;
+            }
+            var file = $("input:file");
+            if (file[0].files.length == 0) {
+                alert('Please select data file.');
+                return false;
+            }
+            
+            var form = $("#advancedSearchForm").get(0);
+            var formData = new FormData(form);
+            $.blockUI({
+                message:
+                    '<div class="spinner-border text-white" role="status"></div>',
+                css: { backgroundColor: "transparent", border: "0" },
+                overlayCSS: { opacity: 0.5 },
+            });
+            $.ajax({
+                url: "/AdvancedSearch/GetAdvancedSearch",
+                type: "POST",
+                dataType: 'html',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    $.unblockUI();
+                    $('#SearchResult').html(response)
+                    $('#search-result').show();
+                    $('#search-filter').hide();
+                    $('#compound-summary').hide();
+                    $('#data-coverage').hide();
+                    $('#lblDatabase').text($('#DatabaseKey option:selected').text())
+                    $('#lblInstrument').text($('#InstrumentKey option:selected').text())
+                    $('#hdDatabase').text($('#DatabaseKey option:selected').text())
+                    $('#hdInstrument').text($('#InstrumentKey option:selected').text())
+
+                },
+                failure: function (response) {
+                    $.unblockUI();
+                    console.log(response.responseText);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $.unblockUI();
+                    alert(xhr.status);
+                    alert(thrownError);
+                    alert(xhr.responseText);
+                    console.log("-----------error--------",xhr);
+                }
+            });
+        });
+
+        $('#btnBack').click(function () {
+            $('#search-result').show();
+            $('#compound-summary').hide();
+            $('#search-filter').hide();
+        });
+
+        $('#btnBacktofilter').click(function () {
+            $('#search-result').hide();
+            $('#search-filter').show();
+            $('#compound-summary').hide();
+        });
+        $('#btnDCBack').click(function () {
+            $('#search-result').show();
+            $('#compound-summary').hide();
+            $('#data-coverage').hide();
+            $('#search-filter').hide();
+        });
+
+        function MassSpectra(msid, mstype) {
+            $.blockUI({
+                message:
+                    '<div class="spinner-border text-white" role="status"></div>',
+                css: { backgroundColor: "transparent", border: "0" },
+                overlayCSS: { opacity: 0.5 },
+            });
+        var options = { "backdrop": "static", keyboard: true };
+             $.ajax({
+                 type: "GET",
+                 url: '@Url.Action("GetMassSpectraDetails", "GeneralSearch")',
+                 contentType: "application/json; charset=utf-8",
+                 data: { "spectraKey": msid, "spectraType": mstype },
+                 datatype: "json",
+                 success: function (data) {
+                     $.unblockUI();
+                     $('.mass-detail-body').html(data)
+                     $('#modalSpectraDetails').modal(options);
+                     $('#modalSpectraDetails').modal('show');
+                     $('#compoundPreviewModal').modal('toggle');
+                 },
+                 error: function () {
+                     $.unblockUI();
+                     alert("Data load failed.");
+                 }
+             });
+        }
+    </script>
+
+    <script>
+        function loadMime(file, callback) {
+            //List of known mimes
+            var mimes = [
+                {
+                    mime: 'text/plain',
+                   // pattern: [0xFF, 0xD8, 0xFF],
+                  //  mask: [0xFF, 0xFF, 0xFF],
+                }             
+            ];
+
+            function check(bytes, mime) {
+                for (var i = 0, l = mime.mask.length; i < l; ++i) {
+                    if ((bytes[i] & mime.mask[i]) - mime.pattern[i] !== 0) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            var blob = file.slice(0, 4); //read the first 4 bytes of the file
+
+            var reader = new FileReader();
+            reader.onloadend = function (e) {
+                if (e.target.readyState === FileReader.DONE) {
+                    var bytes = new Uint8Array(e.target.result);
+
+                    for (var i = 0, l = mimes.length; i < l; ++i) {
+                        if (check(bytes, mimes[i])) return callback("Mime: " + mimes[i].mime + " <br> Browser:" + file.type);
+                    }
+
+                    return callback("Mime: unknown <br> Browser:" + file.type);
+                }
+            };
+            reader.readAsArrayBuffer(blob);
+        }
+
+
+        //when selecting a file on the input
+        DataFile.onchange = function () {
+            loadMime(DataFile.files[0], function (mime) {
+                //print the output to the screen
+              //  output.innerHTML = mime;
+                alert('Not a valid text file.');
+            });
+        };
+    </script>
+    <script type="text/javascript">
+        function PrintDiv() {
+            var divToPrint = document.getElementById('compound-summary');
+            var popupWin = window.open('', '_blank', 'width=600,height=600,location=no,left=200px');
+            popupWin.document.open();
+            popupWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</html>');
+            popupWin.document.close();
+        }
+    </script>
+}

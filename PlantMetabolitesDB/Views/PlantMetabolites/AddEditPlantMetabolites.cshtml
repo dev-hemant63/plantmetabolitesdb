@@ -1,0 +1,201 @@
+﻿@*@using TandemDB.ViewModel
+    @{
+        ViewBag.Title = "AddEditPlantMetabolites";
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    @model PlantMetabolitesVM
+
+
+    <h4 class="py-3 breadcrumb-wrapper mb-2">Add Plant Metabolites</h4>
+    <div class="card">
+        <div class="card-body">
+            <form action="" class="row g-3 fv-plugins-bootstrap5 fv-plugins-framework" id="addUsersForm" method="post">
+                <input type="hidden" name="PlantMetabolitesKey" />
+                <div class="col-md-6">
+                    <label class="form-label" for="PlantFamilyKey">Family of plant species <span class="text-danger">*</span></label>
+                    <select class="form-select" name="PlantFamilyKey">
+                        <option value="">Select</option>
+                        @foreach (var item in Model.Database)
+                        {
+                            <option value="@item.DatabaseKey">@item.DatabaseName</option>
+                        }
+                    </select>
+                    <span class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="PlantSpeciesName">Name of plant species <span class="text-danger">*</span></label>
+                    <input class="form-control" placeholder="Name of plant species" type="text" name="PlantSpeciesName">
+                    <span class="text-danger" asp-validation-for="PlantSpeciesName"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="Synonyms">Synonyms <span class="text-danger">*</span></label>
+                    <input class="form-control" placeholder="Synonyms" type="text" name="Synonyms">
+                    <span class="text-danger" asp-validation-for="Synonyms"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="VernacularName">Vernacular name <span class="text-danger">*</span></label>
+                    <input class="form-control" placeholder="Vernacular name" type="text" name="VernacularName">
+                    <span class="text-danger" asp-validation-for="VernacularName"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="SpecificBiologicalActivity">Specific biological activity <span class="text-danger">*</span></label>
+                    <input class="form-control" placeholder="Specific biological activity" type="text" name="SpecificBiologicalActivity">
+                    <span class="text-danger" asp-validation-for="SpecificBiologicalActivity"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="TaxonomistName">Name of Taxonomist <span class="text-danger">*</span></label>
+                    <input class="form-control" placeholder="Name of Taxonomist" type="text" name="TaxonomistName">
+                    <span class="text-danger" asp-validation-for="TaxonomistName"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="Distribution">Distribution </label>
+                    <input class="form-control" placeholder="Distribution" type="text" name="Distribution">
+                    <span class="text-danger"  asp-validation-for="Distribution"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="EthnobotanicalInformation">Ethnobotanical information </label>
+                    <input class="form-control" placeholder="Ethnobotanical information" type="text" name="EthnobotanicalInformation">
+                    <span class="text-danger" asp-validation-for="EthnobotanicalInformation"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="ClassOfCompounds">Class of compounds </label>
+                    <input class="form-control" placeholder="Class of compounds" type="text" name="ClassOfCompounds">
+                    <span class="text-danger" asp-validation-for="ClassOfCompounds"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="MajorConstituents">Major constituents </label>
+                    <input class="form-control" placeholder="Major constituents" type="text" name="MajorConstituents">
+                    <span class="text-danger" asp-validation-for="MajorConstituents"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="CompiledBy">Compiled By </label>
+                    <input class="form-control" placeholder="Compiled By" type="text" name="CompiledBy">
+                    <span class="text-danger" asp-validation-for="CompiledBy"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="Figure">Figure(s)</label>
+                    <select class="form-select" name="Figure">
+                        <option value="">Select</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                    <span class="text-danger" asp-validation-for="Figure"></span>
+                </div>
+
+                <div class="col-md-12">
+                    <input type="submit" value="@(Model.PlantMetabolitesKey == 0 ? "Create" : "Update")" class="btn btn-primary" id="submitButton" name="submitButton">
+                    <button type="button" name="cancelButton" class="btn btn-secondary m-lg-2" onclick="window.history.back()" id="cancelButton">Close</button>
+                </div>
+
+            </form>
+        </div>
+    </div>*@
+
+
+
+@model TandemDB.ViewModel.PlantMetabolitesVM
+@{
+    ViewBag.Title = "AddEditPlantMetabolites";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h4 class="py-3 breadcrumb-wrapper mb-2">@(Model.PlantMetabolitesKey == 0 ? "Add" : "Edit") Plant Metabolites</h4>
+<div class="card">
+    <div class="card-body">
+        @using (Html.BeginForm("AddEditPlantMetabolites", "PlantMetabolites", FormMethod.Post, new { @class = "row g-3 fv-plugins-bootstrap5 fv-plugins-framework", id = "addUsersForm" }))
+        {
+            @Html.HiddenFor(m => m.PlantMetabolitesKey)
+
+            <div class="col-md-6">
+                <label class="form-label" for="PlantFamilyKey">Family of plant species <span class="text-danger">*</span></label>
+                @Html.DropDownListFor(m => m.PlantFamilyKey,
+                    new SelectList(Model.Database, "DatabaseKey", "DatabaseName", Model.PlantFamilyKey),
+                    "Select",
+                    new { @class = "form-select" })
+                @Html.ValidationMessageFor(m => m.PlantFamilyKey, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="PlantSpeciesName">Name of plant species <span class="text-danger">*</span></label>
+                @Html.TextBoxFor(m => m.PlantSpeciesName, new { @class = "form-control", placeholder = "Name of plant species" })
+                @Html.ValidationMessageFor(m => m.PlantSpeciesName, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="Synonyms">Synonyms <span class="text-danger">*</span></label>
+                @Html.TextBoxFor(m => m.Synonyms, new { @class = "form-control", placeholder = "Synonyms" })
+                @Html.ValidationMessageFor(m => m.Synonyms, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="VernacularName">Vernacular name <span class="text-danger">*</span></label>
+                @Html.TextBoxFor(m => m.VernacularName, new { @class = "form-control", placeholder = "Vernacular name" })
+                @Html.ValidationMessageFor(m => m.VernacularName, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="SpecificBiologicalActivity">Specific biological activity <span class="text-danger">*</span></label>
+                @Html.TextBoxFor(m => m.SpecificBiologicalActivity, new { @class = "form-control", placeholder = "Specific biological activity" })
+                @Html.ValidationMessageFor(m => m.SpecificBiologicalActivity, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="TaxonomistName">Name of Taxonomist <span class="text-danger">*</span></label>
+                @Html.TextBoxFor(m => m.TaxonomistName, new { @class = "form-control", placeholder = "Name of Taxonomist" })
+                @Html.ValidationMessageFor(m => m.TaxonomistName, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="Distribution">Distribution</label>
+                @Html.TextBoxFor(m => m.Distribution, new { @class = "form-control", placeholder = "Distribution" })
+                @Html.ValidationMessageFor(m => m.Distribution, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="EthnobotanicalInformation">Ethnobotanical information</label>
+                @Html.TextBoxFor(m => m.EthnobotanicalInformation, new { @class = "form-control", placeholder = "Ethnobotanical information" })
+                @Html.ValidationMessageFor(m => m.EthnobotanicalInformation, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="ClassOfCompounds">Class of compounds</label>
+                @Html.TextBoxFor(m => m.ClassOfCompounds, new { @class = "form-control", placeholder = "Class of compounds" })
+                @Html.ValidationMessageFor(m => m.ClassOfCompounds, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="MajorConstituents">Major constituents</label>
+                @Html.TextBoxFor(m => m.MajorConstituents, new { @class = "form-control", placeholder = "Major constituents" })
+                @Html.ValidationMessageFor(m => m.MajorConstituents, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="CompiledBy">Compiled By</label>
+                @Html.TextBoxFor(m => m.CompiledBy, new { @class = "form-control", placeholder = "Compiled By" })
+                @Html.ValidationMessageFor(m => m.CompiledBy, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="Figure">Figure(s)</label>
+                @Html.DropDownListFor(m => m.Figure,
+                    new SelectList(Enumerable.Range(1, 10)),
+                    "Select",
+                    new { @class = "form-select" })
+                @Html.ValidationMessageFor(m => m.Figure, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-12">
+                <input type="submit" value="@(Model.PlantMetabolitesKey == 0 ? "Create" : "Update")" class="btn btn-primary" />
+                <button type="button" class="btn btn-secondary m-lg-2" onclick="window.history.back()">Close</button>
+            </div>
+        }
+    </div>
+</div>

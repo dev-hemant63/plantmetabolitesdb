@@ -1,0 +1,290 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap');
+
+body {
+    font-family: 'Barlow', sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+ 
+}
+
+
+.ag-night-sky_clouds {
+    background: url(../images/clouds2.png) repeat-x 0 0;
+    z-index: 2;
+    -webkit-animation: an-clouds 400s linear infinite;
+    -moz-animation: an-clouds 400s linear infinite;
+    -o-animation: an-clouds 400s linear infinite;
+    animation: an-clouds 400s linear infinite;
+    position: absolute;
+    background-position-y: 20px;
+    /* top: 15%; */
+    width: 100%;
+    height: 30%;
+    bottom: 0px;
+}
+  
+  @-webkit-keyframes an-clouds {
+    0% {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 10000px 0;
+    }
+  }
+  @-moz-keyframes an-clouds {
+    0% {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 10000px 0;
+    }
+  }
+  @-o-keyframes an-clouds {
+    0% {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 10000px 0;
+    }
+  }
+  @keyframes an-clouds {
+    0% {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 10000px 0;
+    }
+  }
+
+.bg-img {
+    position: fixed;
+    background: url(../images/login-register.jpg) no-repeat;
+   
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+
+
+
+a {
+    -webkit-transition: all .3s ease-out;
+    -moz-transition: all .3s ease-out;
+    transition: all .3s ease-out;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+.logn-logo-grid{
+    background-color: #fff;
+}
+.logn-logo-grid a{
+    padding: 10px 0px;
+}
+
+.logn-logo-grid a img{
+    height: 90px;
+}
+#login-box {
+    width: 440px;
+    height: 100%;
+    /* background: url(../images/about-patern.png) no-repeat; */
+    background-size: cover;
+    background-color: #156cf0;
+    position: fixed;
+    z-index: 9;
+    right: 0px;
+    overflow: auto;
+    box-shadow: 12px 0px 50px rgb(0 0 0 / 59%);
+    padding: 0px;
+    top: 0px;
+    bottom: 0px;
+    /* border-left: 5px solid #156cf0; */
+}
+#login-box #login-form {
+    padding: 40px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0px;
+}
+
+#login-box>#login-form>.form-group-text {
+    margin-bottom: 0px;
+}
+
+#login-box #login-form #register-link {
+    margin-top: -85px;
+}
+
+#login-box #login-form h3 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    margin-top: 0px;
+    font-weight: 300;
+    color: #fff;
+}
+
+#login-box #login-form .form-group-text>span {
+    position: relative;
+    top: 31px;
+    left: 9px;
+}
+
+#login-box #login-form .form-group-text>span>img {
+    width: 19px;
+    height: auto;
+}
+
+.form-control-iwwa {
+    border: 0px;
+    /* border-bottom: 1px solid #c3c3c3; */
+    padding: 9px 5px;
+    font-size: 14px;
+    width: 100%;
+    padding-left: 35px;
+    border-radius: 2px;
+}
+
+.form-control-iwwa:focus {
+    outline: 0px;
+}
+
+.form-control-iwwa::-webkit-input-placeholder {
+    /* Chrome/Opera/Safari */
+    color: #585858;
+    font-size: 12px;
+}
+
+.form-control-iwwa::-moz-placeholder {
+    /* Firefox 19+ */
+    color: #585858;
+    font-size: 12px;
+}
+
+.form-control-iwwa:-ms-input-placeholder {
+    /* IE 10+ */
+    color: #585858;
+    font-size: 12px;
+}
+
+.form-control-iwwa:-moz-placeholder {
+    /* Firefox 18- */
+    color: #585858;
+    font-size: 12px;
+}
+
+.member_remember>span {
+    font-size: 12px;
+    font-weight: 400;
+    margin-right: 10px;
+    color: #fff;
+}
+
+.member_remember>span {
+  
+    margin-right: 10px;
+    color: #fff;
+    letter-spacing: 0.5;
+    font-size: 13px;
+    font-weight: 300;
+}
+
+.member_remember>span>input[type="radio"], input[type="checkbox"] {
+    position: relative;
+    top: 2px;
+}
+
+.member_forgot {
+    font-size: 12px;
+    color: #fff;
+    text-decoration: none;
+    margin-top: 10px;
+    display: inline-block;
+    letter-spacing: 0.5;
+    font-size: 13px;
+    font-weight: 300;
+}
+
+.member_forgot:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+.submit_btn {
+    background: #f54857;
+    border: 0px;
+    color: #fff;
+    font-size: 16px;
+    padding: 8px 10px;
+    text-align: center;
+    width: 100%;
+    margin-top: 12px;
+    -webkit-transition: all .3s ease-out;
+    -moz-transition: all .3s ease-out;
+    transition: all .3s ease-out;
+    font-weight: 300;
+    box-shadow: 0px 8px 12px hsl(218deg 100% 7% / 42%);
+    border-radius: 3px;
+    display: block;
+}
+
+.submit_btn:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+.submit_btn:focus {
+    outline: 0px;
+}
+
+.home_btn {
+    background: #ff9800;
+    border: 0px;
+    color: #fff;
+    font-size: 16px;
+    padding: 8px 10px;
+    text-align: center;
+    width: 100%;
+    margin-top: 12px;
+    -webkit-transition: all .3s ease-out;
+    -moz-transition: all .3s ease-out;
+    transition: all .3s ease-out;
+    font-weight: 300;
+    box-shadow: 0px 8px 12px hsl(218deg 100% 7% / 42%);
+    border-radius: 3px;
+    display: block;
+}
+
+.home_btn:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+.home_btn:focus {
+    outline: 0px;
+}
+
+.member_remember {
+    margin-bottom: 12px;
+    margin-top: 10px;
+}
+
+.member_register {
+    letter-spacing: 0.5;
+    text-align: center;
+    font-size: 13px;
+    margin: 11px 0px;
+    margin-top: 20px;
+    color: #fff;
+}
+.member_register a {
+    font-size: 12px;
+    color: #ffffff;
+    font-weight: 600;
+}

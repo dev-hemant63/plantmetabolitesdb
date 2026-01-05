@@ -1,0 +1,119 @@
+﻿@model PlantMetabolitesDB.ViewModel.DatabaseViewModel
+
+<div class="text-center mb-4">
+    <h3>Edit Database</h3>
+</div>
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { @id = "editDatabaseForm", @class = "row" }))
+{
+    <div class="col-12 mb-3">
+        @Html.HiddenFor(d => d.DatabaseKey)
+        @Html.LabelFor(d => d.DatabaseName, new { @class = "form-label" })
+        @Html.TextBoxFor(e => e.DatabaseName, new { @class = "form-control typeahead", @placeholder = "Database Name", @autofocus = "autofocus" })
+    </div>
+    <div class="col-12 text-center demo-vertical-spacing">
+        <input type="submit" value="Update" class="btn btn-primary me-sm-3 me-1" id="submitButton" name="submitButton" />
+        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+    </div>
+}
+
+<script>
+    $(function (e) {
+        const submitButton = document.getElementById('submitButton');
+        FormValidation.formValidation(
+            document.getElementById("editDatabaseForm"), {
+            fields: {
+                DatabaseName: {
+                    validators: {
+                        notEmpty: { message: "Please enter database name" },
+                        regexp: {
+                            regexp: /^[A-Za-z\s]*$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap5: new FormValidation.plugins.Bootstrap5({
+                    eleValidClass: "",
+                    rowSelector: ".col-12",
+                }),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+                autoFocus: new FormValidation.plugins.AutoFocus(),
+            },
+
+
+        }).on('core.form.valid', function () {
+            // Disable the submit button
+            submitButton.setAttribute('disabled', true);
+            document.getElementById('submitButton').value = 'Updating...';
+
+            var valdata = $("#editDatabaseForm").serialize();
+            $.ajax({
+                url: "/Database/EditDatabase",
+                type: "POST",
+                dataType: 'json',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: valdata,
+                success: function (response) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Updated",
+                        text: "Data updated successfully.",
+                        customClass: { confirmButton: "btn btn-success" },
+                    });
+
+                    $('.swal2-confirm').on('click', function () {
+                        $('#databaseModal').modal('hide');
+                        LoadTable();
+                    });
+                },
+                error: function (response) {
+
+                }
+            });
+            // Do something else such as sending the form to back-end via Ajax request
+            // ...
+        });
+    });
+</script>
+<script>
+    $(function () {
+        $.ajax({
+            url: "/Database/GetDatabaseNames",
+            type: "Get",
+            dataType: "json",
+            data: {},
+            success: function (data) {
+                var result = [];
+                for (var i in data)
+                    result.push(data[i].DatabaseName);
+                var s,
+                    e = result;
+                $(".typeahead").typeahead(
+                    { hint: !isRtl, highlight: !0, minLength: 1 },
+                    {
+                        name: "DatabaseName",
+                        source:
+                            ((s = e),
+                                function (e, a) {
+                                    var t = [],
+                                        o = new RegExp(e, "i");
+                                    $.each(s, function (e, a) {
+                                        o.test(a) && t.push(a);
+                                    }),
+                                        a(t);
+                                }),
+                    }
+                ),
+                    new Bloodhound({
+                        datumTokenizer: Bloodhound.tokenizers.whitespace,
+                        queryTokenizer: Bloodhound.tokenizers.whitespace,
+                        local: e,
+                    });
+            },
+        });
+    });
+
+</script>

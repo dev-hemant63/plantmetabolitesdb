@@ -1,0 +1,87 @@
+﻿@model IEnumerable<TandemDB.ViewModel.GeneralSearchResultViewModel>
+
+<div class="col-md-12 col-sm-12 col-xs-12 mt-5">
+    <div class="alert alert-primary" role="alert">
+        <h6 class="alert-heading mb-1"><strong>Search Result</strong></h6>
+        <span> Click on the Name / Molecular Weight / Formula to see more data.</span>
+    </div>
+    <div class="table-responsive ">
+        <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0" class="table table-bordered table-striped">
+            <colgroup>
+                <col style="width: 40%">
+                <col style="width: 30%">
+                <col style="width: 30%">
+
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>
+                        <strong>Compound Name</strong>
+                    </th>
+                    <th>
+                        <strong>Molecular Weight</strong>
+                    </th>
+
+                    <th>
+                        <strong>Chemical Formula</strong>
+                    </th>
+                </tr>
+
+            </thead>
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a href="javascript:;" class="view-record" data-bs-target="#compoundMsModal" data-id='@item.CompoundKey'>@item.CompoundName</a>
+                            </td>
+                            <td>
+                                <a href="javascript:;" class="view-record" data-bs-target="#compoundMsModal" data-id='@item.CompoundKey'>@item.MolecularWeight</a>
+                            </td>
+                            <td>
+                                <a href="javascript:;" class="view-record" data-bs-target="#compoundMsModal" data-id='@item.CompoundKey'>@item.Formula</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+    $(function () {
+        $(".view-record1").click(function () {
+            $.blockUI({
+                message:
+                    '<div class="spinner-border text-white" role="status"></div>',
+                css: { backgroundColor: "transparent", border: "0" },
+                overlayCSS: { opacity: 0.5 },
+            });
+            debugger;
+            var id = $(this).attr('data-id');
+            alert(id);
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: "../Compound/CompoundSummary",
+                contentType: "application/json; charset=utf-8",
+                data: { "CompoundKey": id },
+                datatype: "json",
+                success: function (data) {
+                    debugger;
+                    $.unblockUI();
+                    $('.compound-preview-body').html(data)
+                    $('#compoundPreviewModal').modal(options);
+                    $('#compoundPreviewModal').modal('show');
+                },
+                error: function () {
+                    alert("Data load failed.");
+                }
+            });
+        });
+    })
+</script>

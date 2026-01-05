@@ -1,0 +1,242 @@
+﻿@model PlantMetabolitesDB.ViewModel.UsersViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="~/Content/images/fav.png" rel="icon">
+    <link href="~/Content/images/fav.png" rel="apple-touch-icon">
+    <link rel="stylesheet" href="~/Content/css/bootstrap.css" type="text/css">
+    <link href="~/Content/css/font-awesome.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" media="all" href="~/Content/css/signin-style.css">
+    <link href="~/Content/css/responsive.css" rel="stylesheet" type="text/css">
+    <link href="~/assets/vendor/libs/formvalidation/dist/css/formValidation.min.css" rel="stylesheet" />
+    <style>
+
+        .invalid-feedback {
+            color: #ffff00 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="ag-night-sky_clouds"></div>
+    <div class="bg-img"></div>
+    <section>
+        <div class="logn-logo-grid">
+            <div class="container">
+                <div class="row">
+                    <a href="@Url.Action("Index", "Home")"><img src="~/Content/images/logo.png" alt="" class=""></a>
+                </div>
+            </div>
+        </div>
+        <div id="login-box">
+            @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "login-form", @class = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <h3 class=""> Sign Up Now <small style="font-size: 12px; display: block; line-height: normal;">Create your account and enjoy</small></h3>
+
+                <div id="divMessage" class="alert-success"></div>
+
+                <div class="col-12 form-group-text">
+                    <span><img src="~/Content/images/mobile-icon.png" alt="user-icon"></span>
+                    @Html.DropDownListFor(e => e.CountryKey, new SelectList(Model.Countries, "CountryKey", "CountryName"), "Select",
+                   new { @class = "form-control-iwwa select2", data_allow_clear = "true" })
+                </div>
+                <div class="col-12 form-group-text">
+                    <span><img src="~/Content/images/user-icon.png" alt="user-icon"></span>
+                    @Html.TextBoxFor(e => e.FName, new { @class = "form-control-iwwa", @placeholder = "First Name" })
+                </div>
+                <div class="col-12 form-group-text">
+                    <span><img src="~/Content/images/user-icon.png" alt="user-icon"></span>
+                    @Html.TextBoxFor(e => e.LName, new { @class = "form-control-iwwa", @placeholder = "Last Name" })
+                </div>
+                <div class="col-12 form-group-text">
+                    <span><img src="~/Content/images/email-icon.png" alt="user-icon"></span>
+                    @Html.TextBoxFor(e => e.Username, new { @class = "form-control-iwwa", @placeholder = "Email ID" })
+                </div>
+                <span id="spnUserExists" style="font-weight:bolder; font-size:14px; color:yellow;"></span>
+                <div class="col-12 form-group-text">
+                    <span><img src="~/Content/images/password-icon.png" alt="password-icon"></span>
+                    @Html.PasswordFor(e => e.Password, new { @class = "form-control-iwwa", @placeholder = "Password" })
+                </div>
+                <div class="col-12 form-group-text">
+                    <span><img src="~/Content/images/password-icon.png" alt="password-icon"></span>
+                    @Html.PasswordFor(e => e.ConfirmPassword, new { @class = "form-control-iwwa", @placeholder = "Confirm Password" })
+                </div>
+                <div class="form-group">
+                    <label class="col-12  member_remember">
+                        <input type="checkbox" name="agree" value="agree" />
+                        <span>Agree with the <a href="@Url.Action("Index", "TermsConditions")" class="member_forgot"> <b>terms and conditions</b> </a></span>
+                    </label>
+
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="submit_btn" id="submitButton" name="submitButton" />
+                </div>
+                <div class="form-group">
+                    <p class="member_register">Already have an account? <a href="@Url.Action("Login", "Account")"> Sign In</a></p>
+                </div>
+                <div class="form-group">
+                    <a href="@Url.Action("Index", "Home")" class="home_btn">Go To Home </a>
+                </div>
+
+            }
+        </div>
+    </section>
+
+    <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js"></script>
+    <script src="../assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
+    <script src="~/Scripts/js/popup.min.js"></script>
+    <script>
+        $(function (e) {
+            const a = document.getElementById("login-form");
+            const submitButton = document.getElementById('submitButton');
+            const fv = FormValidation.formValidation(a, {
+                fields: {
+                    CountryKey: {
+                        validators: { notEmpty: { message: "Country is required" } },
+                    },
+                    FName: {
+                        validators: {
+                            notEmpty: {
+                                message: 'First name is required',
+                            },
+                            regexp: {
+                                regexp: /^[a-z\s]+$/i,
+                                message: 'The first name allowed alphabetical characters and spaces only',
+                            },
+
+                        }
+                    },
+                    LName: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Last name is required',
+                            },
+                            regexp: {
+                                regexp: /^[a-z\s]+$/i,
+                                message: 'The last name allowed alphabetical characters and spaces only',
+                            },
+
+                        }
+                    },
+                    //Username: {
+                    //    validators: {
+                    //        notEmpty: {
+                    //            message: 'The email address is required',
+                    //        },
+                    //        emailAddress: {
+                    //            message: 'The input is not a valid email address',
+                    //        },
+                    //    },
+                    //},
+                    Username: {
+                        validators: {
+                            notEmpty: { message: "Please enter username" },
+                            regexp: {
+                                regexp: '^[^@@\\s]+@@([^@@\\s]+\\.)+[^@@\\s]+$',
+                                message: 'Please enter a valid email address'
+                            },
+                            //emailAddress: {
+                            //    message: "Please enter a valid email address",
+                            //},
+                        },
+                    },
+                    Password: {
+                        validators: {
+                            notEmpty: {
+                                message: 'The password is required',
+                            },
+                            regexp: {
+                                regexp: '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@@#$%^&-+=()])(?=\\S+$).{8,10}$',
+                                message: 'Password contains at least 8 characters and at most 10 characters. It contains at least one digit. It contains at least one upper case alphabet. It contains at least one lower case alphabet. It contains at least one special character which includes !@@#$%&*()-+=^. It doesn’t contain any white space.'
+                            },
+                            different: {
+                                field: 'emailAddress',
+                                message: 'The password cannot be the same as username',
+                            },
+                        },
+                    },
+                    ConfirmPassword: {
+                        validators: {
+                            notEmpty: { message: "Confirm password is required" },
+                            identical: {
+                                compare: function () {
+                                    return a.querySelector('[name="Password"]').value;
+                                },
+                                message: "The password and its confirm are not the same",
+                            },
+                        },
+                    },
+                    agree: {
+                        validators: {
+                            notEmpty: {
+                                message: 'You must agree with the terms and conditions',
+                            },
+                        },
+                    },
+                },
+                plugins: {
+                    trigger: new FormValidation.plugins.Trigger(),
+                    bootstrap5: new FormValidation.plugins.Bootstrap5({
+                        eleValidClass: "",
+                        rowSelector: ".col-12",
+                    }),
+                    submitButton: new FormValidation.plugins.SubmitButton(),
+                },
+            });
+
+            fv.on('core.form.valid', function (e) {
+                var valdata = $("#login-form").serialize();
+                $.ajax({
+                    url: "/Account/Register",
+                    type: "POST",
+                    dataType: 'json',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: valdata,
+                    success: function (response) {
+                        if (response.Result == "Success") {
+                            const myPopup = new Popup({
+                                id: "registration",
+                                title: "Registration Complete",
+                                content: 'Registration completed. Please check your email: ' + response.EmailId,
+                                font: "Roboto",
+                                css: '.popup-header {background-color: #f54857!important;font-size:20px!important;height:69px!important} .popup-title {font-size: 30px!important; margin-bottom: 20px!important; } .popup-content {font-size:18px!important}',
+                            });
+                            myPopup.show();
+                        }
+                        else if (response.Result == "UserExists") {
+                            $('#spnUserExists').text("Email Address already exists!");
+
+                        }
+                        else {
+                            $('#divMessage').innerText("Invalid username or password!");
+                        }
+                    },
+                    error: function (response) {
+                        $('#divMessage').innerText("Something went wrong!");
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        $(function () {
+            $('#Username').bind('keypress keydown keyup', function () {
+                $('#spnUserExists').text('');
+            });
+        });
+    </script>
+</body>
+
+
+</html>

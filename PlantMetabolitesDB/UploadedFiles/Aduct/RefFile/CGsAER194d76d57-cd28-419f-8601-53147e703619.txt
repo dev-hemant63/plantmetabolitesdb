@@ -1,0 +1,64 @@
+Acquisition Experiment Report
+File: g:\pendrive\data\renu\uplc-ms raw data\19idkm aug23.raw
+
+Header
+Acquired File Name:   19IDKM AUG23
+Acquired Date:        23-Aug-2019
+Acquired Time:        15:17:46
+Job code:             DKM_AUG_2019
+Task code:            
+User Name:            
+Laboratory Name:      
+Instrument:           ACQ-TQD#QBB1152
+Conditions:           
+Submitter:            
+SampleID:             DKMR01 LF
+Bottle Number:        2:A,2
+Description:          Acquity UPLC BHE C18, 2.1 X 100, 1.7 um 
+
+Instrument Parameters - Function 1:
+Parameter File - C:\MassLynx\PROJECT2017.PRO\ACQUDB\PROJECT2017MSMS.IPR
+Polarity	ES+
+Calibration	Dynamic 2
+Capillary (kV)	3.50	3.49
+Cone (V)	30.00	32.48
+Extractor (V)	3.00	2.69
+RF (V)	0.00
+Source Temperature (°C)	120	119
+Desolvation Temperature (°C)	350	350
+Cone Gas Flow (L/Hr)	30	30
+Desolvation Gas Flow (L/Hr)	650	649
+Collision Gas Flow (mL/Min)	0.16	0.16
+LM 1 Resolution	10.00
+HM 1 Resolution	10.00
+Ion Energy 1	1.00
+MS Mode Entrance	50.00
+MS Mode Collision Energy	2.00
+MS Mode Exit	50.00
+MSMS Mode Entrance	2.00
+MSMS Mode Collision Energy	30.0	(With Ramping)
+MSMS Mode Exit	2.00
+LM 2 Resolution	15.00
+HM 2 Resolution	15.00
+Ion Energy 2	1.00
+Gain	1.00
+Multiplier	-504.23
+Active Reservoir	B
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

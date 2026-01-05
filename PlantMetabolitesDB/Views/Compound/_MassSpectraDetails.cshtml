@@ -1,0 +1,68 @@
+﻿@model PlantMetabolitesDB.ViewModel.MassSpectraViewModel
+
+<div class="col-12 mb-2">
+    <div class="row  m-lg-1 mb-4">
+        <table class="pe-1">
+            <tbody>
+                <tr>
+                    <td class="pe-3">Compound:</td>
+                    <td>@Model.CompoundName</td>
+                    <td class="pe-3">Molecular Weight:</td>
+                    <td>@Model.MolecularWeight_Input</td>
+                </tr>
+                <tr>
+                    <td class="pe-3">Mass Spectrum:</td>
+                    <td>@Model.MassSpectrum</td>
+                    <td class="pe-3">Formula:</td>
+                    <td>@Model.Formula</td>
+                </tr>
+
+                <tr>
+                    <td class="pe-3">Instrument:</td>
+                    <td>@Model.Instrument</td>
+                    <td class="pe-3">CAS No:</td>
+                    <td>@Model.CASNo</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row m-lg-1 mb-4">
+        <table class="mt-4">
+            <tbody class="table table-borderless">
+                <tr class="mt-4">
+                    <td class="pe-3" valign="top">
+                        <h5 class="card-title mb-2">Spectrum File:</h5>
+                    </td>
+                    <td>
+                        <div class="col-xl-10 col-12">
+                            <iframe name="my_frame" id="myIframe" style="width:840px; height:380px;" src="@(ViewBag.IframeUrl)"></iframe>
+                        </div>
+                    </td>
+
+                </tr>
+                <tr class="mt-4">
+                    <td class="pe-3" valign="top">
+                        <h5 class="card-title mb-2">Reference File:</h5>
+                    </td>
+                    <td>@Html.Raw(ViewBag.ReferenceFile)</td>
+
+                </tr>
+                <tr class="mt-4">
+                    <td class="pe-3" valign="top">
+                        <h5 class="card-title mb-2">Data File:</h5>
+                    </td>
+                    <td>@Html.Raw(ViewBag.DataFile)</td>
+
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+<script>
+    $("#modalToggleLabel2").text('@Html.Raw(ViewBag.MassSpectrum)');
+    
+</script>
+

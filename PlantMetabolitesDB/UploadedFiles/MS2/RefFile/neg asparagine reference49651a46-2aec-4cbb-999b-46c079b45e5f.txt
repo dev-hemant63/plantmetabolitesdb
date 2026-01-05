@@ -1,0 +1,36 @@
+Name Of Compound  	  L ASPARAGINE
+Source                    Purchased from Sigma
+ Mass Spectrometer	  4000 Q TRAP		
+Software Version:	  Analyst 1.4.2
+Scan Type:	          Product Ion (MS2)
+Polarity:	          Negative 
+Scan Mode:	          Profile
+Ion Source:	          ESI Turbo Spray
+Product Of:	          131.05 amu
+Resolution Q1:	          Unit
+Resolution Q3:	          Unit
+Intensity Thres.:	  0.00 cps
+Settling Time:	          0.0000 msec
+MR Pause:	          5.0070 msec
+Step Size:	          0.10 amu 
+Parameter Table
+CUR: 	                  10.00
+IS: 	                 -4500.00
+TEM: 	                   0.00
+GS1: 	                  10.00
+GS2: 	                   0.00
+ihe: 	                   ON
+CAD: 	                   Medium
+DP	                  -41.00
+EP	                  -10.00
+CE	                  -17.00
+CXP	                   -6.00
+
+HPLC
+ 
+Solvent system :          80:20 Acetonitrile:0.1% Ammonium acetate
+
+Flow           :          0.010 ml/min
+
+
+

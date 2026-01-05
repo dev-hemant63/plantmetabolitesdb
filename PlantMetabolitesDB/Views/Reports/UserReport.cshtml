@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "UserReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model PlantMetabolitesDB.ViewModel.UserReportViewModel
+
+<h4 class="py-3 breadcrumb-wrapper mb-2">User Report</h4>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                @using (Html.BeginForm("", "", FormMethod.Get, new { @id = "userlistForm", @class = "row" }))
+                {
+                    <div class="col-md-4">
+                        @Html.LabelFor(e => e.UserType, new { @class = "form-label" })
+                        @Html.DropDownListFor(e => e.UserType, new SelectList(Model.UserTypes, "Value", "Text"), new { @class = "form-select", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-4 mt-4">
+                        <input type="button" value="Search" class="btn btn-primary" id="submitButton" name="submitButton" />
+                        &nbsp;&nbsp;&nbsp;
+                        @Html.ActionLink("Export to Excel", "ExportToExcel", new { }, new { @class = "btn btn-dark", @id="ancExport" })
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-2">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header mb-2">
+                <h5 class="card-title mb-0">Search Result</h5>
+            </div>
+            <div class="userSearchResult">
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <script>
+        $(function () {
+            $('#ancExport').attr('href', '');
+
+            $('#submitButton').click(function () {
+                var utype = $('#UserType').val();            
+                if (utype != '') {
+                    $('#ancExport').attr("href", "/Reports/ExportToExcel?usertype=" + utype);
+                    $.ajax({
+                        url: "/Reports/GetUserReport",
+                        type: "Get",
+                        dataType: 'html',
+                        contentType: "application/json; charset=utf-8",
+                        data: { "userType": utype },
+                        success: function (data) {
+                            $('.userSearchResult').html(data);
+                        },
+                        failure: function (response) {
+                            console.log(response.responseText);
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            alert(xhr.status);
+                            alert(thrownError);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

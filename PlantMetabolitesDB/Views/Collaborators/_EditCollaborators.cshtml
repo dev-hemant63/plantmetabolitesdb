@@ -1,0 +1,163 @@
+﻿@model PlantMetabolitesDB.ViewModel.CollaboratorsViewModel
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <h5 class="card-header">Edit Collaborator/Contributor</h5>
+            <div class="card-body">
+
+                <div class="card-body">
+                    @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "editCollaboratorsFrom", @class = "row g-3" }))
+                    {
+                        @Html.HiddenFor(d => d.CollaboratorsKey);
+                        <div class="col-md-6">
+                            @Html.LabelFor(d => d.UserType, new { @class = "form-label" })
+                            @Html.DropDownListFor(e => e.UserType, new SelectList(Model.CollaboratorsTypes, "Value", "Text"), "Select", new { @class = "form-select select2", @autofocus = "autofocus" })
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(d => d.Name, new { @class = "form-label" })
+                            @Html.TextBoxFor(e => e.Name, new { @class = "form-control", @placeholder = "Name", @autofocus = "autofocus" })
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(d => d.Affiliation, new { @class = "form-label" })
+                            @Html.TextBoxFor(e => e.Affiliation, new { @class = "form-control", @placeholder = "Affiliation", @autofocus = "autofocus" })
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(d => d.CountryKey, new { @class = "form-label" })
+                            @Html.DropDownListFor(e => e.CountryKey, new SelectList(Model.Countries, "CountryKey", "CountryName"), "Select", new { @class = "form-select select2", @autofocus = "autofocus", data_allow_clear = "true" })
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(d => d.EmailId, new { @class = "form-label" })
+                            @Html.TextBoxFor(e => e.EmailId, new { @class = "form-control", @placeholder = "Email Id", @autofocus = "autofocus" })
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(d => d.ContactNo, new { @class = "form-label" })
+                            @Html.TextBoxFor(e => e.ContactNo, new { @class = "form-control", @placeholder = "Phone", @autofocus = "autofocus" })
+                        </div>
+
+                        <div class="col-md-12">
+                            <input type="submit" value="Update" class="btn btn-primary" id="submitButton" name="submitButton" />
+                            <button type="button" name="cancelButton" class="btn btn-secondary m-lg-2" id="cancelButton">Close</button>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#cancelButton").click(function () {
+        $('#collaboratorsTable').show();
+        $('#collaboratorsFrom').hide();
+    });
+</script>
+
+<script>
+    $(function (e) {
+        $(".select2").select2();
+        const a = document.getElementById("editCollaboratorsFrom"),
+            t = jQuery(a.querySelector('[name="CountryKey"]'));
+
+        const submitButton = document.getElementById('submitButton');
+        s = FormValidation.formValidation(a, {
+            fields: {
+                UserType: {
+                    validators: { notEmpty: { message: "Please select type" } },
+                },
+                Name: {
+                    validators: {
+                        notEmpty: { message: "Please enter Name" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                Affiliation: {
+                    validators: {
+                        notEmpty: { message: "Please enter affiliation" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                CountryKey: {
+                    validators: { notEmpty: { message: "Please select country" } },
+                },
+                EmailId: {
+                    validators: {
+                        notEmpty: { message: "Please enter your email" },
+                        emailAddress: {
+                            message: "Please enter a valid email address",
+                        },
+                    },
+                },
+                ContactNo: {
+                    validators: {
+                        // notEmpty: { message: "Please enter phone" },
+                        integer: {
+                            message: 'Please enter a valid phone number',
+
+                        },
+                    },
+                },
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap5: new FormValidation.plugins.Bootstrap5({
+                    eleValidClass: "",
+                    rowSelector: ".col-12",
+                }),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+                autoFocus: new FormValidation.plugins.AutoFocus(),
+            },
+
+
+        }).on('core.form.valid', function () {
+            // Disable the submit button
+            submitButton.setAttribute('disabled', true);
+            document.getElementById('submitButton').value = 'Updating...';
+
+            var valdata = $("#editCollaboratorsFrom").serialize();
+            $.ajax({
+                url: "/Collaborators/EditCollaborators",
+                type: "POST",
+                dataType: 'json',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: valdata,
+                success: function (response) {                  
+                    Swal.fire({
+                        icon: "success",
+                        title: "Updated",
+                        text: "Data updated successfully.",
+                        customClass: { confirmButton: "btn btn-success" },
+                    });
+
+                    $('.swal2-confirm').on('click', function () {
+                        $('#collaboratorsTable').show();
+                        $('#collaboratorsFrom').hide();
+                        LoadTable();
+                    });
+                },
+                error: function (response) {
+
+                }
+            });
+            // Do something else such as sending the form to back-end via Ajax request
+            // ...
+        });
+        if (t.length &&
+            (t.wrap('<div class="position-relative"></div>'),
+                t
+                    .select2({
+                        placeholder: "Select Country",
+                        dropdownParent: t.parent(),
+                    })
+                    .on("change.select2", function () {
+                        s.revalidateField("CountryKey");
+                    }))
+        );
+    });
+</script>

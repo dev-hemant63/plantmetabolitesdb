@@ -1,0 +1,144 @@
+﻿<header class="topheader">
+    <div class="top_bar">
+        <div class="container">
+            <!-- box1 -->
+            <div id="box1" class="home">
+                <div class="flag">
+                    <div class="top_bar_content">
+                        <ul class="top_bar_contact_list">
+                            <li class="nav-item"> <a href="sitemap.php" class="about-menu">Sitemap</a></li>
+
+
+                        </ul>
+                        <ul class="page-change-sec">
+                            <li>
+                                <!-- <span id="lastupdated" style="font-size: 11px;"></span>
+                                <script>
+                                  document.getElementById("lastupdated").innerHTML = document.lastModified;
+                                </script> -->
+                                <span id="datetime" class="time" tabindex="1">&nbsp;</span>
+                            </li>
+
+                            <!-- <li class="pr-0"> <a href="#" class="changefontsize" id="btn-decrease">-A</a> </li>
+                              <li class="p-0"> <a href="#" class="changefontsize" id="btn-orig">A</a> </li>
+                              <li> <a href="#" class="changefontsize" id="btn-increase">A+</a> </li>
+                              <li class="line-border"></li>
+                              <li class="p-0"> <a href="#" class="clscss" tntype="Light">A</a> </li>
+                              <li class="p-0"> <a href="#" class="bg-dark text-warning" tntype="Dark">A</a> </li>
+                              <li class="p-0"> <a href="#" class="language">हिंदी</a> </li> -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="navbar_bg">
+        <nav id="navbar_top" class="navbar navbar-dark">
+            <div class="container">
+                <a class="navbar-brand logo" href="@Url.Action("Index", "Home")"><img src="~/Content/images/logo.png" alt=""></a>
+                <img src="~/Content/images/right-logo.png" alt="" class="rightlogo">
+            </div>
+            <div class="container">
+                <div class="" id="main_nav">
+
+                    <div class="menu-toggle">
+                        <h3>Menu</h3>
+                        <button type="button" id="menu-btn"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                    </div>
+                    <ul id="respMenu" class="ace-responsive-menu" data-menu-style="horizontal">
+                        <li><a href="@Url.Action("Index", "Home")"><span class="title">Home </span></a></li>
+                        <li><a href="@Url.Action("Index", "Overview")"><span class="title">Overview </span></a></li>
+
+                        <li>
+                            <a href="#"><span class="title">Search </span> <span class="arrow"></span></a>
+                            <ul>
+                                <li>
+                                    <a href="#"><span class="title">General Search </span><span class="arrow-right"></span></a>
+                                    <ul>
+                                        <li><a href="@Url.Action("Index", "GeneralSearch")"><span class="title"> Name of plant species</span></a></li>
+                                        <li><a href="@Url.Action("Index", "GeneralSearch")"><span class="title"> Family of plant species</span></a></li>
+                                        <li><a href="@Url.Action("Index", "GeneralSearch")"><span class="title"> Specific biological activity</span></a></li>
+
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#"><span class="title">MS Based Search</span><span class="arrow-right"></span></a>
+                                    <ul>
+                                        <li><a href="@Url.Action("Index", "MolecularWeight")"><span class="title">  Molecular weight</span></a></li>
+                                        @*<li><a href="@Url.Action("Index", "ChemicalFormula")"><span class="title">   Chemical formula</span></a></li>
+                                        <li><a href="@Url.Action("Index", "MSSearch")"><span class="title">   MS/MS ion search</span></a></li>*@
+                                        <li><a href="@Url.Action("Index", "MSSearch")"><span class="title">   MS/MS fragments</span></a></li>
+                                        <li><a href="@Url.Action("Index", "AdvancedSearch")"><span class="title">    Advanced search</span></a></li>
+                                    </ul>
+
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#"><span class="title">Contributor </span> <span class="arrow"></span></a>
+                            <ul>
+                                <li><a href="@Url.Action("Index", "Contributor")"><span class="title">Contributor</span></a></li>
+                                <li><a href="@Url.Action("Index", "Collaborator")"><span class="title">Collaborator </span></a></li>
+                            </ul>
+                        </li>
+                        <li><a href="https://tmsdatabase.cdri.res.in/" target="_blank"><span class="title">TMS Database </span></a></li>
+                        <li>
+                            <a href="#"><span class="title">Utilities </span> <span class="arrow"></span></a>
+                            <ul>
+                                <li>
+                                    <a href="#"><span class="title">Utility</span>  <span class="arrow-right"></span></a>
+                                    <ul>
+                                        <li><a href="@Url.Action("Index", "AductIonCalculator")"><span class="title"> ESI / APCI Adduct Ion Calculator</span></a></li>
+                                        <li><a href="@Url.Action("Index", "DataFileFormatConvertor")"><span class="title"> Data File Format Convertor  </span></a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="@Url.Action("Index", "FAQ")"><span class="title">FAQ </span></a></li>
+                                <li><a href="@Url.Action("Index", "Download")"><span class="title">Download </span></a></li>
+                            </ul>
+                        </li>
+
+                        <li><a href="@Url.Action("Index", "Contact")"><span class="title">Contact Us </span></a></li>
+
+
+                    </ul>
+
+                    <div class="dropdown rightuser">
+                        @*&& User.IsInRole("User")*@
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <button class="btn btn-rightuser dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                                My Account
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
+                                @if (User.IsInRole("User"))
+                                {
+                                    <li class="dropdown-item divider"> @User.Identity.Name</li>
+                                    <li><a class="dropdown-item" href="@Url.Action("UserProfile", "Account")">Change Profile</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("ChangeUserPassword", "Account")">Change Password</a></li>
+                                }
+                                else
+                                {
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Dashboard")">@User.Identity.Name</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("ChangePassword", "Account")">Change Password</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("UserProfile", "Account")">Change Profile</a></li>
+                                }
+
+                                <li><a class="dropdown-item" href="@Url.Action("Logout", "Account")">Signout</a></li>
+                            </ul>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Login", "Account")" class="btn btn-rightuser">Signin</a>
+                        }
+
+
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+    </div>
+
+</header>

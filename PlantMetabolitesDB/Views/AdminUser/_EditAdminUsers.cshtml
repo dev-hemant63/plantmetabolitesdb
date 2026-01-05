@@ -1,0 +1,219 @@
+﻿
+@model PlantMetabolitesDB.ViewModel.UsersViewModel
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <h5 class="card-header">Edit Admin User</h5>
+            <div class="card-body">
+                @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "editUsersForm", @class = "row g-3" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(d => d.UserKey)
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.UserType, new { @class = "form-label" })
+                        @Html.DropDownListFor(e => e.UserType, new SelectList(Model.UserTypes, "Value", "Text"), new { @class = "form-select", @disabled = "disabled" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.Username, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.Username, new { @class = "form-control", @placeholder = "Username", @disabled = "disabled" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.FName, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.FName, new { @class = "form-control", @placeholder = "First Name", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.LName, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.LName, new { @class = "form-control", @placeholder = "Last Name", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.Address, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.Address, new { @class = "form-control", @placeholder = "Address", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.CountryKey, new { @class = "form-label" })
+                        @Html.DropDownListFor(e => e.CountryKey, new SelectList(Model.Countries, "CountryKey", "CountryName"), "Select", new { @class = "form-select select2", @autofocus = "autofocus", data_allow_clear = "true" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.Phone, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.Phone, new { @class = "form-control", @placeholder = "Phone", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.Mobile, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.Mobile, new { @class = "form-control", @placeholder = "Mobile", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.OrganizationTypeKey, new { @class = "form-label" })
+                        @Html.DropDownListFor(e => e.OrganizationTypeKey, new SelectList(Model.OrganizationTypes, "OrganizationTypeKey", "OrganizationTypeName"), "Select", new { @class = "form-select", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.Affiliation, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.Affiliation, new { @class = "form-control", @placeholder = "Affiliation", @autofocus = "autofocus" })
+                    </div>
+
+                    <div class="col-md-12">
+                        <input type="submit" value="Update" class="btn btn-primary" id="submitButton" name="submitButton" />
+                        <button type="button" name="cancelButton" class="btn btn-secondary m-lg-2" id="cancelButton">Close</button>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#cancelButton").click(function () {
+        $('#adminUsersTable').show();
+        $('#adminUsersForm').hide();
+    });
+</script>
+
+<script>
+    $(function (e) {
+        $(".select2").select2();
+        const a = document.getElementById("editUsersForm");
+        d = jQuery(a.querySelector('[name="CountryKey"]'));
+        const submitButton = document.getElementById('submitButton');
+
+        s = FormValidation.formValidation(
+            a, {
+            fields: {
+                UserType: {
+                    validators: { notEmpty: { message: "Please select user type" } },
+                },
+                //Username: {
+                //    validators: {
+                //        notEmpty: { message: "Please enter username" },
+                //        emailAddress: {
+                //            message: "Please enter a valid email address",
+                //        },
+                //    },
+                //},
+                Username: {
+                    validators: {
+                        notEmpty: { message: "Please enter username" },
+                        regexp: {
+                            regexp: '^[^@@\\s]+@@([^@@\\s]+\\.)+[^@@\\s]+$',
+                            message: 'Please enter a valid email address'
+                        },
+                        //emailAddress: {
+                        //    message: "Please enter a valid email address",
+                        //},
+                    },
+                },
+                FName: {
+                    validators: {
+                        notEmpty: { message: "Please enter first name" },
+                        regexp: {
+                            regexp: /^[A-Za-z\s]*$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                LName: {
+                    validators: {
+                        //notEmpty: { message: "Please enter first name" },
+                        regexp: {
+                            regexp: /^[A-Za-z\s]*$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                Mobile: {
+                    validators: {
+                        notEmpty: { message: "Please enter mobile number" },
+                        integer: {
+                            message: 'Please enter a valid mobile number',
+                        },
+                    },
+                },
+                Address: {
+                    validators: {
+                        notEmpty: { message: "Please enter address" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                CountryKey: {
+                    validators: { notEmpty: { message: "Please select country" } },
+                },
+                OrganizationTypeKey: {
+                    validators: { notEmpty: { message: "Please select organization type" } },
+                },
+                Phone: {
+                    validators: {
+                        integer: {
+                            message: 'Please enter a valid phone number',
+                        },
+                    },
+                },
+                Affiliation: {
+                    validators: {
+                        //notEmpty: { message: "Please enter first name" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap5: new FormValidation.plugins.Bootstrap5({
+                    eleValidClass: "",
+                    rowSelector: ".col-12",
+                }),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+                autoFocus: new FormValidation.plugins.AutoFocus(),
+            },
+
+
+        }).on('core.form.valid', function () {
+            // Disable the submit button
+            submitButton.setAttribute('disabled', true);
+            document.getElementById('submitButton').value = 'Updating...';
+
+            var valdata = $("#editUsersForm").serialize();
+            $.ajax({
+                url: "/AdminUser/EditAdminUsers",
+                type: "POST",
+                dataType: 'json',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: valdata,
+                success: function (response) {                  
+                    Swal.fire({
+                        icon: "success",
+                        title: "Updated",
+                        text: "Data updated successfully.",
+                        customClass: { confirmButton: "btn btn-success" },
+                    });
+
+                    $('.swal2-confirm').on('click', function () {
+                        LoadTable();
+                        $('#adminUsersTable').show();
+                        $('#adminUsersForm').hide();
+                    });
+
+                },
+                error: function (response) {
+
+                }
+            });
+            // Do something else such as sending the form to back-end via Ajax request
+            // ...
+        });
+        if (d.length &&
+            (d.wrap('<div class="position-relative"></div>'),
+                d
+                    .select2({
+                        placeholder: "Select Country",
+                        dropdownParent: d.parent(),
+                    })
+                    .on("change.select2", function () {
+                        s.revalidateField("CountryKey");
+                    }))
+        );
+    });
+</script>

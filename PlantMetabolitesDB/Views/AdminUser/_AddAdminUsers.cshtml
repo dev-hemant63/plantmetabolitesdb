@@ -1,0 +1,279 @@
+﻿@model PlantMetabolitesDB.ViewModel.UsersViewModel
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <h5 class="card-header">Add Admin User</h5>
+            <div class="card-body">
+                @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "addAdminUsersForm", @class = "row g-3" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.UserType, new { @class = "form-label" })
+                        @Html.DropDownListFor(e => e.UserType, new SelectList(Model.UserTypes, "Value", "Text"), new { @class = "form-select", @disabled = "disabled" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.Username, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.Username, new { @class = "form-control", @placeholder = "Username", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.FName, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.FName, new { @class = "form-control", @placeholder = "First Name", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.LName, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.LName, new { @class = "form-control", @placeholder = "Last Name", @autofocus = "autofocus" })
+                    </div>
+                    @*<div class="col-md-6">
+                            @Html.LabelFor(d => d.Password, new { @class = "form-label" })
+                            @Html.PasswordFor(e => e.Password, new { @class = "form-control", @placeholder = "Password", @autofocus = "autofocus" })
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(d => d.ConfirmPassword, new { @class = "form-label" })
+                            @Html.PasswordFor(e => e.ConfirmPassword, new { @class = "form-control", @placeholder = "ConfirmPassword", @autofocus = "autofocus" })
+                        </div>*@
+                    <div class="col-md-6">
+                        <div class="form-password-toggle">
+                            @Html.LabelFor(d => d.Password, new { @class = "form-label" })
+                            <div class="input-group input-group-merge">
+                                @Html.PasswordFor(e => e.Password, new { @class = "form-control", @placeholder = "Password", @autofocus = "autofocus", @aria_describedby = "Password-default-password" })
+                                <span class="input-group-text cursor-pointer" id="Password-default-password"><i class="bx bx-hide"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-password-toggle">
+                            @Html.LabelFor(d => d.ConfirmPassword, new { @class = "form-label" })
+                            <div class="input-group input-group-merge">
+                                @Html.PasswordFor(e => e.ConfirmPassword, new { @class = "form-control", @placeholder = "ConfirmPassword", @autofocus = "autofocus", @aria_describedby = "ConfirmPassword-default-password" })
+                                <span class="input-group-text cursor-pointer" id="ConfirmPassword-default-password"><i class="bx bx-hide"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.Address, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.Address, new { @class = "form-control", @placeholder = "Address", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.CountryKey, new { @class = "form-label" })
+                        @Html.DropDownListFor(e => e.CountryKey, new SelectList(Model.Countries, "CountryKey", "CountryName"), "Select", new { @class = "form-select select2", @autofocus = "autofocus", data_allow_clear = "true" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.Phone, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.Phone, new { @class = "form-control", @placeholder = "Phone", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.Mobile, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.Mobile, new { @class = "form-control", @placeholder = "Mobile", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.OrganizationTypeKey, new { @class = "form-label" })
+                        @Html.DropDownListFor(e => e.OrganizationTypeKey, new SelectList(Model.OrganizationTypes, "OrganizationTypeKey", "OrganizationTypeName"), "Select", new { @class = "form-select", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.Affiliation, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.Affiliation, new { @class = "form-control", @placeholder = "Affiliation", @autofocus = "autofocus" })
+                    </div>
+
+                    <div class="col-md-12">
+                        <input type="submit" value="Create" class="btn btn-primary" id="submitButton" name="submitButton" />
+                        <button type="button" name="cancelButton" class="btn btn-secondary m-lg-2" id="cancelButton">Close</button>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#cancelButton").click(function () {
+        $('#adminUsersTable').show();
+        $('#adminUsersForm').hide();
+    });
+</script>
+
+<script>
+    $(function (e) {
+        $(".select2").select2();
+        const a = document.getElementById("addAdminUsersForm");
+        d = jQuery(a.querySelector('[name="CountryKey"]'));
+
+        var t = document.querySelectorAll(".form-password-toggle i");
+        null != t &&
+            t.forEach(function (t) {
+                t.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    var n = t.closest(".form-password-toggle"),
+                        i = n.querySelector("i"),
+                        o = n.querySelector("input");
+                    "text" === o.getAttribute("type")
+                        ? (o.setAttribute("type", "password"),
+                            i.classList.replace("bx-show", "bx-hide"))
+                        : "password" === o.getAttribute("type") &&
+                        (o.setAttribute("type", "text"),
+                            i.classList.replace("bx-hide", "bx-show"));
+                });
+            });
+
+        const submitButton = document.getElementById('submitButton');
+
+        s = FormValidation.formValidation(
+            a, {
+            fields: {
+                UserType: {
+                    validators: { notEmpty: { message: "Please select user type" } },
+                },
+                //Username: {
+                //    validators: {
+                //        notEmpty: { message: "Please enter username" },
+                //        emailAddress: {
+                //            message: "Please enter a valid email address",
+                //        },
+                //    },
+                //},
+                Username: {
+                    validators: {
+                        notEmpty: { message: "Please enter username" },
+                        regexp: {
+                            regexp: '^[^@@\\s]+@@([^@@\\s]+\\.)+[^@@\\s]+$',
+                            message: 'Please enter a valid email address'
+                        },
+                        //emailAddress: {
+                        //    message: "Please enter a valid email address",
+                        //},
+                    },
+                },
+                FName: {
+                    validators: {
+                        notEmpty: { message: "Please enter first name" },
+                        regexp: {
+                            regexp: /^[A-Za-z\s]*$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                LName: {
+                    validators: {
+                        //notEmpty: { message: "Please enter first name" },
+                        regexp: {
+                            regexp: /^[A-Za-z\s]*$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                Password: {
+                    validators: {
+                        notEmpty: { message: "Please enter password" },
+                        regexp: {
+                            regexp: '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@@#$%^&-+=()])(?=\\S+$).{8,10}$',
+                            message: 'Password contains at least 8 characters and at most 10 characters. It contains at least one digit. It contains at least one upper case alphabet. It contains at least one lower case alphabet. It contains at least one special character which includes !@@#$%&*()-+=^. It doesn’t contain any white space.'
+                        },
+                    },
+                },
+                ConfirmPassword: {
+                    validators: {
+                        notEmpty: { message: "Please enter confirm password" },
+                        identical: {
+                            compare: function () {
+                                return a.querySelector('[name="Password"]').value;
+                            },
+                            message: "The password and its confirm are not the same",
+                        },
+                    },
+                },
+                Mobile: {
+                    validators: {
+                        notEmpty: { message: "Please enter mobile number" },
+                        integer: {
+                            message: 'Please enter a valid mobile number',
+                        },
+                    },
+                },
+                Address: {
+                    validators: {
+                        notEmpty: { message: "Please enter address" }, regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                CountryKey: {
+                    validators: { notEmpty: { message: "Please select country" } },
+                },
+                OrganizationTypeKey: {
+                    validators: { notEmpty: { message: "Please select organization type" } },
+                },
+                Phone: {
+                    validators: {
+                        integer: {
+                            message: 'Please enter a valid phone number',
+                        },
+                    },
+                },
+                Affiliation: {
+                    validators: {
+                        //notEmpty: { message: "Please enter first name" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap5: new FormValidation.plugins.Bootstrap5({
+                    eleValidClass: "",
+                    rowSelector: ".col-12",
+                }),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+                autoFocus: new FormValidation.plugins.AutoFocus(),
+            },
+
+
+        }).on('core.form.valid', function () {
+            // Disable the submit button
+            submitButton.setAttribute('disabled', true);
+            document.getElementById('submitButton').value = 'Saving...';
+
+            var valdata = $("#addAdminUsersForm").serialize();
+            $.ajax({
+                url: "/AdminUser/AddAdminUsers",
+                type: "POST",
+                dataType: 'json',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: valdata,
+                success: function (response) {                 
+                    Swal.fire({
+                        icon: "success",
+                        title: "Saved",
+                        text: "Data saved successfully.",
+                        customClass: { confirmButton: "btn btn-success" },
+                    });
+
+                    $('.swal2-confirm').on('click', function () {
+                        LoadTable();
+                        $('#adminUsersTable').show();
+                        $('#adminUsersForm').hide();
+                    });
+                },
+                error: function (response) {
+
+                }
+            });
+            // Do something else such as sending the form to back-end via Ajax request
+            // ...
+        });
+        if (d.length &&
+            (d.wrap('<div class="position-relative"></div>'),
+                d
+                    .select2({
+                        placeholder: "Select Country",
+                        dropdownParent: d.parent(),
+                    })
+                    .on("change.select2", function () {
+                        s.revalidateField("CountryKey");
+                    }))
+        );
+    });
+</script>

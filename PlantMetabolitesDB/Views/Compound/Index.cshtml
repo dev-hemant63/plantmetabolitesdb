@@ -1,0 +1,500 @@
+﻿
+@{
+    ViewBag.Title = "Compound";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="compound-body" id="compoundTable">
+    <div class="compound-stats">
+    </div>
+    <!-- Users List Table -->
+    <div class="card">
+        <div class="card-header border-bottom">
+            <h5 class="card-title">Compound List</h5>
+            @*<div class="d-flex justify-content-between align-items-center row py-3 gap-3 gap-md-0">
+                    <div class="col-md-4 user_role"></div>
+                    <div class="col-md-4 user_plan"></div>
+                    <div class="col-md-4 user_status"></div>
+                </div>*@
+        </div>
+        <div class="card-datatable table-responsive">
+            <table class="datatables-compounds table border-top">
+                <thead class="table-dark">
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>Database</th>
+                        <th>Compound Name</th>
+                        <th>Molecular Weight</th>
+                        <th>CAS No.</th>
+                        <th>Formula</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="compound-form-body" id="compoundFrom">
+</div>
+<div class="modal fade" id="compoundMSModal" aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-body compound-ms-body">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal 1-->
+<div class="modal fade" id="compoundPreviewModal" tabindex="-1" aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="compoundsummary">Compound Summary</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <hr class="m-2" />
+            <div class="modal-body compound-preview-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal" aria-label="Close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal 2-->
+<div class="modal fade" id="modalSpectraDetails" aria-hidden="true" aria-labelledby="modalToggleLabel2" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalToggleLabel2">@Html.Raw(ViewBag.MassSpectrum)</h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <hr class="dropdown-divider">
+            <div class="modal-body mass-detail-body">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="btnPreviewModel" data-bs-dismiss="modal">Back to Compound Summary</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{  
+    <script>
+        $(function () {
+            LoadTable();
+
+            $('#btnPreviewModel').on("click", function () {
+                $('#compoundPreviewModal').modal('show');
+            });
+        });
+
+        $(function () {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetCompundStats", "Compound")',
+                contentType: "application/json; charset=utf-8",
+                data: {},
+                datatype: "json",
+                success: function (data) {
+                    $('.compound-stats').html(data)
+                },
+                error: function () {
+                    alert("Data load failed.");
+                }
+            });
+        });
+    </script>
+    <script>
+         function LoadTable() {
+             var e,
+                 a = $(".datatables-compounds"),
+                 l = {
+                     1: { title: "Active", class: "bg-label-success" },
+                     2: { title: "Inactive", class: "bg-label-secondary" },
+                 };
+             a.DataTable().destroy();
+             a.length &&
+                 (e = a.DataTable({
+                     "ajax": {
+                         "url": "/Compound/GetCompounds",
+                         "type": "GET",
+                         "datatype": "json"
+                     },
+                     columns: [
+                         { data: "" },
+                         { data: "CompoundKey" },
+                         { data: "DatabaseName" },
+                         { data: "CompoundName" },
+                         { data: "MolecularWeight" },
+                         { data: "CASNo" },
+                         { data: "Formula" },
+                         { data: "StatusName" },
+                         { data: "" },
+                     ],
+                     columnDefs: [
+                         {
+                             className: "control",
+                             searchable: !1,
+                             orderable: !1,
+                             responsivePriority: 2,
+                             targets: 0,
+                             render: function (e, t, a, n) {
+                                 return "";
+                             },
+                         },
+
+                         { targets: 1, searchable: !1, visible: !1, orderable: 1 },
+                         {
+                             targets: 2,
+                             render: function (e, t, a, n) {
+                                 return '<span class="fw-semibold">' + a.DatabaseName + "</span>";
+                             },
+                         },
+                         {
+                             targets: 3,
+                             render: function (e, t, a, n) {
+                                 return '<span class="fw-semibold">' + a.CompoundName + "</span>";
+                             },
+                         },
+                         {
+                             targets: 4,
+                             render: function (e, t, a, n) {
+                                 return '<span class="fw-semibold">' + a.MolecularWeight_Input + "</span>";
+                             },
+                         },
+                         {
+                             targets: 5,
+                             render: function (e, t, a, n) {
+                                 return '<span class="fw-semibold">' + a.CASNo + "</span>";
+                             },
+                         },
+                         {
+                             targets: 6,
+                             render: function (e, t, a, n) {
+                                 return '<span class="fw-semibold">' + a.Formula + "</span>";
+                             },
+                         },
+                         {
+                             targets: 7,
+                             render: function (e, t, a, n) {
+                                 //var r = a.IsActive == true ? "<a href='javascript:void(0)' data-isactive='De-Activate' data-id=" + a.CompoundKey + " class='active-deactive'><span class='badge bg-label-primary m-1'>Disable</span></a>" : "<a href='javascript:void(0)' data-id=" + a.CompoundKey + " data-isactive='Activate' class='active-deactive'><span class='badge bg-label-warning m-1'>Enable</span></a>"
+                                 //return '<span class="text-nowrap">' + r + "</span>";
+                                 a = a.StatusName;
+                                 var indx = a == "Active" ? 1 : 2;
+                                 return (
+                                     '<span class="badge ' +
+                                     l[indx].class +
+                                     '">' +
+                                     l[indx].title +
+                                     "</span>"
+                                 );
+
+                             },
+                         },
+                         {
+                             targets: -1,
+                             title: "Actions",
+                            // searchable: !1,
+                             orderable: !1,
+                             render: function (e, t, a, n) {
+                                 var r = a.IsActive == true ? "<a href='javascript:;' data-isactive='De-Activate' data-id=" + a.CompoundKey + " class='active-deactive'><span class='dropdown-item text-danger m-1'>Deactivate</span></a>" : "<a href='javascript:;' data-id=" + a.CompoundKey + " data-isactive='Activate' class='active-deactive'><span class='dropdown-item text-danger m-1'>Activate</span></a>"
+
+                                 return (
+
+                                     '<div class="d-inline-block text-nowrap">'
+                                     + '<button class="btn btn-sm btn-icon edit-record" data-id=' + a.CompoundKey + ' title="Edit"><i class="bx bx-edit"></i></button>'
+                                     + '<button class="btn btn-sm btn-icon delete-record" data-id=' + a.CompoundKey + ' title="Delete"> <i class="bx bx-trash"></i></button>'
+                                     + '<button class="btn btn-sm btn-icon view-record btn-page-block" data-id=' + a.CompoundKey + ' title="View"> <i class="bx bx-show-alt"></i></button>'
+                                     + '<button class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>'
+                                     + '<div class="dropdown-menu dropdown-menu-end m-0">'
+                                     + '<a href = "javascript:;" class="add-ms dropdown-item" data-bs-target="#compoundMsModal" data-id=' + a.CompoundKey + ' data-databasekey=' + a.DatabaseKey + ' data-ms="MS2">Add MS2</a>'
+                                     + '<a href="javascript:;" class="add-ms  dropdown-item" data-bs-target="#compoundMsModal" data-id=' + a.CompoundKey + ' data-databasekey=' + a.DatabaseKey + ' data-ms="MS3">Add MS3</a>'
+                                     + '<a href="javascript:;" class="add-ms dropdown-item" data-bs-target="#compoundMsModal" data-id=' + a.CompoundKey + ' data-databasekey=' + a.DatabaseKey + ' data-ms="Aduct">Add Adduct</a>'
+                                     + '<div class="dropdown-divider"></div>'
+                                     + r
+                                     + '</div>'
+                                     + '</div>'
+                                 );
+                             },
+                         },
+                     ],
+                     order: [[1, "desc"]],
+                     //dom: '<"row mx-2"<"col-md-2"<"me-3"l>><"col-md-10"<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0"fB>>>t<"row mx-2"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+                     dom: '<"row ms-2 me-3"<"col-12 col-md-6 d-flex align-items-center justify-content-center justify-content-md-start gap-2"l<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start mt-md-0 mt-3"B>><"col-12 col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row pe-3 gap-md-2"f<"compound_status mb-3 mb-md-0">>>t<"row mx-2"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+
+                     language: {
+                         sLengthMenu: "_MENU_",
+                         search: "",
+                         searchPlaceholder: "Search..",
+                     },
+
+                     buttons: [
+                         {
+                             text: '<i class="bx bx-plus me-0 me-lg-2"></i><span class="d-none d-lg-inline-block">Add Compound</span>',
+                            // className: "add-new btn btn-primary mb-3 m-md-2 m-lg-2",
+                             className: "add-new btn btn-primary mb-3 mb-md-0",
+                         },
+                     ],
+                     //responsive: {
+                     //    details: {
+                     //        display: $.fn.dataTable.Responsive.display.modal({
+                     //            header: function (e) {
+                     //                return "Details of " + e.data().CompoundName;
+                     //            },
+                     //        }),
+                     //        type: "column",
+                     //        renderer: function (e, t, a) {
+                     //            a = $.map(a, function (e, t) {
+                     //                return "" !== e.title
+                     //                    ? '<tr data-dt-row="' +
+                     //                    e.rowIndex +
+                     //                    '" data-dt-column="' +
+                     //                    e.columnIndex +
+                     //                    '"><td>' +
+                     //                    e.title +
+                     //                    ":</td> <td>" +
+                     //                    e.data +
+                     //                    "</td></tr>"
+                     //                    : "";
+                     //            }).join("");
+                     //            return !!a && $('<table class="table"/><tbody />').append(a);
+                     //        },
+                     //    },
+                     //},
+                     initComplete: function () {
+                         this.api()
+                             .columns(7)
+                             .every(function () {
+                                 var a = this,
+                                     t = $(
+                                         '<select id="CompoundStatus" class="form-select text-capitalize"><option value=""> Select Status </option></select>'
+                                     )
+                                         .appendTo(".compound_status")
+                                         .on("change", function () {
+                                             var e = $.fn.dataTable.util.escapeRegex($(this).val());
+                                             a.search(e ? "^" + e + "$" : "", !0, !1).draw();
+                                         });
+                                 a.data()
+                                     .unique()
+                                     .sort()
+                                     .each(function (e, a) {
+                                         t.append(
+                                             '<option value="' +
+                                             e +
+                                             '" class="text-capitalize">' +
+                                             e +
+                                             "</option>"
+                                         );
+                                     });
+                             });
+                     },
+                 }));
+             $(".datatables-compounds tbody").on("click", ".active-deactive", function () {
+                    var id = $(this).attr('data-id');
+                    var statustext = $(this).attr('data-isactive');
+                    Swal.fire({
+                        title: "Are you sure want to " + statustext + "?",
+                            text: "You won't be able to revert this!",
+                            icon: "warning",
+                            showCancelButton: !0,
+                        confirmButtonText: "Yes, " + statustext +" it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary me-3",
+                                cancelButton: "btn btn-label-secondary",
+                            },
+                            buttonsStyling: !1,
+                        }).then(function (t) {
+                            if (t.isConfirmed) {
+                                $.ajax({
+                                    type: "GET",
+                                     url: '@Url.Action("ActivateDeActivate", "Compound")',
+                                    contentType: "application/json; charset=utf-8",
+                                    data: {"compoundKey": id},
+                                    datatype: "json",
+                                    success: function (data) {
+                                        var txtmsg = statustext == "Activate" ? "Activated" :"De-Activated"
+                                        t.value &&
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: txtmsg,
+                                            text: "Your data has been " + txtmsg +".",
+                                            customClass: { confirmButton: "btn btn-success" },
+                                        });
+
+                                        $('.swal2-confirm').on('click', function () { LoadTable() });
+                                    },
+                                    error: function () {
+                                        alert("Error Occured!");
+                                    }
+                                });
+                            }
+
+                        });
+                }),
+                $(".datatables-compounds tbody").on("click", ".delete-record", function () {
+                    var id = $(this).attr('data-id');
+                        Swal.fire({
+                            title: "Are you sure want to delete?",
+                            text: "You won't be able to revert this!",
+                            icon: "warning",
+                            showCancelButton: !0,
+                            confirmButtonText: "Yes, delete it!",
+                            customClass: {
+                                confirmButton: "btn btn-primary me-3",
+                                cancelButton: "btn btn-label-secondary",
+                            },
+                            buttonsStyling: !1,
+                        }).then(function (t) {
+                            if (t.isConfirmed) {
+                                $.ajax({
+                                    type: "GET",
+                                     url: '@Url.Action("DeleteCompound", "Compound")',
+                                    contentType: "application/json; charset=utf-8",
+                                    data: {"compoundKey": id},
+                                    datatype: "json",
+                                    success: function (data) {
+                                        t.value &&
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "Deleted!",
+                                            text: "Your all data related to compound ie: MS2/MS3/Adduct has been deleted.",
+                                            customClass: { confirmButton: "btn btn-success" },
+                                        });
+
+                                        $('.swal2-confirm').on('click', function () { LoadTable() });
+                                    },
+                                    error: function () {
+                                        alert("Data not deleted.");
+                                    }
+                                });
+                            }
+
+                        });
+                });
+
+                $(".add-new").on("click", function () {
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("AddCompound", "Compound")',
+                        contentType: "application/json; charset=utf-8",
+                        data: {},
+                        datatype: "json",
+                        success: function (data) {
+                            $('.compound-form-body').html(data)
+                            $('#compoundTable').hide();
+                            $('#compoundFrom').show();
+                        },
+                        error: function () {
+                            alert("Data load failed.");
+                        }
+                    });
+                });
+
+                $(".datatables-compounds tbody").on("click",".edit-record", function () {
+                        var id = $(this).attr('data-id');
+                        $.ajax({
+                            type: "GET",
+                            url: '@Url.Action("EditCompound", "Compound")',
+                            contentType: "application/json; charset=utf-8",
+                            data: { "CompoundKey": id },
+                            datatype: "json",
+                            success: function (data) {
+                                $('.compound-form-body').html(data)
+                                $('#compoundTable').hide();
+                                $('#compoundFrom').show();
+                            },
+                            error: function () {
+                                alert("Data load failed.");
+                            }
+                        });
+                });
+
+                $(".datatables-compounds tbody").on("click", ".add-ms", function () {
+                    var id = $(this).attr('data-id');
+                    var mstype = $(this).attr('data-ms');
+                    var dbkey = $(this).attr('data-databasekey');
+                    var options = { "backdrop": "static", keyboard: true };
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("AddCompoundMS2", "Compound")',
+                        contentType: "application/json; charset=utf-8",
+                        data: { "CompoundKey": id, "DatabaseKey": dbkey, "MSTypeKey": mstype },
+                        datatype: "json",
+                        success: function (data) {
+                            $('.compound-ms-body').html(data)
+                            $('#compoundMSModal').modal(options);
+                            $('#compoundMSModal').modal('show');
+                        },
+                        error: function () {
+                            alert("Data load failed.");
+                        }
+                    });
+                });
+
+             $(".datatables-compounds tbody").on("click", ".view-record", function () {
+                 $.blockUI({
+                     message:
+                         '<div class="spinner-border text-white" role="status"></div>',
+                     css: { backgroundColor: "transparent", border: "0" },
+                     overlayCSS: { opacity: 0.5 },
+                 });
+                    var id = $(this).attr('data-id');
+                    var options = { "backdrop": "static", keyboard: true };
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("CompoundSummary", "Compound")',
+                        contentType: "application/json; charset=utf-8",
+                        data: { "CompoundKey": id},
+                        datatype: "json",
+                        success: function (data) {
+                            $.unblockUI();
+                            $('.compound-preview-body').html(data)
+                            $('#compoundPreviewModal').modal(options);
+                            $('#compoundPreviewModal').modal('show');
+                        },
+                        error: function () {
+                            $.unblockUI();
+                            alert("Data load failed.");
+                        }
+                    });
+                });
+                setTimeout(() => {
+                    $(".dataTables_filter .form-control").removeClass("form-control-sm"),
+                        $(".dataTables_length .form-select").removeClass("form-select-sm");
+                }, 300);
+
+            }
+    </script>
+    <script>
+
+    function MassSpectra(msid,mstype) {
+        var options = { "backdrop": "static", keyboard: true };
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetMassSpectraDetails", "Compound")',
+            contentType: "application/json; charset=utf-8",
+            data: { "spectraKey": msid, "spectraType": mstype},
+            datatype: "json",
+            success: function (data) {
+                $('.mass-detail-body').html(data)
+                $('#modalSpectraDetails').modal(options);
+                $('#modalSpectraDetails').modal('show');
+                $('#compoundPreviewModal').modal('toggle');
+            },
+            error: function () {
+                alert("Data load failed.");
+            }
+        });
+    }
+
+    </script>
+
+
+}

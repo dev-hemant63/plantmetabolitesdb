@@ -1,0 +1,27 @@
+Instrument Parameters - Function 1:
+Parameter File - C:\MassLynx\INTERNAL2011.PRO\ACQUDB\ESIMSMS.ipr
+Polarity	ES+
+Calibration	Dynamic 2
+Capillary (kV)	3.50	3.50
+Cone (V)	30.00	32.48
+Extractor (V)	3.00	2.20
+RF (V)	0.10
+Source Temperature (°C)	120	119
+Desolvation Temperature (°C)	350	341
+Cone Gas Flow (L/Hr)	50	50
+Desolvation Gas Flow (L/Hr)	650	647
+Collision Gas Flow (mL/Min)	0.10	0.10
+LM 1 Resolution	10.00
+HM 1 Resolution	10.00
+Ion Energy 1	1.00
+MS Mode Entrance	50.00
+MS Mode Collision Energy	3.00
+MS Mode Exit	50.00
+MSMS Mode Entrance	2.00
+MSMS Mode Collision Energy	
+MSMS Mode Exit	2.00
+LM 2 Resolution	15.00
+HM 2 Resolution	15.00
+Ion Energy 2	1.50
+Gain	1.50
+Multiplier	-533.39

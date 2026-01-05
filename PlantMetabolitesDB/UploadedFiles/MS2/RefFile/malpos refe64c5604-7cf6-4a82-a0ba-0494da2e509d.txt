@@ -1,0 +1,31 @@
+Name of compound	MALVIDIN
+    Source              Purchased from sigma
+Mass Spectrometer	4000 Q TRAP		
+Software Version:	Analyst 1.4.2
+Scan Type:	        Product Ion (MS2)
+Polarity:	        Positive 
+Scan Mode:	        Profile
+Ion Source:	        ESI Turbo Spray
+Product Of:	        331.08 amu
+Resolution Q1:	        Unit
+Resolution Q3:	        Unit
+Intensity Thres.:	0.00 cps
+Settling Time:	        0.0000 msec
+MR Pause:	       5.0070 msec
+Step Size:	       0.10 amu 
+Parameter Table
+CUR: 	               10.00
+IS: 	               4500.00
+TEM: 	                0.00
+GS1: 	               10.00
+GS2: 	                0.00
+ihe: 	                ON
+CAD: 	               Medium
+DP	               86.00
+EP	               10.00
+CE	               42.00
+CXP	               10.00
+
+HPLC
+Mobile Phase:        Methanol:TDW (80:20)
+       Flow  :       0.010mL/min

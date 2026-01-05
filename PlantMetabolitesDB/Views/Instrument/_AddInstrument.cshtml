@@ -1,0 +1,143 @@
+﻿@model PlantMetabolitesDB.ViewModel.InstrumentViewModel
+
+<div class="text-center mb-4">
+    <h3>Add Instrument</h3>
+</div>
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { @id = "addInstrumentForm", @class = "row" }))
+{
+    @Html.AntiForgeryToken()
+    @*<div class="col-12 mb-3">
+            @Html.LabelFor(d => d.DatabaseKey, new { @class = "form-label" })
+            @Html.DropDownListFor(e => e.DatabaseKey, new SelectList(Model.Databases, "DatabaseKey", "DatabaseName"), "Select", new { @class = "form-select" })
+        </div>*@
+    <div class="col-12 mb-3">
+        @Html.LabelFor(d => d.InstrumentName, new { @class = "form-label" })
+        @Html.TextBoxFor(e => e.InstrumentName, new { @class = "form-control typeahead", @placeholder = "Instrument Name", @autofocus = "autofocus" })
+    </div>
+    <div class="col-12 text-center demo-vertical-spacing">
+        <input type="submit" value="Create" class="btn btn-primary me-sm-3 me-1" id="submitButton" name="submitButton" />
+        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+    </div>
+}
+<script>
+    $(function () {
+        $.ajax({
+            url: "/Instrument/GetInstrumentNames",
+            type: "Get",
+            dataType: "json",
+            data: {},
+            success: function (data) {
+                var result = [];
+                for (var i in data)
+                    result.push(data[i].InstrumentName);
+                var s,
+                    e = result;
+                $(".typeahead").typeahead(
+                    { hint: !isRtl, highlight: !0, minLength: 1 },
+                    {
+                        name: "InstrumentName",
+                        source:
+                            ((s = e),
+                                function (e, a) {
+                                    var t = [],
+                                        o = new RegExp(e, "i");
+                                    $.each(s, function (e, a) {
+                                        o.test(a) && t.push(a);
+                                    }),
+                                        a(t);
+                                }),
+                    }
+                ),
+                    new Bloodhound({
+                        datumTokenizer: Bloodhound.tokenizers.whitespace,
+                        queryTokenizer: Bloodhound.tokenizers.whitespace,
+                        local: e,
+                    })
+            },
+        });
+    });
+</script>
+<script>
+    $(function (e) {
+        const submitButton = document.getElementById('submitButton');
+        const getWhiteSpace = function () {
+            return {
+                validate: function (input) {
+                    const value = input.value;
+                    // Check the white space
+                    if (value.indexOf(' ') >= 0) {
+                        return {
+                            valid: false,
+                        };
+                    }
+                    return {
+                        valid: true,
+                    };
+                }
+            }
+        };
+
+        const fv = FormValidation.formValidation(
+            document.getElementById("addInstrumentForm"), {
+            fields: {
+                InstrumentName: {
+                    validators: {
+                        notEmpty: { message: "Please enter instrument name" },
+                        checkWhiteSpace: {
+                            message: 'Space not allowed',
+                        },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap5: new FormValidation.plugins.Bootstrap5({
+                    eleValidClass: "",
+                    rowSelector: ".col-12",
+                }),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+                autoFocus: new FormValidation.plugins.AutoFocus(),
+            },
+        });
+
+          fv.on('core.form.valid', function () {
+            // Disable the submit button
+            submitButton.setAttribute('disabled', true);
+            document.getElementById('submitButton').value = 'Saving...';
+
+            var valdata = $("#addInstrumentForm").serialize();
+            $.ajax({
+                url: "/Instrument/AddInstrument",
+                type: "POST",
+                dataType: 'json',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: valdata,
+                success: function (response) {
+                    //$('#instrumentModal').modal('hide');
+                    //LoadTable();
+                    Swal.fire({
+                        icon: "success",
+                        title: "Saved",
+                        text: "Data saved successfully.",
+                        customClass: { confirmButton: "btn btn-success" },
+                    });
+
+                    $('.swal2-confirm').on('click', function () {
+                        $('#instrumentModal').modal('hide');
+                        LoadTable();
+                    });
+                },
+                error: function (response) {
+
+                }
+            });
+          });
+
+        fv.registerValidator('checkWhiteSpace', getWhiteSpace);
+    });
+</script>

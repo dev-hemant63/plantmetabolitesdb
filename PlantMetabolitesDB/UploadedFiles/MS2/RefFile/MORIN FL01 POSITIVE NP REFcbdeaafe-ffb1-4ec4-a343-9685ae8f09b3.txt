@@ -1,0 +1,60 @@
+Name of compound:       MORIN HYDRATE
+  
+Source:                 Purchased from sigma
+
+Mass Spectrometer	API 4000 Q TRAP
+
+Software Version:       Analyst 1.4.2
+
+
+Scan Type:	        Product Ion (EMS2)
+
+Polarity:	        Positive 
+
+Scan Mode:	        Profile
+
+Ion Source:	        Turbo Spray
+
+Product Of:	        303.20 amu
+
+Resolution Q1:	        Unit
+
+Resolution Q3:	        Unit
+
+MR Pause:	        5.0070 msec
+
+Step Size:	        0.10 amu 
+ 
+Parameter Table(Period 1  Experiment   1)
+
+CUR: 	               10.00					
+
+IS: 	               5500.00
+
+TEM: 	               50
+
+GS1: 	               12.00
+
+GS2: 	               0.00
+
+ihe: 	                ON
+
+CAD: 	              Medium
+
+DP	              100.00
+
+EP	              10.00
+
+CE	              40.00
+
+CXP	              10.00
+
+
+HPLC
+ 
+Solvent system :  80:20(ISOCRATIC) Acetonitrile:0.1% Formic acid
+
+Flow           :  0.010 ml/min
+
+
+

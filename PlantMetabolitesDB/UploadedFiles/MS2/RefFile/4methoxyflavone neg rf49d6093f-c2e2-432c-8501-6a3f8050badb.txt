@@ -1,0 +1,42 @@
+Name of compound:    4methoxychalcone 
+Source:              Purchased from Extrasynthatase
+Mass Spectrometer     API 4000		
+Software Version:    Analyst 1.4.1
+Scan Type:	     Product Ion (ESIMS2)
+Polarity:	     Negative 
+Scan Mode:	    Profile
+Ion Source:	    Turbo Spray
+Product Of:	    237.09 amu
+Resolution Q1:	    Unit
+Resolution Q3:	    Unit
+Intensity Thres.:   0.00 cps
+Settling Time:	    0.0000 msec
+MR Pause:	    5.0070 msec
+Step Size:	   0.10 amu 
+Parameter Table(Period 1  Experiment   1)
+CUR: 	           10.00
+GS1: 	           15.00
+GS2: 	           0.00
+TEM: 	           0.00
+ihe: 	           ON
+IS: 	          -4500.00
+CAD: 	           3.00
+DP	          -24.00
+EP	           -10.00
+CE	          -20.00
+CXP	           -10.00
+HPLC
+ 
+Solvent system :    80:20 Acetonitrile:0.1% Formic acid
+  
+Flow           :    0.010 ml/min
+
+
+
+
+   
+
+
+
+
+

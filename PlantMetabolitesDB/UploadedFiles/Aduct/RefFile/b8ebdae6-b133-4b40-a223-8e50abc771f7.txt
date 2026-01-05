@@ -1,0 +1,44 @@
+Instrument Parameters - Function 2:
+Parameter File - C:\MassLynx\INTERNAL2011.PRO\ACQUDB\ESIMSMS.ipr
+Polarity	ES-
+Calibration	Dynamic 2
+Capillary (kV)	3.20	3.49
+Cone (V)	30.00	-2.20
+Extractor (V)	3.00	-1.71
+RF (V)	0.00
+Source Temperature (°C)	120	119
+Desolvation Temperature (°C)	350	354
+Cone Gas Flow (L/Hr)	0	29
+Desolvation Gas Flow (L/Hr)	700	671
+Collision Gas Flow (mL/Min)	0.10	0.10
+LM 1 Resolution	15.00
+HM 1 Resolution	15.00
+Ion Energy 1	1.00
+MS Mode Entrance	50.00
+MS Mode Collision Energy	3.00
+MS Mode Exit	50.00
+MSMS Mode Entrance	1.00
+MSMS Mode Collision Energy	
+MSMS Mode Exit	0.50
+LM 2 Resolution	15.00
+HM 2 Resolution	15.00
+Ion Energy 2	1.00
+Gain	1.00
+Multiplier	-533.65
+
+Waters ACQUITY QSM
+ Solvent A Name: ACN+WATER 5:95 
+ Solvent B Name: Acetonitrile 
+ Solvent C Name: Methanol 
+ Solvent D Name: 5 mM amm. acetate pH6.5 
+ Low Pressure Limit: 0 psi
+ High Pressure Limit: 15000 psi
+ Seal Wash Period: 5.00 min
+ [Gradient Table]
+  Time(min) Flow Rate(mL/min) %A %B %C %D Curve 
+ 1. Initial 0.250 0.0 50.0 0.0 50.0 Initial 
+ 2. 1.00 0.250 0.0 50.0 0.0 50.0 6 
+ Comment:  
+ Flow Ramp Rate: 0.45 min
+ Pre-Injector Volume: 0 uL
+ 

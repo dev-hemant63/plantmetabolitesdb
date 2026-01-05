@@ -1,0 +1,304 @@
+﻿@model PlantMetabolitesDB.ViewModel.MS2MassSpectraViewModel
+
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { @id = "addMSForm", @class = "row g-3", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(d => d.MS2MassSpectraKey);
+    @Html.HiddenFor(d => d.CompoundKey);
+    <div class="col-md-4">
+        @Html.LabelFor(d => d.InstrumentKey, new { @class = "form-label" })
+        @Html.DropDownListFor(e => e.InstrumentKey, new SelectList(Model.Instruments, "InstrumentKey", "InstrumentName"), "Select", new { @class = "form-select", @autofocus = "autofocus" })
+    </div>
+    <div class="col-md-4">
+        @Html.LabelFor(d => d.Polarity, new { @class = "form-label" })
+        @Html.DropDownListFor(e => e.Polarity, new SelectList(Model.Polarities, "Value", "Text"), new { @class = "form-select", @autofocus = "autofocus" })
+    </div>
+    <div class="col-md-4">
+        @Html.LabelFor(d => d.AnnotationKey, new { @class = "form-label" })
+        @Html.DropDownListFor(e => e.AnnotationKey, new SelectList(Model.Annotations, "AnnotationKey", "AnnotationName"), "Select", new { @class = "form-select", @autofocus = "autofocus" })
+    </div>
+    <div class="col-md-4">
+        @Html.LabelFor(d => d.ParentIon, new { @class = "form-label" })
+        @Html.TextBoxFor(e => e.ParentIon, new { @class = "form-control", @placeholder = "ParentIon", @autofocus = "autofocus" })
+    </div>
+    <div class="col-md-8">
+        @Html.LabelFor(d => d.SpectraDescription, new { @class = "form-label" })
+        @Html.TextBoxFor(e => e.SpectraDescription, new { @class = "form-control", @placeholder = "Spectra Description", @autofocus = "autofocus" })
+    </div>
+    <div class="col-md-6">
+        @Html.LabelFor(d => d.MS2DataFile, new { @class = "form-label" })
+        <input class="form-control" type="file" id="MS2DataImageFile" name="MS2DataImageFile">
+        @if (Model.MS2DataFile != null)
+        {
+            @Html.HiddenFor(d => d.MS2DataFile)
+            <div class="file-button-hide-show">
+                <a href="~/UploadedFiles/MS2/DataFile/@Model.MS2DataFile" target="_blank" class="btn btn-sm btn-secondary mt-2"><i class="bx bx-search-alt"></i></a>
+            </div>
+        }
+    </div>
+    <div class="col-md-6">
+        @Html.LabelFor(d => d.MS2RefFile, new { @class = "form-label" })
+        <input class="form-control" type="file" id="MS2RefImageFile" name="MS2RefImageFile">
+        @if (Model.MS2RefFile != null)
+        {
+            @Html.HiddenFor(d => d.MS2RefFile)
+            <div class="file-button-hide-show">
+                <a href="~/UploadedFiles/MS2/RefFile/@Model.MS2RefFile" target="_blank" class="btn btn-sm btn-secondary mt-2"><i class="bx bx-search-alt"></i></a>
+            </div>
+        }
+    </div>
+    @*<div class="col-md-12 mt-4">
+            <input type="submit" value="Create" class="btn btn-primary" id="submitButton" name="submitButton" />
+            <button type="button" class="btn btn-warning m-lg-1" id="cancelButton" name="cancelButton">Cancel</button>
+        </div>*@
+    <div class="col-md-11 mt-4">
+        <input type="submit" value="Add" class="btn btn-primary" id="submitButton" name="submitButton" />
+        <button type="button" class="btn btn-secondary m-lg-1" id="resetButton" name="resetButton">Reset</button>
+    </div>
+    <div class="col-md-1 mt-4">
+        <button type="button" class="btn btn-warning m-lg-1" data-bs-dismiss="modal" aria-label="Close">Close</button>
+    </div>
+}
+
+<script>
+    $(function () {
+         $('#InstrumentKey').on("change", function () {
+            var insKey = $('#InstrumentKey option:selected').val();
+            var compKey = $('#CompoundKey').val();
+            if (insKey != "") {
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetMS2List", "Compound")',
+                    contentType: "application/json; charset=utf-8",
+                    data: { "compoundKey": compKey, "instrumentKey": insKey },
+                    datatype: "json",
+                    success: function (data) {
+                        $('.ms2list').show();
+                        $('.ms2list').html(data)
+                    },
+                    error: function () {
+                        alert("Data load failed.");
+                    }
+                });
+            }
+            else {
+                $('.ms2list').hide();
+            }
+         });
+
+        $('#Polarity').on("change", function () {
+            var polaritykey = $('#Polarity option:selected').val();
+            if (polaritykey != "") {
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetAnnotation", "Compound")',
+                    contentType: "application/json; charset=utf-8",
+                    data: { "polarity": polaritykey },
+                    datatype: "json",
+                    success: function (response) {
+                        $('#AnnotationKey').html('');
+                        var options = '';
+                        options += '<option value="">Select</option>';
+                        for (var i = 0; i < response.length; i++) {
+                            options += '<option value="' + response[i].AnnotationKey + '">' + response[i].AnnotationName + '</option>';
+                        }
+                        $('#AnnotationKey').append(options);
+                    },
+                    error: function () {
+                        alert("Data load failed.");
+                    }
+                });
+            }
+            else {
+                $('#AnnotationKey').html('');
+                var options = '<option value="">Select</option>';
+                $('#AnnotationKey').append(options);
+            }
+        });
+    });
+</script>
+<script>
+    $(function (e) {
+        const submitButton = document.getElementById('submitButton');
+        const a = document.getElementById("addMSForm");
+        const getWhiteSpace = function () {
+            return {
+                validate: function (input) {
+                    const value = input.value;
+                    // Check the white space
+                    if (value.indexOf(' ') >= 0) {
+                        return {
+                            valid: false,
+                        };
+                    }
+                    return {
+                        valid: true,
+                    };
+                }
+            }
+        };
+        const fv = FormValidation.formValidation(
+            a, {
+            fields: {
+                InstrumentKey: {
+                    validators: { notEmpty: { message: "Please select instrument" } },
+                },
+                Polarity: {
+                    validators: { notEmpty: { message: "Please select polarity" } },
+                },
+                AnnotationKey: {
+                    validators: { notEmpty: { message: "Please select annotation" } },
+                },
+                    ParentIon: {
+                        validators: {
+                            notEmpty: { message: "Please enter parent-Ion" },
+                            stringLength: {
+                                min: 0,
+                                max: 5,
+                                message: 'The parent-Ion must be less than 5 digits',
+                            },
+                            numeric: {
+                                message: 'The parent-Ion is not a number',
+                            },
+                        },
+                    },
+                SpectraDescription: {
+                    validators: {
+                        notEmpty: { message: "Please enter spectra description" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                        checkWhiteSpace: {
+                            message: 'Space not allowed',
+                        },
+                    },
+                },
+                MS2DataImageFile: {
+                    validators: {
+                        // notEmpty: { message: "Please select the file" },
+                        file: {
+                            extension: 'txt',
+                            type: 'text/plain',
+                            maxSize: 100 * 1024,
+                            message: 'The file must be in txt format and must not exceed 100KB in size',
+                        },
+                    },
+                },
+                MS2RefImageFile: {
+                    validators: {
+                        // notEmpty: { message: "Please select the file" },
+                        file: {
+                            extension: 'txt',
+                            type: 'text/plain',
+                            maxSize: 100 * 1024,
+                            message: 'The file must be in txt format and must not exceed 100KB in size',
+                        },
+                    },
+                },
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap5: new FormValidation.plugins.Bootstrap5(),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+                autoFocus: new FormValidation.plugins.AutoFocus(),
+            },
+
+        });
+
+        fv.on('core.form.valid', function () {
+            var ms2key = $('#MS2MassSpectraKey').val();
+            // Disable the submit button
+            submitButton.setAttribute('disabled', true);
+            var form = $("#addMSForm").get(0);
+            var formData = new FormData(form);
+            if (ms2key == 0) {
+                //Add MS2
+                document.getElementById('submitButton').value = 'Saving...';
+                $.ajax({
+                    url: "/Compound/AddCompoundMS2",
+                    type: "POST",
+                    dataType: 'json',
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (response) {                       
+                        Swal.fire({
+                            icon: "success",
+                            title: "Saved",
+                            text: "Data saved successfully.",
+                            customClass: { confirmButton: "btn btn-success" },
+                        });
+
+                        $('.swal2-confirm').on('click', function () {
+                            clearForm();
+                            $('#InstrumentKey').trigger("change");
+                            submitButton.removeAttribute('disabled');
+                        });
+                    },
+                    error: function (response) {
+                        submitButton.removeAttribute('disabled');
+                        document.getElementById('submitButton').value = 'Add';
+                    }
+                });
+            }
+            else {
+                //Edit MS2
+                document.getElementById('submitButton').value = 'Updating...';
+                $.ajax({
+                    url: "/Compound/EditCompoundMS2",
+                    type: "POST",
+                    dataType: 'json',
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (response) {                       
+                        Swal.fire({
+                            icon: "success",
+                            title: "Updated",
+                            text: "Data updated successfully.",
+                            customClass: { confirmButton: "btn btn-success" },
+                        });
+
+                        $('.swal2-confirm').on('click', function () {
+                            clearForm();
+                            $('#InstrumentKey').trigger("change");
+                            submitButton.removeAttribute('disabled');
+                        });
+                    },
+                    error: function (response) {
+                        submitButton.removeAttribute('disabled');
+                        document.getElementById('submitButton').value = 'Edit';
+                    }
+                });
+            }
+        });
+
+        fv.registerValidator('checkWhiteSpace', getWhiteSpace);
+
+        $('#resetButton').on("click", function () {
+            clearForm();
+
+        });
+    });
+
+    function clearForm() {
+        // $('#InstrumentKey').val(1);
+        $('#Polarity').val('');
+        $('#AnnotationKey').val('');
+        $('#ParentIon').val('');
+        $('#SpectraDescription').val('');
+        $('#MS2MassSpectraKey').val(0)
+        $('#MS2DataFile').val('');
+        $('#MS2RefFile').val('');
+        $('.file-button-hide-show').hide();
+        document.getElementById('submitButton').value = 'Add';
+        $('#MS2DataImageFile')[0].value = "";
+        $('#MS2RefImageFile')[0].value = "";
+    }
+
+</script>

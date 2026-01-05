@@ -1,0 +1,127 @@
+﻿
+@model PlantMetabolitesDB.ViewModel.FAQViewModel
+
+<div class="text-center mb-4">
+    <h3>Add FAQ</h3>
+</div>
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { @id = "addFaqForm", @class = "row", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="col-12 mb-3">
+        @Html.LabelFor(d => d.Title, new { @class = "form-label" })
+        @Html.TextBoxFor(e => e.Title, new { @class = "form-control", @placeholder = "Title", @autofocus = "autofocus" })
+    </div>
+    <div class="col-12 mb-3">
+        @Html.LabelFor(d => d.Description, new { @class = "form-label" })
+        @Html.TextAreaFor(e => e.Description, new { @class = "form-control", @placeholder = "Description", @autofocus = "autofocus", @rows = "4" })
+    </div>
+    <div class="col-12 mb-3">
+        @Html.LabelFor(d => d.UploadedFileName, new { @class = "form-label" })
+        <input class="form-control" type="file" id="UploadedImageFile" name="UploadedImageFile">
+    </div>
+    <div class="col-12 text-center demo-vertical-spacing">
+        <input type="submit" value="Create" class="btn btn-primary me-sm-3 me-1" id="submitButton" name="submitButton" />
+        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+    </div>
+}
+
+<script>
+    $(function (e) {
+        const submitButton = document.getElementById('submitButton');
+        const a = document.getElementById("addFaqForm");
+        const fv = FormValidation.formValidation(
+            a, {
+            fields: {
+                Title: {
+                    validators: {
+                        notEmpty: { message: "Please enter title" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                Description: {
+                    validators: {
+                        notEmpty: { message: "Please enter description" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                UploadedImageFile: {
+                    validators: {
+                        // notEmpty: { message: "Please select the file" },
+                        file: {
+                            extension: 'pdf',
+                            type: 'application/pdf',
+                            maxSize: 1024 * 1024,
+                            message: 'The file must be in pdf format and must not exceed 1MB in size',
+                        },
+                    },
+                },
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap5: new FormValidation.plugins.Bootstrap5({
+                    eleValidClass: "",
+                    rowSelector: ".col-12",
+                }),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+                autoFocus: new FormValidation.plugins.AutoFocus(),
+                //excluded: new FormValidation.plugins.Excluded({
+                //    excluded: function (field, ele, eles) {
+
+                //        const selectedMessageType = a.querySelector('[name="MessageType"]');
+                //        const messagetype = selectedMessageType ? selectedMessageType.value : '';
+                //        return (field === 'UploadedImageFile' && messagetype !== '2') || (field === 'MessageType' && messagetype === '2');
+                //    },
+                //}),
+            },
+
+        });
+
+        fv.on('core.form.valid', function () {
+            // Disable the submit button
+            submitButton.setAttribute('disabled', true);
+            document.getElementById('submitButton').value = 'Saving...';
+            var form = $("#addFaqForm").get(0);
+            var formData = new FormData(form);
+            // var valdata = $("#addFaqForm").serialize();
+            $.ajax({
+                url: "/FAQS/AddFAQ",
+                type: "POST",
+                dataType: 'json',
+                // contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    //$('#faqModal').modal('hide');
+                    //LoadTable();
+                    Swal.fire({
+                        icon: "success",
+                        title: "Saved",
+                        text: "Data saved successfully.",
+                        customClass: { confirmButton: "btn btn-success" },
+                    });
+
+                    $('.swal2-confirm').on('click', function () {
+                        $('#faqModal').modal('hide');
+                        LoadTable();
+                    });
+                },
+                error: function (response) {
+
+                }
+            });
+            // Do something else such as sending the form to back-end via Ajax request
+            // ...
+        });
+    });
+
+</script>

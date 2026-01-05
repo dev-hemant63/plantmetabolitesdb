@@ -1,0 +1,116 @@
+﻿@model IEnumerable<PlantMetabolitesDB.ViewModel.DbInstViewModel>
+
+<div class="text-center mb-4">
+    <h3>Map Plant family</h3>
+</div>
+
+<hr class="m-0" />
+<!-- Inline Checkboxes -->
+<div class="row">
+    @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "mapDatabaseForm", @class = "row" }))
+    {
+
+        @Html.Hidden("InstrumentKey", Model.ElementAt(0).InstrumentKey)
+        <div class="col-md p-4">
+            @if (Model.Count() > 0)
+            {
+                <div class="col-12">
+                    @foreach (var item in Model)
+                    {
+                        <div class="form-check form-check-inline1 p-1">
+                            @Html.CheckBox("Databases[]", item.IsCheked, new { @class = "form-check-input" })
+                            <label class="form-check-label">@item.DatabaseName</label>
+                            @Html.Hidden("DatabaseKey", item.DatabaseKey)
+                            @Html.Hidden("DatabaseName", item.DatabaseName)
+                        </div>
+                    }
+                </div>
+                <div class="col-12 text-center demo-vertical-spacing">
+                    <input type="submit" value="Update" class="btn btn-primary me-sm-3 me-1" id="submitButton" name="submitButton" />
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                </div>
+            }
+
+        </div>
+    }
+</div>
+<script>
+    $(function (e) {
+        const submitButton = document.getElementById('submitButton');
+        const a = document.getElementById("mapDatabaseForm");
+        const fv = FormValidation.formValidation(a, {
+            fields: {
+                'Databases[]': {
+                    validators: {
+                        choice: {
+                            min: 1,
+                            message: 'Please choose atleast one database to map instrument',
+                        },
+                    },
+                },
+
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap5: new FormValidation.plugins.Bootstrap5(
+                    {
+                        eleValidClass: "",
+                        rowSelector: ".col-12",
+                    }
+                ),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+                autoFocus: new FormValidation.plugins.AutoFocus(),
+            },
+        });
+
+        fv.on('core.form.valid', function () {
+            submitButton.setAttribute('disabled', true);
+            document.getElementById('submitButton').value = 'Saving...';
+            //  var valdata = $("#mapDatabaseForm").serialize();
+            var lstDbInstViewModel = [];
+            $('.form-check').find('input[type=checkbox]:checked').each(function () {
+                var obj = {};
+                obj.InstrumentKey = $('#InstrumentKey').val();
+                obj.DatabaseKey = $(this).parent().find('#DatabaseKey').val();
+                obj.DatabaseName = $(this).parent().find('#DatabaseName').val();
+                obj.IsCheked = true;
+                lstDbInstViewModel.push(obj);
+            });
+
+            $.ajax({
+                url: "/Instrument/MapDatabase",
+                type: "POST",
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(lstDbInstViewModel),
+                success: function (response) {
+                    if (response == "Success") {
+                        /* alert('Database mapped successfully.')*/
+                        Swal.fire({
+                            icon: "success",
+                            title: "Mapped",
+                            text: "Database mapped successfully.",
+                            customClass: { confirmButton: "btn btn-success" },
+                        });
+
+                        $('.swal2-confirm').on('click', function () {
+                            $('#instrumentModal').modal('hide');
+                            LoadTable();
+                        });
+                    }
+                    else {
+                        alert('Something went wrong.')
+                    }
+                    submitButton.removeAttribute('disabled');
+                    document.getElementById('submitButton').value = 'Update';
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    submitButton.removeAttribute('disabled');
+                    document.getElementById('submitButton').value = 'Update';
+                    console(xhr.responseText);
+
+                }
+            });
+        });
+    });
+</script>

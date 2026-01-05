@@ -1,0 +1,257 @@
+﻿
+@{
+    ViewBag.Title = "Molecular Weight";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model PlantMetabolitesDB.ViewModel.GeneralSearchViewModel
+<style>
+    .modal-backdrop {
+        /* bug fix - no overlay */
+        display: none;
+    }
+</style>
+<div class="breadcrumb-grid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <h3 class="header_title">Molecular Weight</h3>
+                <ol class="breadcrumb">
+                    <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+                    <li>MS Based Search</li>
+                    <li class="active">Molecular Weight</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="inner-grid" style="min-height: 450px !important;">
+
+    <div class="feedback-container">
+        @using (Html.BeginForm("", "", FormMethod.Get, new { @id = "searchForm" }))
+        {
+            <div class="container">
+                <div id="search-filter" class="row">
+                    <div class="col-md-6 offset-md-3" style="padding-top: 6%;">
+                        <div class="row">
+                            <div class="col-md-8 col-sm-12 col-xs-12">
+                                <div class="feedback-form">
+                                    @Html.LabelFor(d => d.MolecularWeight, new { @class = "form__label" })
+                                    @Html.TextBoxFor(e => e.MolecularWeight, new { @class = "form__input typeahead molecularweight", @placeholder = "Monoisotopic Mass 252.3781" })
+                                    @Html.Hidden("hdMolecularWeight")
+                                </div>
+                                <span id="spnMessage" class="text-danger mt-2"></span>
+                            </div>
+                            <div class="col-md-4 col-sm-12 col-xs-12">
+                                <label class="form__label">&nbsp;</label>
+                                <button class="wel-readmore" style="margin-top: 22px;" type="submit" id="submitButton" name="submitButton">
+                                    <span class="form__btn--visible"> Search </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="search-result" class="row">
+                    <div class="col-md-12 no-print">
+                        <input type="button" class="btn btn-success" id="printSearchResult" onclick="PrintSearchResult()" value="Print" style="float:right" />
+                        <button type="button" id="btnBacktofilter" class="btn btn-dark" style="float:right; margin-right:7px">Back</button>
+
+                    </div>
+                    <div id="SearchResult"></div>
+                </div>
+
+                <div id="compound-summary">
+                    <div class="row">
+                        <div class="col-md-10"> <h4 class="mb-0 pull-left"><strong>Compound Summary</strong></h4></div>
+                        <div class="col-md-2">
+                            <button type="button" id="btnBack" class="btn btn-dark">Back</button>
+                            <input type="button" class="btn btn-success" id="printCompound" onclick="PrintCompoundSummary()" value="Print" />
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="compound-preview-body">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Modal 2-->
+    <div class="modal fade" id="modalSpectraDetails" aria-hidden="true" aria-labelledby="modalToggleLabel2" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#deebff">
+                    <h5 class="modal-title" id="modalToggleLabel2"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body mass-detail-body">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="btnPreviewModel" data-bs-dismiss="modal">Back to Compound Summary</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <script>
+
+        $(function () {
+            const submitButton = document.getElementById('submitButton');
+            $('#spnMessage').text('');
+            
+            $("#MolecularWeight").keyup(function () {
+                debugger;
+                var val = $(this).val();
+                var regex = new RegExp(/^[0-9]{0,4}(?:[.][0-9]{0,4})?$/);
+                $('#spnMessage').text('');
+                submitButton.removeAttribute('disabled');
+                if (val != '') {
+                    if (!regex.test(val)) {
+                        $('#spnMessage').text('The value is not a correct format (ony 4 digit allowed before & after decimal)');
+                        submitButton.setAttribute('disabled', true);
+                    }
+                }
+
+            });
+
+            $('#search-result').hide();
+            $('#compound-summary').hide();
+            $('#search-filter').show();
+
+            $("#submitButton").click(function (event) {
+                event.preventDefault();
+                if ($('#MolecularWeight').val() == '') {
+                    alert('Enter molecular weight to search compound!')
+                    return;
+                }
+                var valdata = $("#searchForm").serialize();
+                $.blockUI({
+                    message:
+                        '<div class="spinner-border text-white" role="status"></div>',
+                    css: { backgroundColor: "transparent", border: "0" },
+                    overlayCSS: { opacity: 0.5 },
+                });
+                $.ajax({
+                    url: "/MolecularWeight/GetMolecularSearch",
+                    type: "GET",
+                    dataType: 'html',
+                    contentType: false,
+                    data: valdata,
+                    success: function (data) {
+                        $.unblockUI();
+                        $('#SearchResult').html(data);
+                        $('#compound-summary').hide();
+                        $('#search-filter').hide();
+                        $('#search-result').show();
+                        $('#lblMolecularWeight').text($('#MolecularWeight').val());
+                        $('#hdMolecularWeight').text($('#MolecularWeight').val());
+                        $('#MolecularWeight').val('');
+                    },
+                    failure: function (response) {
+                        $.unblockUI();
+                        console.log(response.responseText);
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        $.unblockUI();
+                        alert(xhr.status);
+                        alert(thrownError);
+                    }
+                });
+            });
+
+            $.ajax({
+                url: "/MolecularWeight/GetMolecularWeightNames",
+                type: "Get",
+                dataType: "json",
+                data: {},
+                success: function (data) {
+                    var result = [];
+                    for (var i in data)
+                        result.push(data[i].MolecularWeight_Input);
+                    var s, e = result;
+                    $(".typeahead.molecularweight").typeahead(
+                        { hint: true, highlight: true, minLength: 1 },
+                        {
+                            name: "MolecularWeight",
+                            source:
+                                ((s = e),
+                                    function (e, a) {
+                                        var t = [],
+                                            o = new RegExp('^' + e + '', "i");
+                                        $.each(s, function (e, a) {
+                                            o.test(a) && t.push(a);
+                                        }),
+                                            a(t);
+                                    }),
+                        }
+                    ),
+                        new Bloodhound({
+                            datumTokenizer: Bloodhound.tokenizers.whitespace,
+                            queryTokenizer: Bloodhound.tokenizers.whitespace,
+                            local: e,
+                        })
+                },
+            });
+        });
+
+        $('#btnBack').click(function () {
+            $('#search-result').show();
+            $('#compound-summary').hide();
+            $('#search-filter').hide();
+        });
+        $('#btnBacktofilter').click(function () {
+            $('#search-result').hide();
+            $('#compound-summary').hide();
+            $('#search-filter').show();
+        });
+    </script>
+
+    <script>
+
+    function MassSpectra(msid,mstype) {
+        var options = { "backdrop": "static", keyboard: true };
+        $.blockUI({
+            message:
+                '<div class="spinner-border text-white" role="status"></div>',
+            css: { backgroundColor: "transparent", border: "0" },
+            overlayCSS: { opacity: 0.5 },
+        });
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetMassSpectraDetails", "GeneralSearch")',
+            contentType: "application/json; charset=utf-8",
+            data: { "spectraKey": msid, "spectraType": mstype },
+            datatype: "json",
+            success: function (data) {
+                $.unblockUI();
+                $('.mass-detail-body').html(data)
+                $('#modalSpectraDetails').modal(options);
+                $('#modalSpectraDetails').modal('show');
+                $('#compoundPreviewModal').modal('toggle');
+            },
+            error: function () {
+                $.unblockUI();
+                alert("Data load failed.");
+            }
+        });
+    }
+
+    </script>
+    <script type="text/javascript">
+        function PrintDiv() {
+            var divToPrint = document.getElementById('compound-summary');
+            var popupWin = window.open('', '_blank', 'width=600,height=600,location=no,left=200px');
+            popupWin.document.open();
+            popupWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</html>');
+            popupWin.document.close();
+        }
+    </script>
+}

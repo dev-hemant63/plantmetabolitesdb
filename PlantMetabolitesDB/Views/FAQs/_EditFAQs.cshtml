@@ -1,0 +1,133 @@
+﻿
+@model PlantMetabolitesDB.ViewModel.FAQViewModel
+<style>
+    .file-button-hide-show {
+        float: right;
+    }
+</style>
+<div class="text-center mb-4">
+    <h3>Edit FAQ</h3>
+</div>
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { @id = "editFaqForm", @class = "row", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(d => d.FAQKey)
+    <div class="col-12 mb-3">
+        @Html.LabelFor(d => d.Title, new { @class = "form-label" })
+        @Html.TextBoxFor(e => e.Title, new { @class = "form-control", @placeholder = "Title", @autofocus = "autofocus" })
+    </div>
+    <div class="col-12 mb-3">
+        @Html.LabelFor(d => d.Description, new { @class = "form-label" })
+        @Html.TextAreaFor(e => e.Description, new { @class = "form-control", @placeholder = "Description", @autofocus = "autofocus", @rows = "4" })
+    </div>
+    <div class="col-12 mb-3">
+        @Html.LabelFor(d => d.UploadedFileName, new { @class = "form-label" })
+        <input class="form-control" type="file" id="UploadedImageFile" name="UploadedImageFile">
+        @if (Model.UploadedFileName != null)
+        {
+            @Html.HiddenFor(d => d.UploadedFileName)
+            <div class="file-button-hide-show">
+                <a href="~/UploadedFiles/FAQs/@Model.UploadedFileName" target="_blank" class="btn btn-sm btn-secondary mt-2"><i class="bx bx-show-alt"></i> View</a>
+            </div>
+        }
+
+    </div>
+    <div class="col-12 text-center demo-vertical-spacing">
+        <input type="submit" value="Update" class="btn btn-primary me-sm-3 me-1" id="submitButton" name="submitButton" />
+        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+    </div>
+}
+
+<script>
+    $(function (e) {
+        const submitButton = document.getElementById('submitButton');
+        const a = document.getElementById("editFaqForm");
+        const fv = FormValidation.formValidation(
+            a, {
+            fields: {
+                Title: {
+                    validators: {
+                        notEmpty: { message: "Please enter title" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                Description: {
+                    validators: {
+                        notEmpty: { message: "Please description title" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                UploadedImageFile: {
+                    validators: {
+                        // notEmpty: { message: "Please select the file" },
+                        file: {
+                            extension: 'pdf',
+                            type: 'application/pdf',
+                            maxSize: 1024 * 1024,
+                            message: 'The file must be in pdf format and must not exceed 1MB in size',
+                        },
+                    },
+                },
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap5: new FormValidation.plugins.Bootstrap5({
+                    eleValidClass: "",
+                    rowSelector: ".col-12",
+                }),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+                autoFocus: new FormValidation.plugins.AutoFocus(),
+            },
+        });
+
+        fv.on('core.form.valid', function () {
+
+            // Disable the submit button
+            submitButton.setAttribute('disabled', true);
+            document.getElementById('submitButton').value = 'Updating...';
+            var form = $("#editFaqForm").get(0);
+            var formData = new FormData(form);
+            $.ajax({
+                url: "/FAQs/EditFAQ",
+                type: "POST",
+                dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    //$('#faqModal').modal('hide');
+                    //LoadTable();
+                    Swal.fire({
+                        icon: "success",
+                        title: "Updated",
+                        text: "Data updated successfully.",
+                        customClass: { confirmButton: "btn btn-success" },
+                    });
+
+                    $('.swal2-confirm').on('click', function () {
+                        $('#faqModal').modal('hide');
+                        LoadTable();
+                    });
+                },
+                failure: function (response) {
+                    console.log(response.responseText);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
+                }
+            });
+            // Do something else such as sending the form to back-end via Ajax request
+            // ...
+        });
+    });
+</script>

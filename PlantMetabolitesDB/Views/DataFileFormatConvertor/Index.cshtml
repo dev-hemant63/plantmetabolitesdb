@@ -1,0 +1,135 @@
+﻿
+@{
+    ViewBag.Title = "Data File Format Convertor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model PlantMetabolitesDB.ViewModel.DataFileFormatViewModel
+
+<div class="breadcrumb-grid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <h3 class="header_title">Data File Format Convertor</h3>
+                <ol class="breadcrumb">
+                    <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+                    <li><a href="javascript:void(0)">Utility</a></li>
+                    <li class="active">Data File Format Convertor </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="inner-grid">
+
+    <div class="feedback-container">
+        <div class="container">
+            <div class="row">
+                @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "addDataFileForm", @class = "row", enctype = "multipart/form-data" }))
+                {
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="col-12 feedback-form">
+                            @Html.LabelFor(d => d.DataFormatName, new { @class = "form-label" })
+                            @Html.DropDownListFor(e => e.DataFormatName, new SelectList(Model.DataFormats, "Value", "Text"), "Select", new { @class = "form-select" })
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="col-12 feedback-form">
+                            @Html.LabelFor(d => d.TotalValue, new { @class = "form-label" })
+                            @Html.DropDownListFor(e => e.TotalValue, new SelectList(Model.TotalValues, "Value", "Text"), "Select", new { @class = "form-select" })
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                        <div class="col-12 feedback-form">
+                            @*<label for="name" class="form__label">Browse File</label>
+                                <input type="file" class="form__input" placeholder="" required value="Browse File">*@
+                            @Html.LabelFor(d => d.UploadedFileName, new { @class = "form-label" })
+                            <input class="form-control" type="file" id="UploadedImageFile" name="UploadedImageFile">
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                        @*<label for="name" class="form__label">&nbsp;</label>*@
+                        <button type="submit" value="Create" class="wel-readmore" id="submitButton" name="submitButton" style="margin-top: 2.2rem !important">
+                            <span class="form__btn--visible">Convert to TMSD Format </span>
+                        </button>
+                        @*<button class="wel-readmore">
+                                <span class="form__btn--visible"> Convert To TMSD Format </span>
+                            </button>*@
+                    </div>
+
+                }
+
+            </div>
+        </div>
+    </div>
+</section>
+<script src="~/assets/vendor/libs/jquery/jquery.js"></script>
+<script src="~/assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js"></script>
+<script src="~/assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
+<script>
+    $(function (e) {
+        const submitButton = document.getElementById('submitButton');
+        const a = document.getElementById("addDataFileForm");
+        const fv = FormValidation.formValidation(
+            a, {
+            fields: {
+                DataFormatName: {
+                    validators: { notEmpty: { message: "Please select data format type" } },
+                    },
+                    TotalValue: {
+                        validators: { notEmpty: { message: "Please select total no. of values" } },
+                    },
+                UploadedImageFile: {
+                    validators: {
+                        notEmpty: { message: "Please select the file" },
+                        //file: {
+                        //    extension: 'txt,pdf',
+                        //    type: 'application/pdf,text/plain',
+                        //    maxSize: 50 * 1024,
+                        //    message: 'The file must be in txt, pdf format and must not exceed 50KB in size',
+                        //},
+                    },
+                },
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap5: new FormValidation.plugins.Bootstrap5({
+                    eleValidClass: "",
+                    rowSelector: ".col-12",
+                }),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+               // autoFocus: new FormValidation.plugins.AutoFocus(),
+            },
+
+        });
+
+        fv.on('core.form.valid', function () {
+            document.getElementById('submitButton').value = 'Converting to TMSD Format';
+            var form = $("#addDataFileForm").get(0);
+            var formData = new FormData(form);
+            $.ajax({
+                url: "/DataFileFormatConvertor/GetDataFile",
+                type: "POST",
+                dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    window.location = '@Url.Action("DownloadFile", "DataFileFormatConvertor", new { fileName = "TMSDataFile.tmsd" })';
+                        },
+                error: function (response) {
+
+                }
+            });;
+        });
+    });
+
+</script>

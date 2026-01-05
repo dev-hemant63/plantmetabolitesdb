@@ -1,0 +1,137 @@
+﻿@model PlantMetabolitesDB.ViewModel.AdvisoryBoardViewModel
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <h5 class="card-header">Add Advisory Board</h5>
+            <div class="card-body">
+                @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "addAdvisoryBoardForm", @class = "row g-3" }))
+                {
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.DisplayOrder, new { @class = "form-label" })
+                        @Html.DropDownListFor(e => e.DisplayOrder, new SelectList(Model.DisplayOrders, "Value", "Text"), new { @class = "form-select", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.Name, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.Name, new { @class = "form-control", @placeholder = "Advisory Board Name", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.Designation, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.Designation, new { @class = "form-control", @placeholder = "Designation", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.Affiliation, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.Affiliation, new { @class = "form-control", @placeholder = "Affiliation", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.CountryKey, new { @class = "form-label" })
+                        @Html.DropDownListFor(e => e.CountryKey, new SelectList(Model.Countries, "CountryKey", "CountryName"), "Select", new { @class = "form-select select2", @autofocus = "autofocus", data_allow_clear = "true" })
+                    </div>
+                    <div class="col-md-12">
+                        <input type="submit" value="Create" class="btn btn-primary" id="submitButton" name="submitButton" />
+                        <button type="button" name="cancelButton" class="btn btn-secondary m-lg-2" id="cancelButton">Cancel</button>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#cancelButton").click(function () {
+        $('#advisoryboardTable').show();
+        $('#advisoryboardFrom').hide();
+    });
+</script>
+
+<script>
+    $(function (e) {
+        $(".select2").select2();
+        const a = document.getElementById("addAdvisoryBoardForm"),
+            t = jQuery(a.querySelector('[name="CountryKey"]'));
+        const submitButton = document.getElementById('submitButton');
+
+        s = FormValidation.formValidation(a, {
+            fields: {
+                DisplayOrder: {
+                    validators: { notEmpty: { message: "Please select display order" } },
+                },
+                Name: {
+                    validators: {
+                        notEmpty: { message: "Please enter name" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                Designation: {
+                    validators: {
+                        notEmpty: { message: "Please enter designation" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                Affiliation: {
+                    validators: {
+                        notEmpty: { message: "Please enter affiliation" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                CountryKey: {
+                    validators: { notEmpty: { message: "Please select country" } },
+                },
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap5: new FormValidation.plugins.Bootstrap5({
+                    eleValidClass: "",
+                    rowSelector: ".col-12",
+                }),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+                autoFocus: new FormValidation.plugins.AutoFocus(),
+            },
+
+
+        }).on('core.form.valid', function () {
+            // Disable the submit button
+            submitButton.setAttribute('disabled', true);
+            document.getElementById('submitButton').value = 'Saving...';
+
+            var valdata = $("#addAdvisoryBoardForm").serialize();
+            $.ajax({
+                url: "/AdvisoryBoard/AddAdvisoryBoard",
+                type: "POST",
+                dataType: 'json',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: valdata,
+                success: function (response) {
+                    $('#advisoryboardTable').show();
+                    $('#advisoryboardFrom').hide();
+                    LoadTable();
+                },
+                error: function (response) {
+
+                }
+            });
+            // Do something else such as sending the form to back-end via Ajax request
+            // ...
+        });
+        if (t.length &&
+            (t.wrap('<div class="position-relative"></div>'),
+                t
+                    .select2({
+                        placeholder: "Select Country",
+                        dropdownParent: t.parent(),
+                    })
+                    .on("change.select2", function () {
+                        s.revalidateField("CountryKey");
+                    }))
+        );
+    });
+</script>

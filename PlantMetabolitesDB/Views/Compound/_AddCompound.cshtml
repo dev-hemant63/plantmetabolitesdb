@@ -1,0 +1,444 @@
+﻿@model PlantMetabolitesDB.ViewModel.CompoundViewModel
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <h5 class="card-header">Add Compound</h5>
+            <hr class="mt-0 mb-0" />
+            <div class="card-body">
+                @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "addCompoundForm", @class = "row g-3", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.DatabaseKey, new { @class = "form-label" })
+                        @Html.DropDownListFor(e => e.DatabaseKey, new SelectList(Model.Databases, "DatabaseKey", "DatabaseName"), "Select", new { @class = "form-select", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.CompoundName, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.CompoundName, new { @class = "form-control typeahead compound", @placeholder = "Compound Name", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.CompiledBy, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.CompiledBy, new { @class = "form-control typeahead compiledBy", @placeholder = "Compiled By", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.Formula, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.Formula, new { @class = "form-control", @placeholder = "Formula", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.MolecularWeight_Input, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.MolecularWeight_Input, new { @class = "form-control", @placeholder = "Molecular Weight", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.CASNo, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.CASNo, new { @class = "form-control typeahead casno", @placeholder = "CAS No", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.Smiles, new { @class = "form-label" })
+                        @Html.TextAreaFor(e => e.Smiles, new { @class = "form-control", @placeholder = "Canonical Smiles", @autofocus = "autofocus", @rows = "4" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.IUPACName, new { @class = "form-label" })
+                        @Html.TextAreaFor(e => e.IUPACName, new { @class = "form-control", @placeholder = "IUPAC Name", @autofocus = "autofocus", @rows = "4" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.OtherNames, new { @class = "form-label" })
+                        @Html.TextBoxFor(e => e.OtherNames, new { @class = "form-control typeahead othernames", @placeholder = "Other Names", @autofocus = "autofocus" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(d => d.ChemicalStructureFile, new { @class = "form-label" })
+                        <input class="form-control" type="file" id="ChemicalStructureImageFile" name="ChemicalStructureImageFile">
+                        <div id="output"></div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <input type="submit" value="Add" class="btn btn-primary" id="submitButton" name="submitButton" />
+                        <button type="button" name="cancelButton" class="btn btn-secondary m-lg-2" id="cancelButton">Close</button>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#cancelButton").click(function () {
+        $('#compoundTable').show();
+        $('#compoundFrom').hide();
+    });
+</script>
+<script>
+    $(function (e) {
+        const submitButton = document.getElementById('submitButton');
+        const a = document.getElementById("addCompoundForm");
+        const fv = FormValidation.formValidation(
+            a, {
+            fields: {
+                DatabaseKey: {
+                    validators: { notEmpty: { message: "Please select database" } },
+                },
+                CompoundName: {
+                    validators: {
+                        notEmpty: { message: "Please enter compound name" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                CompiledBy: {
+                    validators: {
+                        notEmpty: { message: "Please enter compiled by" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                Formula: {
+                    validators: {
+                        notEmpty: { message: "Please enter formula" },
+                        callback: {
+                            message: 'Only character and number are allowed',
+                            callback: function (input) {
+                                var regex = new RegExp("^[a-zA-Z0-9]+\$");
+                                if (!regex.test(input.value)) {
+                                    return false
+                                }
+                                return true;
+                            },
+                        },
+                        //regexp: {
+                        //    regexp: "^[a-zA-Z0-9]+\z",
+                        //    message: 'Invalid character not allowed'
+                        //},
+                    },
+                },
+                MolecularWeight_Input: {
+                    validators: {
+                        notEmpty: { message: "Please enter molecular weight" },
+                        callback: {
+                            message: 'The value is not a correct format (ony 4 digit allowed before & after decimal)',
+                            callback: function (input) {
+                                var regex = new RegExp("^[0-9]{0,4}(?:[.][0-9]{0,4})?$");
+                                if (!regex.test(input.value)) {
+                                    return false
+                                }
+                                return true;
+                            },
+                        },
+                        //numeric: {
+                        //    message: 'The value is not a number',
+                        //    thousandsSeparator: '',
+                        //    decimalSeparator: '.',
+                        //},
+                    },
+                },
+                IUPACName: {
+                    validators: {
+                        notEmpty: { message: "Please enter IUPAC" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                CASNo: {
+                    validators: {
+                        // notEmpty: { message: "Please enter IUPAC" },
+                        callback: {
+                            message: 'Only number and dash(-) are allowed',
+                            callback: function (input) {
+                                var regex = new RegExp("^\[0-9]+(-\[0-9]+)*$");
+                                if (!regex.test(input.value)) {
+                                    return false
+                                }
+                                return true;
+                            },
+                        },
+                        //regexp: {
+                        //    regexp: /^[^<%>]+$/,
+                        //    message: 'Invalid character not allowed'
+                        //},
+                    },
+                },
+                Smiles: {
+                    validators: {
+                        //notEmpty: { message: "Please enter IUPAC" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                OtherNames: {
+                    validators: {
+                        //notEmpty: { message: "Please enter IUPAC" },
+                        regexp: {
+                            regexp: /^[^<%>]+$/,
+                            message: 'Invalid character not allowed'
+                        },
+                    },
+                },
+                ChemicalStructureImageFile: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Please choose a chemical structure file to upload',
+                        },
+                        file: {
+                            extension: 'jpg, jpeg',
+                            type: 'image/jpg,image/jpeg',
+                            maxSize: 50 * 1024,
+                            message: 'The file must be in jpg, jpeg format and must not exceed 50KB in size',
+                        },
+                    },
+                },
+            },
+            plugins: {
+                trigger: new FormValidation.plugins.Trigger(),
+                bootstrap5: new FormValidation.plugins.Bootstrap5(),
+                submitButton: new FormValidation.plugins.SubmitButton(),
+                autoFocus: new FormValidation.plugins.AutoFocus(),
+
+            },
+
+        });
+
+        fv.on('core.form.valid', function () {
+            // Disable the submit button
+            submitButton.setAttribute('disabled', true);
+            document.getElementById('submitButton').value = 'Saving...';
+            var form = $("#addCompoundForm").get(0);
+            var formData = new FormData(form);
+            //  var valdata = $("#addCompoundForm").serialize();
+            $.ajax({
+                url: "/Compound/AddCompound",
+                type: "POST",
+                dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    if (response == "Success") {                     
+                        Swal.fire({
+                            icon: "success",
+                            title: "Saved",
+                            text: "Data saved successfully.",
+                            customClass: { confirmButton: "btn btn-success" },
+                        });
+
+                        $('.swal2-confirm').on('click', function () {
+                            $('#compoundTable').show();
+                            $('#compoundFrom').hide();
+                            LoadTable();
+                        });
+                    } else {
+                        $('#compoundTable').hide();
+                        $('#compoundFrom').show();
+                        submitButton.setAttribute('disabled', false);
+                        document.getElementById('submitButton').value = 'Add';
+                    }
+                },
+                error: function (response) {
+                    submitButton.setAttribute('disabled', false);
+                    document.getElementById('submitButton').value = 'Add';
+                }
+            });
+        });
+    });
+
+</script>
+
+<script>
+    function loadMime(file, callback) {
+        //List of known mimes
+        var mimes = [
+            {
+                mime: 'image/jpeg',
+                pattern: [0xFF, 0xD8, 0xFF],
+                mask: [0xFF, 0xFF, 0xFF],
+            },
+            {
+                mime: 'image/jpg',
+                pattern: [0x89, 0x50, 0x4E, 0x47],
+                mask: [0xFF, 0xFF, 0xFF, 0xFF],
+            }
+
+        ];
+
+        function check(bytes, mime) {
+            for (var i = 0, l = mime.mask.length; i < l; ++i) {
+                if ((bytes[i] & mime.mask[i]) - mime.pattern[i] !== 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        var blob = file.slice(0, 4); //read the first 4 bytes of the file
+
+        var reader = new FileReader();
+        reader.onloadend = function (e) {
+            if (e.target.readyState === FileReader.DONE) {
+                var bytes = new Uint8Array(e.target.result);
+
+                for (var i = 0, l = mimes.length; i < l; ++i) {
+                    if (check(bytes, mimes[i])) return callback("Mime: " + mimes[i].mime + " <br> Browser:" + file.type);
+                }
+
+                return callback("Mime: unknown <br> Browser:" + file.type);
+            }
+        };
+        reader.readAsArrayBuffer(blob);
+    }
+
+
+    //when selecting a file on the input
+    //ChemicalStructureImageFile.onchange = function () {
+    //    loadMime(ChemicalStructureImageFile.files[0], function (mime) {
+    //        //print the output to the screen
+    //        output.innerHTML = mime;
+    //    });
+    //};
+
+    $(function () {
+        $.ajax({
+            url: "/Compound/GetCASNoNames",
+            type: "Get",
+            dataType: "json",
+            data: {},
+            success: function (data) {
+                var result = [];
+                for (var i in data)
+                    result.push(data[i].CASNo);
+                var s, e = result;
+                $(".typeahead.casno").typeahead(
+                    { hint: true, highlight: true, minLength: 1 },
+                    {
+                        name: "CASNo",
+                        source:
+                            ((s = e),
+                                function (e, a) {
+                                    var t = [],
+                                        o = new RegExp(e, "i");
+                                    $.each(s, function (e, a) {
+                                        o.test(a) && t.push(a);
+                                    }),
+                                        a(t);
+                                }),
+                    }
+                ),
+                    new Bloodhound({
+                        datumTokenizer: Bloodhound.tokenizers.whitespace,
+                        queryTokenizer: Bloodhound.tokenizers.whitespace,
+                        local: e,
+                    })
+            },
+        });
+
+        $.ajax({
+            url: "/Compound/GetOtherNames",
+            type: "Get",
+            dataType: "json",
+            data: {},
+            success: function (data) {
+                var result = [];
+                for (var i in data)
+                    result.push(data[i].OtherNames);
+                var s, e = result;
+                $(".typeahead.othernames").typeahead(
+                    { hint: true, highlight: true, minLength: 1 },
+                    {
+                        name: "OtherNames",
+                        source:
+                            ((s = e),
+                                function (e, a) {
+                                    var t = [],
+                                        o = new RegExp(e, "i");
+                                    $.each(s, function (e, a) {
+                                        o.test(a) && t.push(a);
+                                    }),
+                                        a(t);
+                                }),
+                    }
+                ),
+                    new Bloodhound({
+                        datumTokenizer: Bloodhound.tokenizers.whitespace,
+                        queryTokenizer: Bloodhound.tokenizers.whitespace,
+                        local: e,
+                    })
+            },
+        });
+
+        $.ajax({
+            url: "/Compound/GetCompoundNames",
+            type: "Get",
+            dataType: "json",
+            data: {},
+            success: function (data) {
+                var result = [];
+                for (var i in data)
+                    result.push(data[i].CompoundName);
+                var s, e = result;
+                $(".typeahead.compound").typeahead(
+                    { hint: true, highlight: true, minLength: 1 },
+                    {
+                        name: "CompoundName",
+                        source:
+                            ((s = e),
+                                function (e, a) {
+                                    var t = [],
+                                        o = new RegExp(e, "i");
+                                    $.each(s, function (e, a) {
+                                        o.test(a) && t.push(a);
+                                    }),
+                                        a(t);
+                                }),
+                    }
+                ),
+                    new Bloodhound({
+                        datumTokenizer: Bloodhound.tokenizers.whitespace,
+                        queryTokenizer: Bloodhound.tokenizers.whitespace,
+                        local: e,
+                    })
+            },
+        });
+
+        $.ajax({
+            url: "/Compound/GetCompiledByNames",
+            type: "Get",
+            dataType: "json",
+            data: {},
+            success: function (data) {
+                var result = [];
+                for (var i in data)
+                    result.push(data[i].CompiledBy);
+                var s, e = result;
+                $(".typeahead.compiledBy").typeahead(
+                    { hint: true, highlight: true, minLength: 1 },
+                    {
+                        name: "CompiledBy",
+                        source:
+                            ((s = e),
+                                function (e, a) {
+                                    var t = [],
+                                        o = new RegExp(e, "i");
+                                    $.each(s, function (e, a) {
+                                        o.test(a) && t.push(a);
+                                    }),
+                                        a(t);
+                                }),
+                    }
+                ),
+                    new Bloodhound({
+                        datumTokenizer: Bloodhound.tokenizers.whitespace,
+                        queryTokenizer: Bloodhound.tokenizers.whitespace,
+                        local: e,
+                    })
+            },
+        });
+
+    });
+
+</script>

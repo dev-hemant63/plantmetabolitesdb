@@ -1,0 +1,31 @@
+Name of compound: Isosakuanetin
+Source: Purchased from Sigma
+Name of instrument: LCQ advantage MAX (Thermo Electron) 
+Type of instrument: Ion Trap 
+MS Data reduction: The data reductions perform by using Xcalibur 1.4 SR1
+Source: ESI
+Capillary Temp (C):	300.00
+Sheath Gas Flow ():	42.00
+Aux/Sweep Gas Flow (): 2.00
+
+NEGATIVE POLARITY	
+Source Voltage (kV):	5.30
+Source Current (uA):	80.00
+Capillary Voltage (V): -34.00
+Tube Lens Offset (V):	-50.00
+Multipole RF Amplifier (Vp-p): 400.00
+Multipole 1 Offset (V):	3.00
+Multipole 2 Offset (V):	5.50
+InterMultipole Lens Voltage (V): 22.00
+Trap DC Offset Voltage (V):	10.00
+Full Micro Scans:	3
+Full AGC Target:	20000000.00
+Full Max Ion Time (ms):	50.00
+MSn Micro Scans:	3
+MSn AGC Target:	20000000.00
+MSn Max Ion Time (ms):	200.00
+
+
+HPLC 
+Solvent system: 70:30 (Isocratic) Acetonitrile: 5 mM AcNH4
+Lambda-max:    	(nm)

@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+     
+   <!--<Row ss:AutoFitHeight="0" ss:Height="16.5">
+    <Mode>1. Positive ion mode</Mode>
+    <Cell ss:Index="4"/>
+    <Cell ss:Index="7"/>
+   </Row>-->
+   <AdductIonMass>
+   <Ion>    
+    <IonName>M+H</IonName>
+    <IonMass>M + 1.007276</IonMass>
+    <Charge>1+</Charge>
+    <Mult>1</Mult>
+    <Mass>1.007276</Mass>
+   </Ion>
+   <Ion>    
+    <IonName>M+NH4</IonName>
+    <IonMass>M + 18.033823</IonMass>
+    <Charge>1+</Charge>
+    <Mult>1</Mult>
+    <Mass>18.033823</Mass>
+   </Ion>
+   <Ion>    
+    <IonName>M+Na</IonName>
+    <IonMass>M + 22.989218</IonMass>
+    <Charge>1+</Charge>
+    <Mult>1</Mult>
+    <Mass>22.989218</Mass>
+   </Ion>
+   <Ion>    
+    <IonName>M+CH3OH+H</IonName>
+    <IonMass>M + 33.033489</IonMass>
+    <Charge>1+</Charge>
+    <Mult>1</Mult>
+    <Mass>33.033489</Mass>
+   </Ion>
+   <Ion>    
+    <IonName>M+K</IonName>
+    <IonMass>M + 38.963158</IonMass>
+    <Charge>1+</Charge>
+    <Mult>1</Mult>
+    <Mass>38.963158</Mass>
+   </Ion>
+   <Ion>    
+    <IonName>M+ACN+H</IonName>
+    <IonMass>M + 42.033823</IonMass>
+    <Charge>1+</Charge>
+    <Mult>1</Mult>
+    <Mass>42.033823</Mass>
+   </Ion>
+   <Ion>    
+    <IonName>M+2Na-H</IonName>
+    <IonMass>M + 44.971160</IonMass>
+    <Charge>1+</Charge>
+    <Mult>1</Mult>
+    <Mass>44.97116</Mass>
+   </Ion>
+   <!--<Ion>    
+    <IonName>M+IsoProp+H</IonName>
+    <IonMass>M + 61.06534</IonMass>
+    <Charge>1+</Charge>
+    <Mult>1</Mult>
+    <Mass>61.06534</Mass>
+   </Ion>-->
+   <Ion>    
+    <IonName>M+ACN+Na</IonName>
+    <IonMass>M + 64.015765</IonMass>
+    <Charge>1+</Charge>
+    <Mult>1</Mult>
+    <Mass>64.015765</Mass>
+   </Ion>
+   <Ion>    
+    <IonName>M+2K+H</IonName>
+    <IonMass>M + 76.919040</IonMass>
+    <Charge>1+</Charge>
+    <Mult>1</Mult>
+    <Mass>76.919040</Mass>
+   </Ion>
+   <Ion>    
+    <IonName>M+DMSO+H</IonName>
+    <IonMass>M + 79.02122</IonMass>
+    <Charge>1+</Charge>
+    <Mult>1</Mult>
+    <Mass>79.02122</Mass>
+   </Ion>
+   <Ion>    
+    <IonName>M+2ACN+H</IonName>
+    <IonMass>M + 83.060370</IonMass>
+    <Charge>1+</Charge>
+    <Mult>1</Mult>
+    <Mass>83.060370</Mass>
+   </Ion>
+   <!--<Ion>    
+    <IonName>M+IsoProp+Na+H</IonName>
+    <IonMass>M + 84.05511</IonMass>
+    <Charge>1+</Charge>
+    <Mult>1</Mult>
+    <Mass>84.05511</Mass>
+   </Ion>-->
+   <Ion>    
+    <IonName>2M+H</IonName>
+    <IonMass>2M + 1.007276</IonMass>
+    <Charge>1+</Charge>
+    <Mult>2</Mult>
+    <Mass>1.007276</Mass>
+   </Ion>
+   <Ion>    
+    <IonName>2M+NH4</IonName>
+    <IonMass>2M + 18.033823</IonMass>
+    <Charge>1+</Charge>
+    <Mult>2</Mult>
+    <Mass>18.033823</Mass>
+   </Ion>
+   <Ion>    
+    <IonName>2M+Na</IonName>
+    <IonMass>2M + 22.989218</IonMass>
+    <Charge>1+</Charge>
+    <Mult>2</Mult>
+    <Mass>22.989218</Mass>
+   </Ion>
+   <Ion>    
+    <IonName>2M+3H2O+2H</IonName>
+    <IonMass>2M + 28.02312</IonMass>
+    <Charge>2+</Charge>
+    <Mult>2</Mult>
+    <Mass>28.02312</Mass>
+   </Ion>
+   <Ion>    
+    <IonName>2M+K</IonName>
+    <IonMass>2M + 38.963158</IonMass>
+    <Charge>1+</Charge>
+    <Mult>2</Mult>
+    <Mass>38.963158</Mass>
+   </Ion>
+   <Ion>    
+    <IonName>2M+ACN+H</IonName>
+    <IonMass>2M + 42.033823</IonMass>
+    <Charge>1+</Charge>
+    <Mult>2</Mult>
+    <Mass>42.033823</Mass>
+   </Ion>
+   <Ion>    
+    <IonName>2M+ACN+Na</IonName>
+    <IonMass>2M + 64.015765</IonMass>
+    <Charge>1+</Charge>
+    <Mult>2</Mult>
+    <Mass>64.015765</Mass>
+   </Ion>
+   </AdductIonMass>
+  

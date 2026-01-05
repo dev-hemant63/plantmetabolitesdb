@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewBag.Title = "Plant Metabolites";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h4 class="py-3 breadcrumb-wrapper mb-2">Plant Metabolites List</h4>
+
+<div class="card">
+    <div class="card-datatable table-responsive">
+        <table class="datatables-plant-metabolites table border-top">
+            <thead>
+                <tr>
+                    <th>Sr.No</th>
+                    <th>Plant Species</th>
+                    <th>Family Name</th>
+                    <th>Taxonomist</th>
+                    <th>MS1</th>
+                    <th>MS2</th>
+                    <th>MS3</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            loadTable();
+        });
+
+        function loadTable() {
+            $.post('/PlantMetabolites/GetList').done(function (res) {
+                console.log('PlantMetabolites', res.data);
+
+                let _html = res.data.map((v, i) => {
+                    return `<tr>
+                            <td>${i + 1}</td>
+                            <td>${v.PlantSpeciesName}</td>
+                            <td></td>
+                            <td>${v.TaxonomistName}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>`;
+                });
+
+                $('.datatables-plant-metabolites tbody').html(_html);
+
+                const table = $(".datatables-plant-metabolites");
+                if ($.fn.DataTable.isDataTable(table)) {
+                    table.DataTable().destroy();
+                };
+
+                table.DataTable({
+                    paging: true,
+                    pageLength: 10,
+                    lengthChange: true,
+                    searching: true,
+                    ordering: true,
+                    info: true,
+                    autoWidth: false,
+                    responsive: true,
+
+                    order: [[0, 'asc']],
+
+                    columnDefs: [
+                        {
+                            targets: [0], // example: first column
+                            orderable: true
+                        },
+                        {
+                            targets: 'no-sort', // add class="no-sort" to <th>
+                            orderable: false
+                        }
+                    ],
+
+                    dom: '<"d-flex justify-content-end align-items-center mb-2"fB>rtip',
+
+                    buttons: [
+                        {
+                            text: '<i class="bx bx-plus me-0 me-lg-2"></i> Add Plant Metabolite',
+                            className: 'btn btn-primary ms-2 btn-sm m-2',
+                            action: function () {
+                                window.location.href = '/PlantMetabolites/AddEditPlantMetabolites';
+                            }
+                        }
+                    ],
+
+                    language: {
+                        search: "Search:",
+                        lengthMenu: "Show _MENU_ entries",
+                        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                        paginate: {
+                            next: "Next",
+                            previous: "Previous"
+                        }
+                    }
+                });
+
+
+            }).fail(function (xhr) {
+                console.log(xhr);
+            });
+        };
+    </script>
+}

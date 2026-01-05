@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "Send Email";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="breadcrumb-grid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <h3 class="header_title">Send Email</h3>
+                <ol class="breadcrumb">
+                    <li><a href="#">Home</a></li>
+                    <li class="active">Send Email</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="inner-grid">
+    <div class="container">
+
+        <div class="about-text">
+            <div class="row">
+                @if (!string.IsNullOrEmpty(ViewBag.Message))
+                {
+                    <div class="alert alert-success">@ViewBag.Message</div>
+                }
+
+                @if (!string.IsNullOrEmpty(ViewBag.Error))
+                {
+                    <div class="alert alert-danger">@ViewBag.Error</div>
+                }
+
+            </div>
+        </div>
+
+    </div>
+
+</section>

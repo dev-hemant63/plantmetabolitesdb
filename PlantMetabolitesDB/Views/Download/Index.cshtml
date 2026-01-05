@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "Download";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model  IEnumerable<PlantMetabolitesDB.ViewModel.LatestUpdatesViewModel>
+<div class="breadcrumb-grid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <h3 class="header_title">Download</h3>
+                <ol class="breadcrumb">
+                    <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+                    <li class="active">Download</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="inner-grid">
+    <div class="container">
+        <div class="row">
+            @if (Model != null)
+            {
+                for (int i = 0; i < Model.Count(); i++)
+                {
+                    <div class="col-md-4 col-xs-12">
+
+                        <a href="~/UploadedFiles/LatestUpdates/@Model.ElementAt(i).UploadedFileName" target="_blank" title="Click to Download" class="box">
+                            <div class="icon">
+                                <div class="image"><i class="fa fa-download" aria-hidden="true"></i></div>
+                                <div class="info">
+                                    @Model.ElementAt(i).Title
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            }
+
+
+            @*<div class="col-md-4 col-xs-12">
+
+                <a href="http://www.tmsdatabase.org/UploadedFiles/LatestUpdates/test_file4af9fabb-5964-4c9d-a64a-e47a0f663c20.txt" target="_blank" title="Click to Download" class="box">
+                    <div class="icon">
+                        <div class="image"><i class="fa fa-download" aria-hidden="true"></i></div>
+                        <div class="info">
+                            Sample data.txt (demo file, for advance search)
+
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4 col-xs-12">
+
+                <a href="images/AvailableDownloads/User-instruction-manual.pdf" target="_blank" title="Click to Download" class="box">
+                    <div class="icon">
+                        <div class="image"><i class="fa fa-download" aria-hidden="true"></i></div>
+                        <div class="info">
+                            User instruction manual
+
+                        </div>
+                    </div>
+                </a>
+            </div>*@
+
+        </div>
+
+    </div>
+
+</section>
