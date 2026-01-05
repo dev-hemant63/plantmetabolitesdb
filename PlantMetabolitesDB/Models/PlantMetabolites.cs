@@ -12,7 +12,7 @@ namespace TandemDB.Models
         public int PlantMetabolitesKey { get; set; }
         public string PlantSpeciesName { get; set; }
         public string TaxonomistName { get; set; }
-        public int PlantFamilyKey { get; set; }
+        public Int16 PlantFamilyKey { get; set; }
         public string DataSheetFile { get; set; }
         public bool IsActive { get; set; }
         public int? CreatedBy { get; set; }
@@ -21,6 +21,7 @@ namespace TandemDB.Models
         public DateTime? LastModifiedOn { get; set; }
         public string CompiledBy { get; set; }
         public string Synonyms { get; set; }
+        public string Figure { get; set; }
 
 
         public virtual Master_Database Master_Databases { get; set; }
