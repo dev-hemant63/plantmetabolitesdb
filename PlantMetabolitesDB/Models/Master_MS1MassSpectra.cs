@@ -1,9 +1,11 @@
-﻿using System;
+﻿using PlantMetabolitesDB.Models;
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TandemDB.Models
 {
-    public class MasterMS1MassSpectra
+    public class Master_MS1MassSpectra
     {
         [Key]
         public int MS1MassSpectraKey { get; set; }
@@ -14,7 +16,7 @@ namespace TandemDB.Models
 
         public int Polarity { get; set; }
 
-        public int AnnotationKey { get; set; }
+        public Int16 AnnotationKey { get; set; }
 
         public string PartsOfPlant { get; set; }
 
@@ -47,5 +49,9 @@ namespace TandemDB.Models
         public int? LastModifiedBy { get; set; }
 
         public DateTime? LastModifiedOn { get; set; }
+
+        public virtual PlantMetabolites PlantMetabolites { get; set; }
+        [ForeignKey("AnnotationKey")]
+        public virtual Master_Annotation Master_Annotation { get; set; }
     }
 }

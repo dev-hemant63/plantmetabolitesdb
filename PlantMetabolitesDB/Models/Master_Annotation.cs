@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using TandemDB.Models;
 
 namespace PlantMetabolitesDB.Models
 {
@@ -20,5 +21,7 @@ namespace PlantMetabolitesDB.Models
         public DateTime? CreatedOn { get; set; }
         public Int16? LastModifiedBy { get; set; }
         public DateTime? LastModifiedOn { get; set; }
+
+        public virtual ICollection<Master_MS1MassSpectra> Master_MS1MassSpectra { get; set; }
     }
 }

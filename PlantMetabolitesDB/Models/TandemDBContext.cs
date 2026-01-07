@@ -42,7 +42,7 @@ namespace PlantMetabolitesDB.Models
         public DbSet<M05_EthnobotanicalInfo> M05_EthnobotanicalInfo { get; set; }
         public DbSet<M06_CompuondClass> M06_CompuondClass { get; set; }
         public DbSet<M07_Constituents> M07_Constituents { get; set; }
-        public DbSet<MasterMS1MassSpectra> MasterMS1MassSpectra { get; set; }
+        public DbSet<Master_MS1MassSpectra> Master_MS1MassSpectra { get; set; }
 
 
 
@@ -84,6 +84,16 @@ namespace PlantMetabolitesDB.Models
                 .HasMany(p => p.M07_Constituents)
                 .WithRequired(c => c.PlantMetabolites)
                 .HasForeignKey(c => c.M01ID);
+
+            modelBuilder.Entity<PlantMetabolites>()
+                .HasMany(p => p.Master_MS1MassSpectra)
+                .WithRequired(v => v.PlantMetabolites)
+                .HasForeignKey(v => v.PlantMetabolitesKey);
+
+            modelBuilder.Entity<Master_Annotation>()
+                .HasMany(p => p.Master_MS1MassSpectra)
+                .WithRequired(v => v.Master_Annotation)
+                .HasForeignKey(v => v.AnnotationKey);
         }
 
 

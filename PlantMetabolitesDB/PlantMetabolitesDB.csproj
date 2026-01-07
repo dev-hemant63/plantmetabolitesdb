@@ -203,7 +203,7 @@
     <Compile Include="Models\M05_EthnobotanicalInfo.cs" />
     <Compile Include="Models\M06_CompuondClass.cs" />
     <Compile Include="Models\M07_Constituents.cs" />
-    <Compile Include="Models\MasterMS1MassSpectra.cs" />
+    <Compile Include="Models\Master_MS1MassSpectra.cs" />
     <Compile Include="Models\PlantMetabolites.cs" />
     <Compile Include="Models\SearchDBLayer.cs" />
     <Compile Include="Models\SqlHelper.cs" />

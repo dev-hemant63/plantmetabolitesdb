@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using System.Windows.Documents;
 
@@ -14,7 +15,7 @@ namespace TandemDB.ViewModel
 
         public int Polarity { get; set; }
 
-        public int AnnotationKey { get; set; }
+        public Int16 AnnotationKey { get; set; }
 
         public string PartsOfPlant { get; set; }
 
