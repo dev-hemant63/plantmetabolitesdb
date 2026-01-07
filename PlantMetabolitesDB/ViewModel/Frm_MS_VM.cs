@@ -11,5 +11,6 @@ namespace TandemDB.ViewModel
         public IEnumerable<InstrumentViewModel> InstrumentList { get; set; }
         public PlantMetabolitesVM PlantMetabolitesDetails { get; set; }
         public MasterMS1MassSpectraVM MasterMS1MassSpectra { get; set; }
+        public IEnumerable<Master_MS1MassSpectra> MS1MassSpectraData { get; set; }
     }
 }

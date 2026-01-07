@@ -3,6 +3,7 @@ using PlantMetabolitesDB.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using TandemDB.Models;
@@ -19,7 +20,11 @@ namespace TandemDB.Repository
         int Delete(int PlantMetabolitesKey);
 
 
-        int AddMS1MassSpectra(MasterMS1MassSpectra entity);
+        int AddMS1MassSpectra(Master_MS1MassSpectra entity);
+        int UpdateMS1MassSpectra(Master_MS1MassSpectra entity);
+        IEnumerable<Master_MS1MassSpectra> GetMS1MassSpectraList();
+        int DeleteMS1Record(int MS1MassSpectraKey);
+        Master_MS1MassSpectra GetMS1MassSpectraById(int MS1MassSpectraKey);
     }
     public class PlantMetabolitesRepository : IPlantMetabolitesRepository
     {
@@ -354,6 +359,8 @@ namespace TandemDB.Repository
                     _context.M06_CompuondClass.Where(c => c.M01ID == entity.PlantMetabolitesKey));
                 _context.M07_Constituents.RemoveRange(
                     _context.M07_Constituents.Where(c => c.M01ID == entity.PlantMetabolitesKey));
+                _context.Master_MS1MassSpectra.RemoveRange(
+                   _context.Master_MS1MassSpectra.Where(c => c.PlantMetabolitesKey == entity.PlantMetabolitesKey));
 
 
                 int result = _context.SaveChanges();
@@ -369,10 +376,100 @@ namespace TandemDB.Repository
 
 
 
-        public int AddMS1MassSpectra(MasterMS1MassSpectra entity)
+        public int AddMS1MassSpectra(Master_MS1MassSpectra entity)
         {
-            _context.MasterMS1MassSpectra.Add(entity);
-            return _context.SaveChanges();
+            _context.Master_MS1MassSpectra.Add(entity);
+            try
+            {
+                return _context.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                var message = ex.InnerException?.InnerException?.Message;
+                return 0;
+            }
+        }
+        public int UpdateMS1MassSpectra(Master_MS1MassSpectra entity)
+        {
+            if (entity.MS1MassSpectraKey == 0)
+            {
+                return 0;
+            }
+            
+            try
+            {
+                var existing_entity = _context.Master_MS1MassSpectra
+                  .Include(m => m.Master_Annotation)
+                  .Include(m => m.PlantMetabolites)
+                  .Where(x => x.MS1MassSpectraKey == entity.MS1MassSpectraKey)
+                  .FirstOrDefault();
+
+                existing_entity.InstrumentKey = entity.InstrumentKey;
+                existing_entity.Polarity = entity.Polarity;
+                existing_entity.AnnotationKey = entity.AnnotationKey;
+                existing_entity.PartsOfPlant = entity.PartsOfPlant;
+                existing_entity.SampleType = entity.SampleType;
+                existing_entity.TaxonomistName = entity.TaxonomistName;
+                existing_entity.VoucherNo = entity.VoucherNo;
+                existing_entity.HerbariumDepositedAt = entity.HerbariumDepositedAt;
+                existing_entity.DateOfCollection = entity.DateOfCollection;
+                existing_entity.GeoLocation = entity.GeoLocation;
+                existing_entity.SpectrumAveraging = entity.SpectrumAveraging;
+                existing_entity.HPLCUPLCMethodeFilePath = string.IsNullOrEmpty(entity.HPLCUPLCMethodeFilePath) ? existing_entity.HPLCUPLCMethodeFilePath : entity.HPLCUPLCMethodeFilePath;
+                existing_entity.ExtractionMethodeFilePath = string.IsNullOrEmpty(entity.ExtractionMethodeFilePath) ? existing_entity.ExtractionMethodeFilePath : entity.ExtractionMethodeFilePath;
+                existing_entity.FingerprintFilePath = string.IsNullOrEmpty(entity.FingerprintFilePath) ? existing_entity.FingerprintFilePath : entity.FingerprintFilePath;
+                existing_entity.MS1RefFilePath = string.IsNullOrEmpty(entity.MS1RefFilePath) ? existing_entity.MS1RefFilePath : entity.MS1RefFilePath;
+                existing_entity.MS1RefFilePath = string.IsNullOrEmpty(entity.MS1RefFilePath) ? existing_entity.MS1RefFilePath : entity.MS1RefFilePath;
+                existing_entity.LastModifiedBy = entity.LastModifiedBy;
+                existing_entity.LastModifiedOn = entity.LastModifiedOn;
+
+                return _context.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                var message = ex.InnerException?.InnerException?.Message;
+                return 0;
+            }
+        }
+        public IEnumerable<Master_MS1MassSpectra> GetMS1MassSpectraList()
+        {
+            try
+            {
+                var list = _context.Master_MS1MassSpectra
+                  .Include(m => m.Master_Annotation)
+                  .Include(m => m.PlantMetabolites)
+                  .ToList();
+                return list;
+            }
+            catch (DbUpdateException ex)
+            {
+                var message = ex.InnerException?.InnerException?.Message;
+                return default(IEnumerable<Master_MS1MassSpectra>);
+            }
+        }
+        public int DeleteMS1Record(int MS1MassSpectraKey)
+        {
+            var entity = _context.Master_MS1MassSpectra.Where(x => x.MS1MassSpectraKey == MS1MassSpectraKey).FirstOrDefault();
+            _context.Master_MS1MassSpectra.Remove(entity);
+            int result = _context.SaveChanges();
+            return result;
+        }
+        public Master_MS1MassSpectra GetMS1MassSpectraById(int MS1MassSpectraKey)
+        {
+            try
+            {
+                var data = _context.Master_MS1MassSpectra
+                  .Include(m => m.Master_Annotation)
+                  .Include(m => m.PlantMetabolites)
+                  .Where(x => x.MS1MassSpectraKey == MS1MassSpectraKey)
+                  .FirstOrDefault();
+
+                return data;
+            }
+            catch (Exception ex)
+            {
+                return default(Master_MS1MassSpectra);
+            }
         }
     }
 }

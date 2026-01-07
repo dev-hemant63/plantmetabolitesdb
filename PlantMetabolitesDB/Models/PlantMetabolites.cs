@@ -31,5 +31,6 @@ namespace TandemDB.Models
         public virtual ICollection<M05_EthnobotanicalInfo> M05_EthnobotanicalInfo { get; set; }
         public virtual ICollection<M06_CompuondClass> M06_CompuondClass { get; set; }
         public virtual ICollection<M07_Constituents> M07_Constituents { get; set; }
+        public virtual ICollection<Master_MS1MassSpectra> Master_MS1MassSpectra { get; set; }
     }
 }

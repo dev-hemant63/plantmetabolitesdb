@@ -1,43 +1,51 @@
 ﻿@using TandemDB.ViewModel
 @model Frm_MS_VM
 
+<style>
+    .clickable{
+        cursor:pointer;
+        font-size:25px;
+    }
+</style>
 
 <div class="text-center mb-4">
     <h3>MS1</h3>
 </div>
+
 <div class="row">
-    <input type="hidden" value="@Model.plantMetabolitesKey" id="plantMetabolitesKey"/>
+    <input type="hidden" value="@Model.plantMetabolitesKey" id="plantMetabolitesKey" />
+    <input type="hidden" value="0" id="MS1MassSpectraKey" />
     <div class="col-md-6">
         <label class="form-label" for="PlantFamilyKey">Name of plant species <span class="text-danger">*</span></label>
         <label class="form-control">@Model.PlantMetabolitesDetails.PlantSpeciesName</label>
     </div>
     <div class="col-md-6">
-        <label class="form-label" for="InstrumentKey">Name of plant species <span class="text-danger">*</span></label>
+        <label class="form-label" for="InstrumentKey">Instrument <span class="text-danger">*</span></label>
         @Html.DropDownListFor(m => m.MasterMS1MassSpectra.InstrumentKey,
-                            new SelectList(Model.InstrumentList, "InstrumentKey", "InstrumentName", Model.MasterMS1MassSpectra.InstrumentKey),
-                            "Select",
-                            new { @class = "form-select", id = "InstrumentKey" })
+                                                     new SelectList(Model.InstrumentList, "InstrumentKey", "InstrumentName", Model.MasterMS1MassSpectra.InstrumentKey),
+                                                     "Select",
+                                                     new { @class = "form-select", id = "InstrumentKey" })
         @Html.ValidationMessageFor(m => m.MasterMS1MassSpectra.InstrumentKey, "", new { @class = "text-danger" })
     </div>
     <div class="col-md-6">
         <label class="form-label" for="Polarity">Polarity</label>
 
         @Html.DropDownListFor(
-                                                                                                                                        m => m.MasterMS1MassSpectra.Polarity,
-                                                                                                                                        new List<SelectListItem>
-                                                                                                                                        {
+                                                                                                                                                                 m => m.MasterMS1MassSpectra.Polarity,
+                                                                                                                                                                 new List<SelectListItem>
+                                                                                                                                                                 {
             new SelectListItem { Text = "Positive", Value = "1" },
             new SelectListItem { Text = "Negative", Value = "2" }
-                                                                                                                                                                                                                                            },
-                                                                                                                                        "Select",
-                                                                                                                                        new { @class = "form-select", id = "Polarity" }
-                                                                                                                                    )
+                                                                                                                                                                                                                                                                                         },
+                                                                                                                                                                 "Select",
+                                                                                                                                                                 new { @class = "form-select", id = "Polarity" }
+                                                                                                                                                             )
 
         @Html.ValidationMessageFor(
-                                                                                                                                        m => m.MasterMS1MassSpectra.Polarity,
-                                                                                                                                        "",
-                                                                                                                                        new { @class = "text-danger" }
-                                                                                                                                    )
+                                                                                                                                                                 m => m.MasterMS1MassSpectra.Polarity,
+                                                                                                                                                                 "",
+                                                                                                                                                                 new { @class = "text-danger" }
+                                                                                                                                                             )
     </div>
     <div class="col-md-6">
         <label class="form-label" for="Datatype">Data type</label>
@@ -97,15 +105,15 @@
         <label class="form-label" for="FingerprintFile">Mass spectrum fingerprint</label>
 
         @Html.TextBoxFor(
-                                                                  m => m.MasterMS1MassSpectra.FingerprintFile,
-                                                                  new { @class = "form-control", type = "file", id = "FingerprintFile" }
-                                                              )
+                                                                                           m => m.MasterMS1MassSpectra.FingerprintFile,
+                                                                                           new { @class = "form-control", type = "file", id = "FingerprintFile" }
+                                                                                       )
 
         @Html.ValidationMessageFor(
-                                                                  m => m.MasterMS1MassSpectra.FingerprintFile,
-                                                                  "",
-                                                                  new { @class = "text-danger" }
-                                                              )
+                                                                                           m => m.MasterMS1MassSpectra.FingerprintFile,
+                                                                                           "",
+                                                                                           new { @class = "text-danger" }
+                                                                                       )
     </div>
 
     <div class="col-md-12">
@@ -170,43 +178,43 @@
         <label class="form-label" for="ExtractionMethodeFile">Extraction method file</label>
 
         @Html.TextBoxFor(
-                                                                 m => m.MasterMS1MassSpectra.ExtractionMethodeFile,
-                                                                 new { @class = "form-control", type = "file", id = "ExtractionMethodeFile" }
-                                                             )
+                                                                                          m => m.MasterMS1MassSpectra.ExtractionMethodeFile,
+                                                                                          new { @class = "form-control", type = "file", id = "ExtractionMethodeFile" }
+                                                                                      )
 
         @Html.ValidationMessageFor(
-                                                                 m => m.MasterMS1MassSpectra.ExtractionMethodeFile,
-                                                                 "",
-                                                                 new { @class = "text-danger" }
-                                                             )
+                                                                                          m => m.MasterMS1MassSpectra.ExtractionMethodeFile,
+                                                                                          "",
+                                                                                          new { @class = "text-danger" }
+                                                                                      )
     </div>
     <div class="col-md-6">
         <label class="form-label" for="HPLCUPLCMethodeFile">HPLC/UPLC Method</label>
 
         @Html.TextBoxFor(
-                                                                m => m.MasterMS1MassSpectra.HPLCUPLCMethodeFile,
-                                                                new { @class = "form-control", type = "file", id = "HPLCUPLCMethodeFile" }
-                                                            )
+                                                                                         m => m.MasterMS1MassSpectra.HPLCUPLCMethodeFile,
+                                                                                         new { @class = "form-control", type = "file", id = "HPLCUPLCMethodeFile" }
+                                                                                     )
 
         @Html.ValidationMessageFor(
-                                                                m => m.MasterMS1MassSpectra.ExtractionMethodeFile,
-                                                                "",
-                                                                new { @class = "text-danger" }
-                                                            )
+                                                                                         m => m.MasterMS1MassSpectra.ExtractionMethodeFile,
+                                                                                         "",
+                                                                                         new { @class = "text-danger" }
+                                                                                     )
     </div>
     <div class="col-md-12">
         <label class="form-label" for="MS1RefFile">Refrence File</label>
 
         @Html.TextBoxFor(
-                                                               m => m.MasterMS1MassSpectra.MS1RefFile,
-                                                               new { @class = "form-control", type = "file", id = "MS1RefFile" }
-                                                           )
+                                                                                        m => m.MasterMS1MassSpectra.MS1RefFile,
+                                                                                        new { @class = "form-control", type = "file", id = "MS1RefFile" }
+                                                                                    )
 
         @Html.ValidationMessageFor(
-                                                               m => m.MasterMS1MassSpectra.MS1RefFile,
-                                                               "",
-                                                               new { @class = "text-danger" }
-                                                           )
+                                                                                        m => m.MasterMS1MassSpectra.MS1RefFile,
+                                                                                        "",
+                                                                                        new { @class = "text-danger" }
+                                                                                    )
     </div>
     <div class="col-md-12">
         <label class="form-label" for="RawFile">Raw File</label>
@@ -244,7 +252,70 @@
     </div>
 
     <div class="col-md-12">
-        <button type="submit" onclick="saveMS1Form()" class="btn btn-primary">Save</button>
+        <button type="submit" onclick="saveMS1Form()" id="action-btn" class="btn btn-primary">Save</button>
         <button type="button" class="btn btn-secondary m-lg-2" onclick="$('#ms-form-modal').modal('hide');">Close</button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Plant Metabolites</th>
+                        <th>Polarity</th>
+                        <th>Annotation</th>
+                        <th>Data</th>
+                        <th>Ref</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.MS1MassSpectraData.Any())
+                    {
+                        int i = 0;
+                        foreach (var item in Model.MS1MassSpectraData)
+                        {
+                            i++;
+                            <tr>
+                                <td>@i</td>
+                                <td>@item.PlantMetabolites.PlantSpeciesName</td>
+                                <td>
+                                    @if (@item.Polarity == 1)
+                                    {
+                                        <span class="badge bg-success">Positive</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">negative</span>
+                                    }
+                                </td>
+                                <td>@item.Master_Annotation.AnnotationName</td>
+                                <td>
+                                    <i class="bx bx-file-find clickable"></i>
+                                </td>
+                                <td>
+                                    <i class="bx bx-file-find clickable"></i>
+                                </td>
+                                <td>
+                                    <span class="text-nowrap">
+                                        <button class="edit-record btn btn-sm btn-icon me-2" data-id="@item.MS1MassSpectraKey" onclick="editMS1Record('@item.MS1MassSpectraKey')" title="Edit"> <i class="bx bx-edit"></i></button>
+                                        <button class="delete-record btn btn-sm btn-icon me-2" onclick="deleteMS1Record('@item.MS1MassSpectraKey')" data-id="@item.MS1MassSpectraKey" title="Delete"><i class="bx bx-trash"></i></button>
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="12">No data found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

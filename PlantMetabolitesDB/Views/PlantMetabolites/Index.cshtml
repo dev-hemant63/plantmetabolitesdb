@@ -27,7 +27,7 @@
 </div>
 
 <div class="modal fade" id="ms-form-modal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content p-3 p-md-5">
             <button type="button" class="btn-close btn-pinned" data-bs-dismiss="modal" aria-label="Close"></button>
             <div class="modal-body" id="ms-form-modal-body">
@@ -42,6 +42,10 @@
     <script>
         $(document).ready(function () {
             loadTable();
+
+            $(document).on('change', '#Polarity', function () {
+                bindAnnotationByPolarity();
+            });
         });
 
         function loadTable() {
@@ -126,27 +130,47 @@
         };
 
         function deleteRecord(id) {
-            $.post('/PlantMetabolites/Delete', { plantMetabolitesKey: id }).done(function (res) {
-                if (res > 0) {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Success",
-                        text: "Record deleted successfully!"
-                    }).then(() => {
-                        window.location.reload();
-                    });
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This record will be permanently deleted!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post('/PlantMetabolites/Delete', { plantMetabolitesKey: id })
+                        .done(function (res) {
+                            if (res > 0) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Success",
+                                    text: "Record deleted successfully!"
+                                }).then(() => {
+                                    window.location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Failed",
+                                    text: "Sorry, something went wrong. Try after some time!"
+                                });
+                            }
+                        })
+                        .fail(function (xhr) {
+                            console.error(xhr);
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error",
+                                text: "Server error occurred."
+                            });
+                        });
                 }
-                else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Failed",
-                        text: "Sorry,Something went wrong try after some time!",
-                    });
-                }
-            }).fail(function (xhr) {
-                console.log(xhr);
             });
         };
+
         function openMsFormModal(id,type) {
             $.post('/PlantMetabolites/Frm_' + type, { plantMetabolitesKey: id }).done(function (_html) {
                 $('#ms-form-modal-body').html(_html);
@@ -176,6 +200,7 @@
         }
 
         function saveMS1Form() {
+            let MS1MassSpectraKey = $('#MS1MassSpectraKey').val();
             let InstrumentKey = $('#InstrumentKey').val();
             let Polarity = $('#Polarity').val();
             let Datatype = $('#Datatype').val();
@@ -235,9 +260,10 @@
             });
 
             let formData = new FormData();
+            formData.append('MS1MassSpectraKey', MS1MassSpectraKey);
             formData.append('InstrumentKey', InstrumentKey);
             formData.append('Polarity', Polarity);
-            formData.append('Datatype', Datatype);
+            formData.append('AnnotationKey', Datatype);
             formData.append('PartsOfPlant', PartsOfPlant);
             formData.append('SampleType', SampleType);
             formData.append('TaxonomistName', TaxonomistName);
@@ -277,7 +303,23 @@
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                    alert('MS1 form saved successfully');
+                    if (response > 0) {
+                        $('#action-btn').text('Save');
+                        Swal.fire({
+                            icon: "success",
+                            title: "Success",
+                            text: "MS1 form saved successfully!"
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    }
+                    else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Failed",
+                            text: "Sorry,Something went wrong try after some time!",
+                        });
+                    }
                 },
                 error: function (xhr, status, error) {
                     alert('Error saving MS1 form');
@@ -285,6 +327,88 @@
             });
         }
 
+        function bindAnnotationByPolarity() {
+            let polarityKey = $('#Polarity').val();
+            $.post('/PlantMetabolites/GetAnnotationByPolarity', { polarity:polarityKey }).done(function (res) {
+                let __option = res.map((v, i) => {
+                    return `<option value="${v.AnnotationKey}" >${v.AnnotationName}</option>`;
+                });
+                $('#Datatype').empty().append('<option value="0">Select</option>').append(__option);
+            }).fail(function (xhr) {
+                console.log(xhr);
+                alert("Something went wrong!");
+            });
+        }
 
+        function deleteMS1Record(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This record will be permanently deleted!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post('/PlantMetabolites/DeleteMS1Record', { MS1MassSpectraKey: id })
+                        .done(function (res) {
+                            if (res > 0) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Deleted!",
+                                    text: "Record deleted successfully!"
+                                }).then(() => {
+                                    window.location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Failed",
+                                    text: "Sorry, something went wrong. Try again later!"
+                                });
+                            }
+                        })
+                        .fail(function (xhr) {
+                            console.error(xhr);
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error",
+                                text: "Server error occurred."
+                            });
+                        });
+                }
+            });
+        }
+
+        function editMS1Record(id) {
+            $.post('/PlantMetabolites/GetMS1MassSpectraById', { MS1MassSpectraKey: id })
+                .done(function (res) {
+                    $('#InstrumentKey').val(res.InstrumentKey);
+                    $('#Polarity').val(res.Polarity);
+                    bindAnnotationByPolarity();
+                    setTimeout(function () {
+                        $('#Datatype').val(res.AnnotationKey);
+                    }, 1000);
+                    $('#MasterMS1MassSpectra_PartsOfPlant').val(res.PartsOfPlant);
+                    $('#MasterMS1MassSpectra_SampleType').val(res.SampleType);
+                    $('#MasterMS1MassSpectra_TaxonomistName').val(res.TaxonomistName);
+                    $('#MasterMS1MassSpectra_VoucherNo').val(res.VoucherNo);
+                    $('#MasterMS1MassSpectra_HerbariumDepositedAt').val(res.HerbariumDepositedAt);
+                    $('#MasterMS1MassSpectra_DateOfCollection').val(res.DateOfCollection);
+                    $('#MasterMS1MassSpectra_GeoLocation').val(res.GeoLocation);
+                    $('#MasterMS1MassSpectra_SpectrumAveraging').val(res.SpectrumAveraging);
+                    $('#action-btn').text('Update');
+                })
+                .fail(function (xhr) {
+                    console.error(xhr);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Server error occurred."
+                    });
+                });
+        };
     </script>
 }
